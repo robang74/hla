@@ -22,8 +22,8 @@ hla:  hlaparse.exe hla.exe
 
 hla.exe: hla.obj 
 	bcc32 $(DB) -N -K -5 -O2 $(INC) $(LIBR) hla.obj
-	copy hla.exe ..\executables 
-	copy hla.exe .. 
+	copy hla.exe ..\..\executables 
+	copy hla.exe ..\.. 
 
 hla.obj: hla.c $(RATC) $(DBG)
 	bcc32 $(DB) -d -N -K -w-rch- -5 -O2 $(INC) $(LIBR) -c hla.c
@@ -33,8 +33,8 @@ hlaparse.exe: hlaparse.obj lex.yy.obj symbol.obj hlautils.obj \
 				cfasm.obj hlaasm.obj hfasm.obj
 	bcc32 -lS:0x10000000 -lSc:0x400000  $(DB) @hla.bcc
 	build
-	copy hlaparse.exe ..\executables
-	copy hlaparse.exe ..
+	copy hlaparse.exe ..\..\executables
+	copy hlaparse.exe ..\..
 
 hlaparse.obj: hlaparse.c $(SYM) $(RATC) $(CMN) $(ENM) $(DBG) $(OUT)
 	 bcc32 $(DB) -d -N -K -w-rch- -5 -O2 $(INC) $(LIBR) -c hlaparse.c
@@ -100,11 +100,6 @@ version:
 	delete hla.exe
 	delete hlaparse.exe
 	version
-
-lib:
-	cd hlalibsrc
-	make
-	cd ..
 
 clean:
 	delete *.exe

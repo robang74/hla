@@ -1,5 +1,5 @@
 ; Assembly code emitted by HLA compiler
-; Version 1.102 build 18583 (prototype)
+; Version 1.102 build 18688 (prototype)
 ; HLA compiler written by Randall Hyde
 ; MASM compatible output
 
@@ -10038,8 +10038,8 @@ calculationLoop_$1284:
         je         calculate_not_$1293
         cmp        al, 131 
         je         calculate_neg_$1294
-        mov        cx, [ebx+8] 
-        or         cx, [edi+8] 
+        mov        dx, [ebx+8] 
+        or         dx, [edi+8] 
         cmp        al, 128 
         je         calculate_add_$1295
         cmp        al, 129 
@@ -10058,7 +10058,7 @@ absolute_values_calculation_$1297:
         je         calculate_mul_$1298
         cmp        al, 145 
         je         calculate_div_$1299
-        or         cx, cx 
+        or         dx, dx 
         jnz        invalid_expression_$539
         cmp        al, 160 
         je         calculate_mod_$1300
@@ -10304,7 +10304,7 @@ add_values_$1319:
         add        [ebx], eax 
         mov        eax, [edi+4] 
         adc        [ebx+4], eax 
-        or         cx, cx 
+        or         dx, dx 
         jz         calculationLoop_$1284
         push        esi
         mov        esi, ebx 
@@ -10381,7 +10381,7 @@ sub_values_$1326:
         sub        [ebx], eax 
         mov        eax, [edi+4] 
         sbb        [ebx+4], eax 
-        or         cx, cx 
+        or         dx, dx 
         jz         calculationLoop_$1284
         push        esi
         mov        esi, ebx 
@@ -10409,7 +10409,7 @@ sub_register_$1328:
         jmp        add_register_start_$1322
 
 calculate_mul_$1298:
-        or         cx, cx 
+        or         dx, dx 
         jz         mul_start_$1329
         cmp        word ptr [ebx+8], 0 
         jne        mul_start_$1329
@@ -10483,7 +10483,7 @@ mul_numbers_$1332:
 
 mul_ok_$1333:
         pop        edx
-        or         cx, cx 
+        or         dx, dx 
         jz         mul_calculated_$1334
         cmp        word ptr [edi+8], 0 
         jne        invalid_value_$546
@@ -10532,7 +10532,7 @@ calculate_div_$1299:
         mov        esi, ebx 
         call       div_64_$1336
         pop        edx
-        or         cx, cx 
+        or         dx, dx 
         jz         div_calculated_$1337
         cmp        byte ptr [esi+8], 0 
         je         div_first_register_ok_$1338
@@ -11465,7 +11465,7 @@ value_qword_$1456:
 
 value_pword_$1455:
         call       get_pword_value_$1417
-        movzx      edx, cx 
+        movzx      edx, dx 
         ret
 
 value_dword_$1454:
@@ -14274,9 +14274,9 @@ directory_ok_$1808:
         cdq
 
 calculate_checksum_$1810:
-        mov        cx, [ebx] 
+        mov        dx, [ebx] 
         add        eax, edx 
-        mov        cx, ax 
+        mov        dx, ax 
         shr        eax, 16 
         add        eax, edx 
         add        ebx, 2 
@@ -15807,7 +15807,7 @@ L2081_false__hla_:
         je         L2082_false__hla_
         call       mark_relocation
         stosd
-        mov        ax, cx 
+        mov        ax, dx 
         stosw
         jmp        L2082_endif__hla_
 L2082_false__hla_:
@@ -16451,11 +16451,11 @@ postbyte_16bit_$2207:
         jge        value_out_of_range_$567
         cmp        edx, -32768 
         jl         value_out_of_range_$567
-        or         cx, cx 
+        or         dx, dx 
         jz         address_$2209
-        cmp        cx, 128 
+        cmp        dx, 128 
         jb         address_8bit_value_$2210
-        cmp        cx, 65408 
+        cmp        dx, 65408 
         jae        address_8bit_value_$2210
 
 address_16bit_value_$2208:
@@ -16476,9 +16476,9 @@ address_8bit_value_$2210:
         stosb
         mov        al, dl 
         stosb
-        cmp        cx, 128 
+        cmp        dx, 128 
         jge        value_out_of_range_$567
-        cmp        cx, 65408 
+        cmp        dx, 65408 
         jl         value_out_of_range_$567
         ret
 
@@ -16727,7 +16727,7 @@ addressing_16bit_$2232:
         jge        address_immediate_32bit_$2230
         cmp        edx, -32768 
         jl         address_immediate_32bit_$2230
-        movzx      edx, cx 
+        movzx      edx, dx 
 
 address_immediate_16bit_$2231:
         call       address_16bit_prefix_$2154
@@ -17414,7 +17414,7 @@ stub_from_file_$2365:
         xor        eax, eax 
         rep stosd
         mov        edx, 64 
-        xchg       word ptr [esi+24], cx 
+        xchg       word ptr [esi+24], dx 
         call       seek_$445
         movzx      ecx, word ptr [esi+6] 
         shl        ecx, 2 
@@ -17423,7 +17423,7 @@ stub_from_file_$2365:
         mov        edx, edi 
         sub        edx, esi 
         shr        edx, 4 
-        xchg       word ptr [esi+8], cx 
+        xchg       word ptr [esi+8], dx 
         shl        edx, 4 
         call       seek_$445
         movzx      ecx, word ptr [esi+4] 
@@ -17454,13 +17454,13 @@ stub_code_ok_$2378:
         call       close_$438
         mov        edx, edi 
         sub        edx, esi 
-        mov        ax, cx 
+        mov        ax, dx 
         and        ax, 511 
         mov        [esi+2], ax 
         dec        edx
         shr        edx, 9 
         inc        edx
-        mov        [esi+4], cx 
+        mov        [esi+4], dx 
         mov        eax, edi 
         sub        eax, esi 
         mov        [esi+60], eax 
@@ -19680,7 +19680,7 @@ basic_al_imm_$2657:
 basic_reg_imm_16bit_$2654:
         call       operand_16bit_$2125
         call       get_word_value_$1397
-        mov        cx, ax 
+        mov        dx, ax 
         mov        bl, base_code_$125 
         shr        bl, 3 
         xchg       byte ptr postbyte_register_$127, bl 
@@ -19688,9 +19688,9 @@ basic_reg_imm_16bit_$2654:
         jne        basic_reg_imm_16bit_store_$2658
         cmp        size_declared_$121, 0 
         jne        basic_reg_imm_16bit_store_$2658
-        cmp        cx, 128 
+        cmp        dx, 128 
         jb         basic_reg_simm_8bit_$2659
-        cmp        cx, 65408 
+        cmp        dx, 65408 
         jae        basic_reg_simm_8bit_$2659
 
 basic_reg_imm_16bit_store_$2658:
@@ -19698,7 +19698,7 @@ basic_reg_imm_16bit_store_$2658:
         jz         basic_ax_imm_$2660
         mov        base_code_$125, 129 
         call       store_nomem_instruction_$2263
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2580
@@ -19713,7 +19713,7 @@ basic_reg_simm_8bit_$2659:
 basic_ax_imm_$2660:
         add        base_code_$125, 5 
         call       store_instruction_code_$2168
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2580
@@ -20250,11 +20250,11 @@ mov_reg_imm_8bit_$2716:
 
 mov_reg_imm_16bit_$2717:
         call       get_word_value_$1397
-        mov        cx, ax 
+        mov        dx, ax 
         call       operand_16bit_$2125
         mov        al, 184 
         call       store_mov_reg_imm_code_$2287
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2580
@@ -20601,14 +20601,14 @@ test_al_imm_$2751:
 test_reg_imm_16bit_$2748:
         call       operand_16bit_$2125
         call       get_word_value_$1397
-        mov        cx, ax 
+        mov        dx, ax 
         mov        bl, postbyte_register_$127 
         mov        postbyte_register_$127, 0 
         mov        base_code_$125, 247 
         or         bl, bl 
         jz         test_ax_imm_$2752
         call       store_nomem_instruction_$2263
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2580
@@ -20616,7 +20616,7 @@ test_reg_imm_16bit_$2748:
 test_ax_imm_$2752:
         mov        base_code_$125, 169 
         call       store_instruction_code_$2168
-        mov        ax, cx 
+        mov        ax, dx 
         stosw
         jmp        instruction_assembled_$2580
 
@@ -20977,7 +20977,7 @@ push_imm_optimized_32bit_$2789:
 
 push_imm_optimized_16bit_$2788:
         call       get_word_value_$1397
-        mov        cx, ax 
+        mov        dx, ax 
         call       operand_16bit_$2125
         cmp        value_type_$123, 0 
         jne        push_imm_16bit_store_$2793
@@ -20996,13 +20996,13 @@ push_imm_8bit_$2792:
 
 push_imm_16bit_$2785:
         call       get_word_value_$1397
-        mov        cx, ax 
+        mov        dx, ax 
         call       operand_16bit_$2125
 
 push_imm_16bit_store_$2793:
         mov        base_code_$125, 104 
         call       store_instruction_code_$2168
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        push_done_$2772
@@ -21523,9 +21523,9 @@ ret_imm_ok_$2831:
         jz         simple_ret_$2829
 
 ret_imm_store_$2832:
-        mov        cx, ax 
+        mov        dx, ax 
         call       store_instruction_code_$2168
-        mov        ax, cx 
+        mov        ax, dx 
         stosw
         jmp        instruction_assembled_$2580
 
@@ -22411,7 +22411,7 @@ imul_reg_reg_imm_16bit_$2902:
         push        ebx
         call       get_word_value_$1397
         pop        ebx
-        mov        cx, ax 
+        mov        dx, ax 
         cmp        value_type_$123, 0 
         jne        imul_reg_reg_imm_16bit_store_$2905
         cmp        size_declared_$121, 0 
@@ -22424,7 +22424,7 @@ imul_reg_reg_imm_16bit_$2902:
 imul_reg_reg_imm_16bit_store_$2905:
         mov        base_code_$125, 105 
         call       store_nomem_instruction_$2263
-        mov        ax, cx 
+        mov        ax, dx 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2580
@@ -23347,7 +23347,7 @@ cmps_instruction_$183::
         jnz        invalid_address_$536
         or         bl, ch 
         jnz        invalid_address_$536
-        pop        cx
+        pop        dx
         pop        ax
         cmp        segment_register_$128, 1 
         ja         invalid_address_$536
@@ -24121,11 +24121,11 @@ fucompp_instruction_$239::
         jmp        instruction_assembled_$2580
 
 fxch_instruction_$241::
-        mov        cx, 473 
+        mov        dx, 473 
         jmp        fpu_single_operand_$3032
 
 ffreep_instruction_$224::
-        mov        cx, 223 
+        mov        dx, 223 
         jmp        fpu_single_operand_$3032
 
 ffree_instruction_$223::
@@ -24143,7 +24143,7 @@ fpu_single_operand_$3032:
         mov        esi, ebx 
         shl        dh, 3 
         or         dh, 193 
-        mov        ax, cx 
+        mov        ax, dx 
         stosw
         jmp        instruction_assembled_$2580
 
@@ -24153,7 +24153,7 @@ fpu_streg_$3033:
         shl        dh, 3 
         or         dh, al 
         or         dh, 192 
-        mov        ax, cx 
+        mov        ax, dx 
         stosw
         jmp        instruction_assembled_$2580
 
@@ -25800,8 +25800,8 @@ public_allowed_$3114:
         cmp        eax, 15 
         jb         invalid_use_of_symbol_$545
         je         reserved_word_used_as_symbol_$557
-        mov        cx, current_pass_$104 
-        mov        [eax+18], cx 
+        mov        dx, current_pass_$104 
+        mov        [eax+18], dx 
         or         byte ptr [eax+8], 8 
         inc        esi
         mov        ebx, free_additional_memory_$46 
@@ -27020,14 +27020,14 @@ subsystem_setting_$3195:
         jne        invalid_value_$546
         cmp        byte ptr [esi+10], 2 
         ja         invalid_value_$546
-        mov        cx, [esi+8] 
-        cmp        cx, 32768 
+        mov        dx, [esi+8] 
+        cmp        dx, 32768 
         je         zero_version_$3198
         mov        eax, [esi+4] 
-        cmp        cx, 7 
+        cmp        dx, 7 
         jg         invalid_value_$546
         mov        cx, 7 
-        sub        cx, cx 
+        sub        cx, dx 
         mov        eax, [esi+4] 
         shr        eax, cl 
         mov        ebx, eax 
@@ -27344,7 +27344,7 @@ store_section_index_$3242 proc near32
         mov        eax, ecx 
         shl        eax, 8 
         mov        [ebx], eax 
-        inc        cx
+        inc        dx
         jz         format_limitations_exceeded_$533
         mov        eax, edx 
         shl        eax, 16 
@@ -27352,7 +27352,7 @@ store_section_index_$3242 proc near32
         test       byte ptr [ebx+20], 64 
         jz         section_index_ok_$3243
         or         ah, -1 
-        inc        cx
+        inc        dx
         jz         format_limitations_exceeded_$533
 
 section_index_ok_$3243:
@@ -28059,7 +28059,7 @@ section_symbol_ok_$3355:
         add        esi, 32 
         cmp        ebx, free_additional_memory_$46 
         jne        find_next_section_$3350
-        inc        cx
+        inc        dx
         jz         format_limitations_exceeded_$533
         mov        current_section_$93, edx 
         mov        esi, symbols_stream_$88 
@@ -28100,17 +28100,17 @@ make_public_symbol_$3359:
         jnz        elf64_public_$3362
         cmp        dl, 2 
         jne        invalid_use_of_symbol_$545
-        mov        cx, [eax+14] 
+        mov        dx, [eax+14] 
         jmp        section_for_public_ok_$3363
 
 elf64_public_$3362:
         cmp        dl, 4 
         jne        invalid_use_of_symbol_$545
-        mov        cx, [eax+6] 
+        mov        dx, [eax+6] 
         jmp        section_for_public_ok_$3363
 
 public_absolute_$3361:
-        mov        cx, 65521 
+        mov        dx, 65521 
 
 section_for_public_ok_$3363:
         mov        eax, [esi+4] 

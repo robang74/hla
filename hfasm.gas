@@ -1,5 +1,5 @@
 // Assembly code emitted by HLA compiler
-// Version 1.102 build 18583 (prototype)
+// Version 1.102 build 18688 (prototype)
 // HLA compiler written by Randall Hyde
 // GAS compatible output
 
@@ -5107,7 +5107,6 @@ putc_$21:
         popal
         ret        $4
 xputc_$21:
-End_putc_$21_22:
 
 /* procedure puts_$23 */
 
@@ -5119,7 +5118,6 @@ puts_$23:
         popal
         ret        $4
 xputs_$23:
-End_puts_$23_24:
 
 /* procedure putu32_$25 */
 
@@ -5131,7 +5129,6 @@ putu32_$25:
         popal
         ret        $4
 xputu32_$25:
-End_putu32_$25_26:
 
 /* procedure puthex32_$27 */
 
@@ -5143,7 +5140,6 @@ puthex32_$27:
         popal
         ret        $4
 xputhex32_$27:
-End_puthex32_$27_28:
 
 /* procedure put_newln_$29 */
 
@@ -5153,7 +5149,6 @@ put_newln_$29:
         popal
         ret
 xput_newln_$29:
-End_put_newln_$29_30:
 
 /* procedure putBuf_$31 */
 
@@ -5166,7 +5161,6 @@ putBuf_$31:
         popal
         ret        $8
 xputBuf_$31:
-End_putBuf_$31_32:
 
 /* procedure _0191__p___$405 */
 
@@ -5183,7 +5177,6 @@ _0191__p___$405:
         int        $3 
         int        $3 
 x_0191__p___$405:
-End__0191__p___$405_406:
 
 /* procedure exists_$407 */
 
@@ -5203,7 +5196,6 @@ exists_$407:
         cmc
         ret
 xexists_$407:
-End_exists_$407_408:
 
 /* procedure _019a__p___$414 */
 
@@ -5220,7 +5212,6 @@ _019a__p___$414:
         int        $3 
         int        $3 
 x_019a__p___$414:
-End__019a__p___$414_415:
 
 /* procedure open_$416 */
 
@@ -5244,7 +5235,6 @@ rtnError_$417:
         stc
         ret
 xopen_$416:
-End_open_$416_418:
 
 /* procedure _01a4__p___$424 */
 
@@ -5261,7 +5251,6 @@ _01a4__p___$424:
         int        $3 
         int        $3 
 x_01a4__p___$424:
-End__01a4__p___$424_425:
 
 /* procedure create_$426 */
 
@@ -5285,7 +5274,6 @@ rtnError_$427:
         stc
         ret
 xcreate_$426:
-End_create_$426_428:
 
 /* procedure _01ae__p___$434 */
 
@@ -5302,7 +5290,6 @@ _01ae__p___$434:
         int        $3 
         int        $3 
 x_01ae__p___$434:
-End__01ae__p___$434_435:
 
 /* procedure write_$436 */
 
@@ -5333,7 +5320,6 @@ write_failed_$437:
         mov        $12295, %eax 
         jmp        Raise__hla_
 xwrite_$436:
-End_write_$436_438:
 
 /* procedure _01b8__p___$444 */
 
@@ -5350,7 +5336,6 @@ _01b8__p___$444:
         int        $3 
         int        $3 
 x_01b8__p___$444:
-End__01b8__p___$444_445:
 
 /* procedure read_$446 */
 
@@ -5381,7 +5366,6 @@ read_failed_$447:
         mov        $16386, %eax 
         jmp        Raise__hla_
 xread_$446:
-End_read_$446_448:
 
 /* procedure _01c2__p___$454 */
 
@@ -5398,7 +5382,6 @@ _01c2__p___$454:
         int        $3 
         int        $3 
 x_01c2__p___$454:
-End__01c2__p___$454_455:
 
 /* procedure close_$456 */
 
@@ -5418,7 +5401,6 @@ close_$456:
         popl       %ebx 
         ret
 xclose_$456:
-End_close_$456_457:
 
 /* procedure _01cb__p___$463 */
 
@@ -5435,7 +5417,6 @@ _01cb__p___$463:
         int        $3 
         int        $3 
 x_01cb__p___$463:
-End__01cb__p___$463_464:
 
 /* procedure seek_$465 */
 
@@ -5457,7 +5438,6 @@ seek_$465:
         popl       %ebx 
         ret
 xseek_$465:
-End_seek_$465_466:
 
 /* procedure _01d4__p___$472 */
 
@@ -5474,7 +5454,6 @@ _01d4__p___$472:
         int        $3 
         int        $3 
 x_01d4__p___$472:
-End__01d4__p___$472_473:
 
 /* procedure mseek_$474 */
 
@@ -5496,7 +5475,6 @@ mseek_$474:
         popl       %ebx 
         ret
 xmseek_$474:
-End_mseek_$474_475:
 
 /* procedure _01dd__p___$481 */
 
@@ -5513,7 +5491,6 @@ _01dd__p___$481:
         int        $3 
         int        $3 
 x_01dd__p___$481:
-End__01dd__p___$481_482:
 
 /* procedure rseek_$483 */
 
@@ -5535,7 +5512,6 @@ rseek_$483:
         popl       %ebx 
         ret
 xrseek_$483:
-End_rseek_$483_484:
 
 /* procedure _01e6__p___$490 */
 
@@ -5552,7 +5528,6 @@ _01e6__p___$490:
         int        $3 
         int        $3 
 x_01e6__p___$490:
-End__01e6__p___$490_491:
 
 /* procedure getenv_$492 */
 
@@ -5575,7 +5550,6 @@ getenv_$492:
         popl       %ebp 
         ret        $4
 xgetenv_$492:
-End_getenv_$492_493:
 
 /* procedure _01ee__p___$498 */
 
@@ -5592,7 +5566,6 @@ _01ee__p___$498:
         int        $3 
         int        $3 
 x_01ee__p___$498:
-End__01ee__p___$498_499:
 
 /* procedure get_environment_variable_$500 */
 
@@ -5629,7 +5602,6 @@ out_of_memory_$501:
         mov        $12288, %eax 
         jmp        Raise__hla_
 xget_environment_variable_$500:
-End_get_environment_variable_$500_503:
 
 /* procedure _01f8__p___$508 */
 
@@ -5646,7 +5618,6 @@ _01f8__p___$508:
         int        $3 
         int        $3 
 x_01f8__p___$508:
-End__01f8__p___$508_509:
 
 /* procedure init_memory_$510 */
 
@@ -5664,7 +5635,6 @@ init_memory_$510:
         mov        %eax, additional_memory_end_$48 
         ret
 xinit_memory_$510:
-End_init_memory_$510_511:
 
 /* procedure _0200__p___$516 */
 
@@ -5681,7 +5651,6 @@ _0200__p___$516:
         int        $3 
         int        $3 
 x_0200__p___$516:
-End__0200__p___$516_517:
 
 /* procedure display_string_$518 */
 
@@ -5699,7 +5668,6 @@ display_string_$518:
         popl       %ebx 
         ret
 xdisplay_string_$518:
-End_display_string_$518_519:
 
 /* procedure _0209__p___$525 */
 
@@ -5716,7 +5684,6 @@ _0209__p___$525:
         int        $3 
         int        $3 
 x_0209__p___$525:
-End__0209__p___$525_526:
 
 /* procedure exitProcess_$14 */
 
@@ -5726,7 +5693,6 @@ exitProcess_$14:
         pushl      8(%ebp) 
         call       _fasm_exitProcess
 xexitProcess_$14:
-End_exitProcess_$14_527:
 
 /* procedure _0211__p___$533 */
 
@@ -5743,7 +5709,6 @@ _0211__p___$533:
         int        $3 
         int        $3 
 x_0211__p___$533:
-End__0211__p___$533_534:
 
 /* procedure readFileIntoMemory_$535 */
 
@@ -5758,7 +5723,7 @@ readFileIntoMemory_$535:
         pushl      %edi 
         pushl      %esi 
         pushl      %ebp 
-        add        $-4, (%esp) 
+        addl       $-4, (%esp) 
         pushl      12(%ebp) 
 
         call       _fasm_readFileIntoMemory
@@ -5787,7 +5752,6 @@ raiseFileException_$537:
         mov        8(%ebp), %eax 
         jmp        Raise__hla_
 xreadFileIntoMemory_$535:
-End_readFileIntoMemory_$535_538:
 
 /* procedure _021c__p___$544 */
 
@@ -5804,7 +5768,6 @@ _021c__p___$544:
         int        $3 
         int        $3 
 x_021c__p___$544:
-End__021c__p___$544_545:
 
 /* procedure make_timestamp_$546 */
 
@@ -5813,21 +5776,21 @@ make_timestamp_$546:
         movl       %esp, %ebp 
         subl       $24, %esp 
         pushl      %ebp 
-        add        $-24, (%esp) 
+        addl       $-24, (%esp) 
         pushl      %ebp 
-        add        $-20, (%esp) 
+        addl       $-20, (%esp) 
 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
 
         pushl      %ebp 
-        add        $-12, (%esp) 
+        addl       $-12, (%esp) 
 
         pushl      %ebp 
-        add        $-8, (%esp) 
+        addl       $-8, (%esp) 
 
         pushl      %ebp 
-        add        $-4, (%esp) 
+        addl       $-4, (%esp) 
 
         call       _fasm_curDateTime
         addl       $24, %esp 
@@ -5902,7 +5865,6 @@ day_correction_ok_$552:
         popl       %ebp 
         ret
 xmake_timestamp_$546:
-End_make_timestamp_$546_559:
 
 /* procedure _0230__p___$564 */
 
@@ -5919,7 +5881,6 @@ _0230__p___$564:
         int        $3 
         int        $3 
 x_0230__p___$564:
-End__0230__p___$564_565:
 
 /* procedure allTheExceptions_$566 */
 
@@ -6093,7 +6054,6 @@ write_failed_$608:
         mov        $12295, %eax 
         jmp        Raise__hla_
 xallTheExceptions_$566:
-End_allTheExceptions_$566_609:
 
 /* procedure _0262__p___$614 */
 
@@ -6110,7 +6070,6 @@ _0262__p___$614:
         int        $3 
         int        $3 
 x_0262__p___$614:
-End__0262__p___$614_615:
 
 /* procedure lower_case_$616 */
 
@@ -6127,7 +6086,6 @@ convert_case_$617:
 case_ok_$618:
         ret
 xlower_case_$616:
-End_lower_case_$616_619:
 
 /* procedure _026c__p___$624 */
 
@@ -6144,7 +6102,6 @@ _026c__p___$624:
         int        $3 
         int        $3 
 x_026c__p___$624:
-End__026c__p___$624_625:
 
 /* procedure search_rsrvd_word_table_$626 */
 
@@ -6191,7 +6148,6 @@ symbol_ok_$630:
         clc
         ret
 xsearch_rsrvd_word_table_$626:
-End_search_rsrvd_word_table_$626_631:
 
 /* procedure _0278__p___$636 */
 
@@ -6208,7 +6164,6 @@ _0278__p___$636:
         int        $3 
         int        $3 
 x_0278__p___$636:
-End__0278__p___$636_637:
 
 /* procedure get_symbol_$638 */
 
@@ -6255,7 +6210,6 @@ symbol_ok_$642:
         clc
         ret
 xget_symbol_$638:
-End_get_symbol_$638_643:
 
 /* procedure _0284__p___$648 */
 
@@ -6272,7 +6226,6 @@ _0284__p___$648:
         int        $3 
         int        $3 
 x_0284__p___$648:
-End__0284__p___$648_649:
 
 /* procedure get_instruction_$650 */
 
@@ -6316,7 +6269,6 @@ instruction_ok_$653:
         clc
         ret
 xget_instruction_$650:
-End_get_instruction_$650_655:
 
 /* procedure _0290__p___$660 */
 
@@ -6333,7 +6285,6 @@ _0290__p___$660:
         int        $3 
         int        $3 
 x_0290__p___$660:
-End__0290__p___$660_661:
 
 /* procedure get_operator_$662 */
 
@@ -6405,7 +6356,6 @@ simple_operator_found_$671:
         mov        2(%edi), %al 
         ret
 xget_operator_$662:
-End_get_operator_$662_672:
 
 /* procedure _02a1__p___$677 */
 
@@ -6422,7 +6372,6 @@ _02a1__p___$677:
         int        $3 
         int        $3 
 x_02a1__p___$677:
-End__02a1__p___$677_678:
 
 /* procedure allocate_label_$679 */
 
@@ -6437,7 +6386,6 @@ initialize_label_$680:
         mov        %eax, labels_list_$73 
         ret
 xallocate_label_$679:
-End_allocate_label_$679_681:
 
 /* procedure _02aa__p___$686 */
 
@@ -6454,7 +6402,6 @@ _02aa__p___$686:
         int        $3 
         int        $3 
 x_02aa__p___$686:
-End__02aa__p___$686_687:
 
 /* procedure get_label_id_$688 */
 
@@ -6709,7 +6656,6 @@ reserved_word_$713:
         popl       %edi 
         ret
 xget_label_id_$688:
-End_get_label_id_$688_716:
 
 /* procedure _02cd__p___$721 */
 
@@ -6726,7 +6672,6 @@ _02cd__p___$721:
         int        $3 
         int        $3 
 x_02cd__p___$721:
-End__02cd__p___$721_722:
 
 /* procedure display_block_$723 */
 
@@ -6752,7 +6697,6 @@ block_ok_$726:
 block_displayed_$725:
         ret
 xdisplay_block_$723:
-End_display_block_$723_727:
 
 /* procedure _02d8__p___$732 */
 
@@ -6769,7 +6713,6 @@ _02d8__p___$732:
         int        $3 
         int        $3 
 x_02d8__p___$732:
-End__02d8__p___$732_733:
 
 /* procedure flush_display_buffer_$734 */
 
@@ -6796,7 +6739,6 @@ display_messages_$736:
 display_done_$735:
         ret
 xflush_display_buffer_$734:
-End_flush_display_buffer_$734_737:
 
 /* procedure _02e2__p___$742 */
 
@@ -6813,7 +6755,6 @@ _02e2__p___$742:
         int        $3 
         int        $3 
 x_02e2__p___$742:
-End__02e2__p___$742_743:
 
 /* procedure display_user_messages_$744 */
 
@@ -6835,7 +6776,6 @@ make_line_break_$746:
 line_break_ok_$745:
         ret
 xdisplay_user_messages_$744:
-End_display_user_messages_$744_747:
 
 /* procedure _02ec__p___$752 */
 
@@ -6852,7 +6792,6 @@ _02ec__p___$752:
         int        $3 
         int        $3 
 x_02ec__p___$752:
-End__02ec__p___$752_753:
 
 /* procedure fatal_error_$754 */
 
@@ -6867,7 +6806,6 @@ fatal_error_$754:
         pushl      $255 
         call       exitProcess_$14
 xfatal_error_$754:
-End_fatal_error_$754_756:
 
 /* procedure _02f5__p___$761 */
 
@@ -6884,7 +6822,6 @@ _02f5__p___$761:
         int        $3 
         int        $3 
 x_02f5__p___$761:
-End__02f5__p___$761_762:
 
 /* procedure assembler_error_$763 */
 
@@ -6984,7 +6921,6 @@ L765_endtry__hla_:
         pushl      $2 
         call       exitProcess_$14
 xassembler_error_$763:
-End_assembler_error_$763_772:
 
 /* procedure _0305__p___$777 */
 
@@ -7001,7 +6937,6 @@ _0305__p___$777:
         int        $3 
         int        $3 
 x_0305__p___$777:
-End__0305__p___$777_778:
 
 /* procedure convert_line_$779 */
 
@@ -7260,7 +7195,6 @@ line_end_$793:
         popl       %ecx 
         ret
 xconvert_line_$779:
-End_convert_line_$779_806:
 
 /* procedure _0327__p___$811 */
 
@@ -7277,7 +7211,6 @@ _0327__p___$811:
         int        $3 
         int        $3 
 x_0327__p___$811:
-End__0327__p___$811_812:
 
 /* procedure move_data_$813 */
 
@@ -7295,7 +7228,6 @@ movsw_ok_$815:
         rep movsl
         ret
 xmove_data_$813:
-End_move_data_$813_816:
 
 /* procedure _0331__p___$821 */
 
@@ -7312,7 +7244,6 @@ _0331__p___$821:
         int        $3 
         int        $3 
 x_0331__p___$821:
-End__0331__p___$821_822:
 
 /* procedure calculate_hash_$823 */
 
@@ -7329,7 +7260,6 @@ fnv1a_hash_$824:
         jb         fnv1a_hash_$824
         ret
 xcalculate_hash_$823:
-End_calculate_hash_$823_825:
 
 /* procedure _033a__p___$830 */
 
@@ -7346,7 +7276,6 @@ _033a__p___$830:
         int        $3 
         int        $3 
 x_033a__p___$830:
-End__033a__p___$830_831:
 
 /* procedure get_preprocessor_symbol_$832 */
 
@@ -7422,7 +7351,6 @@ preprocessor_symbol_found_$838:
         clc
         ret
 xget_preprocessor_symbol_$832:
-End_get_preprocessor_symbol_$832_839:
 
 /* procedure _0348__p___$844 */
 
@@ -7439,7 +7367,6 @@ _0348__p___$844:
         int        $3 
         int        $3 
 x_0348__p___$844:
-End__0348__p___$844_845:
 
 /* procedure process_macro_operators_$846 */
 
@@ -7679,7 +7606,6 @@ shift_line_data_$869:
         lea        4(%edi,%eax,1), %esi 
         jmp        before_macro_operators_$847
 xprocess_macro_operators_$846:
-End_process_macro_operators_$846_870:
 
 /* procedure _0367__p___$875 */
 
@@ -7696,7 +7622,6 @@ _0367__p___$875:
         int        $3 
         int        $3 
 x_0367__p___$875:
-End__0367__p___$875_876:
 
 /* procedure process_fix_constants_$877 */
 
@@ -7704,7 +7629,6 @@ process_fix_constants_$877:
         movb       $3, value_type_$130 
         jmp        process_symbolic_constants
 xprocess_fix_constants_$877:
-End_process_fix_constants_$877_878:
 
 /* procedure _036f__p___$883 */
 
@@ -7721,14 +7645,12 @@ _036f__p___$883:
         int        $3 
         int        $3 
 x_036f__p___$883:
-End__036f__p___$883_884:
 
 /* procedure process_equ_constants_$885 */
 
 process_equ_constants_$885:
         movb       $2, value_type_$130 
 xprocess_equ_constants_$885:
-End_process_equ_constants_$885_886:
 
 /* procedure process_symbolic_constants */
 
@@ -7770,7 +7692,6 @@ check_symbol_$888:
         jc         no_replacing_$891
         mov        %edi, current_section_$100 
 xprocess_symbolic_constants:
-End_process_symbolic_constants_892:
 
 /* procedure replace_symbolic_constant_$893 */
 
@@ -7836,7 +7757,6 @@ symbol_after_replaced_$896:
         call       move_data_$813
         jmp        process_after_replaced_$895
 xreplace_symbolic_constant_$893:
-End_replace_symbolic_constant_$893_899:
 
 /* procedure _0384__p___$904 */
 
@@ -7853,7 +7773,6 @@ _0384__p___$904:
         int        $3 
         int        $3 
 x_0384__p___$904:
-End__0384__p___$904_905:
 
 /* procedure find_macro_symbol_leaf_$906 */
 
@@ -7881,7 +7800,6 @@ no_such_macro_symbol_$908:
         stc
         ret
 xfind_macro_symbol_leaf_$906:
-End_find_macro_symbol_leaf_$906_909:
 
 /* procedure _038e__p___$914 */
 
@@ -7898,7 +7816,6 @@ _038e__p___$914:
         int        $3 
         int        $3 
 x_038e__p___$914:
-End__038e__p___$914_915:
 
 /* procedure add_macro_symbol_$916 */
 
@@ -7943,7 +7860,6 @@ extend_macro_symbol_tree_$917:
         xorl       %eax, %eax 
         jmp        make_macro_symbol_$918
 xadd_macro_symbol_$916:
-End_add_macro_symbol_$916_923:
 
 /* procedure _039c__p___$928 */
 
@@ -7960,7 +7876,6 @@ _039c__p___$928:
         int        $3 
         int        $3 
 x_039c__p___$928:
-End__039c__p___$928_929:
 
 /* procedure get_macro_argument_$930 */
 
@@ -8058,7 +7973,6 @@ argument_value_ok_$937:
 macro_argument_ok_$940:
         ret
 xget_macro_argument_$930:
-End_get_macro_argument_$930_941:
 
 /* procedure _03ae__p___$946 */
 
@@ -8075,7 +7989,6 @@ _03ae__p___$946:
         int        $3 
         int        $3 
 x_03ae__p___$946:
-End__03ae__p___$946_947:
 
 /* procedure get_number_$948 */
 
@@ -8359,7 +8272,6 @@ text_out_of_range_$981:
         orl        $-1, %ebp 
         jmp        get_text_character_$980
 xget_number_$948:
-End_get_number_$948_983:
 
 /* procedure _03d8__p___$988 */
 
@@ -8376,7 +8288,6 @@ _03d8__p___$988:
         int        $3 
         int        $3 
 x_03d8__p___$988:
-End__03d8__p___$988_989:
 
 /* procedure skip_foreign_symbol_$990 */
 
@@ -8404,7 +8315,6 @@ skip_foreign_string_$993:
         addl       %eax, %esi 
         jmp        skip_foreign_line_$992
 xskip_foreign_symbol_$990:
-End_skip_foreign_symbol_$990_994:
 
 /* procedure _03e3__p___$999 */
 
@@ -8421,7 +8331,6 @@ _03e3__p___$999:
         int        $3 
         int        $3 
 x_03e3__p___$999:
-End__03e3__p___$999_1000:
 
 /* procedure get_macro_symbol_$1001 */
 
@@ -8453,7 +8362,6 @@ macro_symbol_not_found_$1002:
         stc
         ret
 xget_macro_symbol_$1001:
-End_get_macro_symbol_$1001_1005:
 
 /* procedure _03ee__p___$1010 */
 
@@ -8470,7 +8378,6 @@ _03ee__p___$1010:
         int        $3 
         int        $3 
 x_03ee__p___$1010:
-End__03ee__p___$1010_1011:
 
 /* procedure store_number_symbol_$1012 */
 
@@ -8513,7 +8420,6 @@ number_digit_ok_$1015:
         mov        %al, -1(%ebx) 
         ret
 xstore_number_symbol_$1012:
-End_store_number_symbol_$1012_1016:
 
 /* procedure _03f9__p___$1021 */
 
@@ -8530,7 +8436,6 @@ _03f9__p___$1021:
         int        $3 
         int        $3 
 x_03f9__p___$1021:
-End__03f9__p___$1021_1022:
 
 /* procedure close_macro_block_$1023 */
 
@@ -8563,7 +8468,6 @@ block_closed_$1024:
         clc
         ret
 xclose_macro_block_$1023:
-End_close_macro_block_$1023_1027:
 
 /* procedure _0404__p___$1032 */
 
@@ -8580,7 +8484,6 @@ _0404__p___$1032:
         int        $3 
         int        $3 
 x_0404__p___$1032:
-End__0404__p___$1032_1033:
 
 /* procedure skip_pattern_$1034 */
 
@@ -8620,7 +8523,6 @@ skip_quoted_string_in_pattern_$1037:
 pattern_skipped_$1036:
         ret
 xskip_pattern_$1034:
-End_skip_pattern_$1034_1039:
 
 /* procedure _0410__p___$1044 */
 
@@ -8637,7 +8539,6 @@ _0410__p___$1044:
         int        $3 
         int        $3 
 x_0410__p___$1044:
-End__0410__p___$1044_1045:
 
 /* procedure exact_match_$1046 */
 
@@ -8706,7 +8607,6 @@ elements_mismatch_$1055:
         movl       %ebp, %edi 
         ret
 xexact_match_$1046:
-End_exact_match_$1046_1056:
 
 /* procedure _0421__p___$1061 */
 
@@ -8723,7 +8623,6 @@ _0421__p___$1061:
         int        $3 
         int        $3 
 x_0421__p___$1061:
-End__0421__p___$1061_1062:
 
 /* procedure skip_match_element_$1063 */
 
@@ -8755,7 +8654,6 @@ cannot_match_$1064:
         stc
         ret
 xskip_match_element_$1063:
-End_skip_match_element_$1063_1068:
 
 /* procedure _042d__p___$1073 */
 
@@ -8772,7 +8670,6 @@ _042d__p___$1073:
         int        $3 
         int        $3 
 x_042d__p___$1073:
-End__042d__p___$1073_1074:
 
 /* procedure skip_parameters_$1075 */
 
@@ -8801,7 +8698,6 @@ skip_quoted_parameter_$1078:
 parameters_skipped_$1077:
         ret
 xskip_parameters_$1075:
-End_skip_parameters_$1075_1079:
 
 /* procedure _0438__p___$1084 */
 
@@ -8818,7 +8714,6 @@ _0438__p___$1084:
         int        $3 
         int        $3 
 x_0438__p___$1084:
-End__0438__p___$1084_1085:
 
 /* procedure process_macro_$1086 */
 
@@ -9249,7 +9144,6 @@ new_macro_block_$1131:
         mov        %ecx, macro_block_line_number_$64 
         jmp        process_macro_line_$1098
 xprocess_macro_$1086:
-End_process_macro_$1086_1132:
 
 /* procedure _046d__p___$1137 */
 
@@ -9266,7 +9160,6 @@ _046d__p___$1137:
         int        $3 
         int        $3 
 x_046d__p___$1137:
-End__046d__p___$1137_1138:
 
 /* procedure add_preprocessor_symbol_$1139 */
 
@@ -9354,7 +9247,6 @@ extend_hashes_tree_$1141:
         mov        %esi, 4(%edx) 
         ret
 xadd_preprocessor_symbol_$1139:
-End_add_preprocessor_symbol_$1139_1151:
 
 /* procedure _0480__p___$1156 */
 
@@ -9371,7 +9263,6 @@ _0480__p___$1156:
         int        $3 
         int        $3 
 x_0480__p___$1156:
-End__0480__p___$1156_1157:
 
 /* procedure preprocess_path_$1158 */
 
@@ -9419,7 +9310,6 @@ not_environment_variable_$1166:
 L1159_exitloop__hla_:
 
 xpreprocess_path_$1158:
-End_preprocess_path_$1158_1167:
 
 /* procedure _0490__p___$1172 */
 
@@ -9436,7 +9326,6 @@ _0490__p___$1172:
         int        $3 
         int        $3 
 x_0490__p___$1172:
-End__0490__p___$1172_1173:
 
 /* procedure preprocess_line */
 
@@ -10423,7 +10312,6 @@ symbol_restored_$1274:
         jnz        extra_characters_on_line_$571
         ret
 xpreprocess_line:
-End_preprocess_line_1275:
 
 /* procedure _04fc__p___$1280 */
 
@@ -10440,7 +10328,6 @@ _04fc__p___$1280:
         int        $3 
         int        $3 
 x_04fc__p___$1280:
-End__04fc__p___$1280_1281:
 
 /* procedure preprocess_file */
 
@@ -10477,7 +10364,6 @@ file_end_$1283:
         popl       memory_end_$46 
         ret
 xpreprocess_file:
-End_preprocess_file_1284:
 
 /* procedure _0505__p___$1289 */
 
@@ -10494,7 +10380,6 @@ _0505__p___$1289:
         int        $3 
         int        $3 
 x_0505__p___$1289:
-End__0505__p___$1289_1290:
 
 /* procedure preprocessor_$1291 */
 
@@ -10521,7 +10406,6 @@ preprocessor_$1291:
         mov        %edi, source_start_$54 
         ret
 xpreprocessor_$1291:
-End_preprocessor_$1291_1293:
 
 /* procedure _050e__p___$1298 */
 
@@ -10538,7 +10422,6 @@ _050e__p___$1298:
         int        $3 
         int        $3 
 x_050e__p___$1298:
-End__050e__p___$1298_1299:
 
 /* procedure fp_mul_$1300 */
 
@@ -10583,7 +10466,6 @@ fp_zero_$1301:
         movl       $32768, 8(%edi) 
         ret
 xfp_mul_$1300:
-End_fp_mul_$1300_1304:
 
 /* procedure _0519__p___$1309 */
 
@@ -10600,7 +10482,6 @@ _0519__p___$1309:
         int        $3 
         int        $3 
 x_0519__p___$1309:
-End__0519__p___$1309_1310:
 
 /* procedure fp_div_$1311 */
 
@@ -10657,7 +10538,6 @@ fp_zero_$1312:
         movl       $32768, 8(%edi) 
         ret
 xfp_div_$1311:
-End_fp_div_$1311_1316:
 
 /* procedure _0525__p___$1321 */
 
@@ -10674,7 +10554,6 @@ _0525__p___$1321:
         int        $3 
         int        $3 
 x_0525__p___$1321:
-End__0525__p___$1321_1322:
 
 /* procedure fp_add_$1323 */
 
@@ -10743,7 +10622,6 @@ _exp_done__$1328:
         popl       %ecx 
         ret
 xfp_add_$1323:
-End_fp_add_$1323_1330:
 
 /* procedure _0533__p___$1335 */
 
@@ -10760,7 +10638,6 @@ _0533__p___$1335:
         int        $3 
         int        $3 
 x_0533__p___$1335:
-End__0533__p___$1335_1336:
 
 /* procedure fp_optimize_$1337 */
 
@@ -10789,7 +10666,6 @@ fp_zero_$1338:
         movl       $32768, 8(%edi) 
         ret
 xfp_optimize_$1337:
-End_fp_optimize_$1337_1341:
 
 /* procedure _053e__p___$1346 */
 
@@ -10806,7 +10682,6 @@ _053e__p___$1346:
         int        $3 
         int        $3 
 x_053e__p___$1346:
-End__053e__p___$1346_1347:
 
 /* procedure convert_number_$1348 */
 
@@ -10905,7 +10780,6 @@ register_value_$1358:
         stosb
         ret
 xconvert_number_$1348:
-End_convert_number_$1348_1361:
 
 /* procedure _0552__p___$1366 */
 
@@ -10922,7 +10796,6 @@ _0552__p___$1366:
         int        $3 
         int        $3 
 x_0552__p___$1366:
-End__0552__p___$1366_1367:
 
 /* procedure get_fp_value_$1368 */
 
@@ -11200,7 +11073,6 @@ fp_ok_$1391:
         clc
         ret
 xget_fp_value_$1368:
-End_get_fp_value_$1368_1392:
 
 /* procedure _0571__p___$1397 */
 
@@ -11217,7 +11089,6 @@ _0571__p___$1397:
         int        $3 
         int        $3 
 x_0571__p___$1397:
-End__0571__p___$1397_1398:
 
 /* procedure convert_expression */
 
@@ -11301,7 +11172,6 @@ fp_expression_$1399:
         popl       %ebp 
         ret
 xconvert_expression:
-End_convert_expression_1408:
 
 /* procedure _0581__p___$1413 */
 
@@ -11318,7 +11188,6 @@ _0581__p___$1413:
         int        $3 
         int        $3 
 x_0581__p___$1413:
-End__0581__p___$1413_1414:
 
 /* procedure calculation_loop_$1415 */
 
@@ -11355,8 +11224,8 @@ calculationLoop_$1416:
         je         calculate_not_$1425
         cmpb       $131, %al 
         je         calculate_neg_$1426
-        mov        8(%ebx), %cx 
-        orw        8(%edi), %cx 
+        mov        8(%ebx), %dx 
+        orw        8(%edi), %dx 
         cmpb       $128, %al 
         je         calculate_add_$1427
         cmpb       $129, %al 
@@ -11375,7 +11244,7 @@ absolute_values_calculation_$1429:
         je         calculate_mul_$1430
         cmpb       $145, %al 
         je         calculate_div_$1431
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jnz        invalid_expression_$579
         cmpb       $160, %al 
         je         calculate_mod_$1432
@@ -11621,7 +11490,7 @@ add_values_$1451:
         addl       %eax, (%ebx) 
         mov        4(%edi), %eax 
         adcl       %eax, 4(%ebx) 
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         calculationLoop_$1416
         pushl      %esi 
         movl       %ebx, %esi 
@@ -11698,7 +11567,7 @@ sub_values_$1458:
         subl       %eax, (%ebx) 
         mov        4(%edi), %eax 
         sbbl       %eax, 4(%ebx) 
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         calculationLoop_$1416
         pushl      %esi 
         movl       %ebx, %esi 
@@ -11726,7 +11595,7 @@ sub_register_$1460:
         jmp        add_register_start_$1454
 
 calculate_mul_$1430:
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         mul_start_$1461
         cmpw       $0, 8(%ebx) 
         jne        mul_start_$1461
@@ -11800,7 +11669,7 @@ mul_numbers_$1464:
 
 mul_ok_$1465:
         popl       %edx 
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         mul_calculated_$1466
         cmpw       $0, 8(%edi) 
         jne        invalid_value_$586
@@ -11849,7 +11718,7 @@ calculate_div_$1431:
         movl       %ebx, %esi 
         call       div_64_$1468
         popl       %edx 
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         div_calculated_$1469
         cmpb       $0, 8(%esi) 
         je         div_first_register_ok_$1470
@@ -12258,7 +12127,6 @@ remainder_ok_$1498:
 div_ok_$1499:
         ret
 xcalculation_loop_$1415:
-End_calculation_loop_$1415_1500:
 
 /* procedure _05dd__p___$1505 */
 
@@ -12275,7 +12143,6 @@ _05dd__p___$1505:
         int        $3 
         int        $3 
 x_05dd__p___$1505:
-End__05dd__p___$1505_1506:
 
 /* procedure calculate_expression_$1507 */
 
@@ -12389,7 +12256,6 @@ get_string_value_$1508:
         movb       $0, 12(%edi) 
         ret
 xcalculate_expression_$1507:
-End_calculate_expression_$1507_1516:
 
 /* procedure _05ed__p___$1521 */
 
@@ -12406,7 +12272,6 @@ _05ed__p___$1521:
         int        $3 
         int        $3 
 x_05ed__p___$1521:
-End__05ed__p___$1521_1522:
 
 /* procedure get_byte_value_$1523 */
 
@@ -12455,7 +12320,6 @@ range_exceeded_$1526:
         movl       $value_out_of_range_$607, error_$85 
         ret
 xget_byte_value_$1523:
-End_get_byte_value_$1523_1528:
 
 /* procedure _05f9__p___$1533 */
 
@@ -12472,7 +12336,6 @@ _05f9__p___$1533:
         int        $3 
         int        $3 
 x_05f9__p___$1533:
-End__05f9__p___$1533_1534:
 
 /* procedure get_word_value_$1535 */
 
@@ -12522,7 +12385,6 @@ range_exceeded_$1538:
 done_$1539:
         ret
 xget_word_value_$1535:
-End_get_word_value_$1535_1540:
 
 /* procedure _0605__p___$1545 */
 
@@ -12539,7 +12401,6 @@ _0605__p___$1545:
         int        $3 
         int        $3 
 x_0605__p___$1545:
-End__0605__p___$1545_1546:
 
 /* procedure get_dword_value_$1547 */
 
@@ -12586,7 +12447,6 @@ range_exceeded_$1550:
 done_$1551:
         ret
 xget_dword_value_$1547:
-End_get_dword_value_$1547_1552:
 
 /* procedure _0611__p___$1557 */
 
@@ -12603,7 +12463,6 @@ _0611__p___$1557:
         int        $3 
         int        $3 
 x_0611__p___$1557:
-End__0611__p___$1557_1558:
 
 /* procedure get_pword_value_$1559 */
 
@@ -12646,7 +12505,6 @@ range_exceeded_$1561:
 done_$1562:
         ret
 xget_pword_value_$1559:
-End_get_pword_value_$1559_1563:
 
 /* procedure _061c__p___$1568 */
 
@@ -12663,7 +12521,6 @@ _061c__p___$1568:
         int        $3 
         int        $3 
 x_061c__p___$1568:
-End__061c__p___$1568_1569:
 
 /* procedure get_qword_value_$1570 */
 
@@ -12683,7 +12540,6 @@ check_qword_value_$1571:
         mov        4(%edi), %edx 
         ret
 xget_qword_value_$1570:
-End_get_qword_value_$1570_1572:
 
 /* procedure _0625__p___$1577 */
 
@@ -12700,7 +12556,6 @@ _0625__p___$1577:
         int        $3 
         int        $3 
 x_0625__p___$1577:
-End__0625__p___$1577_1578:
 
 /* procedure get_address_register_$1579 */
 
@@ -12735,7 +12590,6 @@ range_exceeded_$1582:
 done_$1583:
         ret
 xget_address_register_$1579:
-End_get_address_register_$1579_1584:
 
 /* procedure _0631__p___$1589 */
 
@@ -12752,7 +12606,6 @@ _0631__p___$1589:
         int        $3 
         int        $3 
 x_0631__p___$1589:
-End__0631__p___$1589_1590:
 
 /* procedure get_size_operator_$1591 */
 
@@ -12780,7 +12633,6 @@ no_size_operator_$1592:
         movb       $0, size_override_$125 
         ret
 xget_size_operator_$1591:
-End_get_size_operator_$1591_1594:
 
 /* procedure _063b__p___$1599 */
 
@@ -12797,7 +12649,6 @@ _063b__p___$1599:
         int        $3 
         int        $3 
 x_063b__p___$1599:
-End__063b__p___$1599_1600:
 
 /* procedure get_value_$1601 */
 
@@ -12827,7 +12678,7 @@ value_qword_$1606:
 
 value_pword_$1605:
         call       get_pword_value_$1559
-        movzx      %cx, %edx 
+        movzx      %dx, %edx 
         ret
 
 value_dword_$1604:
@@ -12847,7 +12698,6 @@ value_byte_$1602:
         movzx      %al, %eax 
         ret
 xget_value_$1601:
-End_get_value_$1601_1607:
 
 /* procedure _0648__p___$1612 */
 
@@ -12864,7 +12714,6 @@ _0648__p___$1612:
         int        $3 
         int        $3 
 x_0648__p___$1612:
-End__0648__p___$1612_1613:
 
 /* procedure get_address_value_$1614 */
 
@@ -12872,7 +12721,6 @@ get_address_value_$1614:
         movb       $0, address_size_$126 
         movb       $8, value_size_$124 
 xget_address_value_$1614:
-End_get_address_value_$1614_1615:
 
 /* procedure calculate_address_$1616 */
 
@@ -13020,7 +12868,6 @@ range_exceeded_$1625:
 done_$1631:
         ret
 xcalculate_address_$1616:
-End_calculate_address_$1616_1632:
 
 /* procedure _0661__p___$1637 */
 
@@ -13037,7 +12884,6 @@ _0661__p___$1637:
         int        $3 
         int        $3 
 x_0661__p___$1637:
-End__0661__p___$1637_1638:
 
 /* procedure get_relative_offset_$1639 */
 
@@ -13046,7 +12892,6 @@ get_relative_offset_$1639:
         movb       $-1, size_override_$125 
         call       calculate_expression_$1507
 xget_relative_offset_$1639:
-End_get_relative_offset_$1639_1640:
 
 /* procedure calculate_relative_offset_$1641 */
 
@@ -13097,7 +12942,6 @@ range_exceeded_$1645:
 done_$1646:
         ret
 xcalculate_relative_offset_$1641:
-End_calculate_relative_offset_$1641_1647:
 
 /* procedure _0670__p___$1652 */
 
@@ -13114,7 +12958,6 @@ _0670__p___$1652:
         int        $3 
         int        $3 
 x_0670__p___$1652:
-End__0670__p___$1652_1653:
 
 /* procedure skip_symbol_$1654 */
 
@@ -13168,7 +13011,6 @@ nothing_to_skip_$1655:
 
 skip_expression_$1659:
 xskip_symbol_$1654:
-End_skip_symbol_$1654_1662:
 
 /* procedure skip_expression_$1663 */
 
@@ -13218,7 +13060,6 @@ skip_done_$1667:
         clc
         ret
 xskip_expression_$1663:
-End_skip_expression_$1663_1670:
 
 /* procedure _0687__p___$1675 */
 
@@ -13235,7 +13076,6 @@ _0687__p___$1675:
         int        $3 
         int        $3 
 x_0687__p___$1675:
-End__0687__p___$1675_1676:
 
 /* procedure preevaluate_logical_value_$1677 */
 
@@ -13483,7 +13323,6 @@ different_type_$1706:
         popl       %esi 
         jmp        preevaluated_false_$1701
 xpreevaluate_logical_value_$1677:
-End_preevaluate_logical_value_$1677_1708:
 
 /* procedure _06ad__p___$1713 */
 
@@ -13500,7 +13339,6 @@ _06ad__p___$1713:
         int        $3 
         int        $3 
 x_06ad__p___$1713:
-End__06ad__p___$1713_1714:
 
 /* procedure skip_logical_value_$1715 */
 
@@ -13552,7 +13390,6 @@ logical_value_skipped_$1720:
         clc
         ret
 xskip_logical_value_$1715:
-End_skip_logical_value_$1715_1721:
 
 /* procedure _06ba__p___$1726 */
 
@@ -13569,7 +13406,6 @@ _06ba__p___$1726:
         int        $3 
         int        $3 
 x_06ba__p___$1726:
-End__06ba__p___$1726_1727:
 
 /* procedure preevaluate_logical_expression */
 
@@ -13663,7 +13499,6 @@ invalid_logical_expression_$1729:
         stosb
         ret
 xpreevaluate_logical_expression:
-End_preevaluate_logical_expression_1737:
 
 /* procedure _06ca__p___$1742 */
 
@@ -13680,7 +13515,6 @@ _06ca__p___$1742:
         int        $3 
         int        $3 
 x_06ca__p___$1742:
-End__06ca__p___$1742_1743:
 
 /* procedure calculate_logical_expression_$1744 */
 
@@ -13721,7 +13555,6 @@ logical_value_already_determined_$1748:
         popl       %eax 
         jmp        logical_loop_$1745
 xcalculate_logical_expression_$1744:
-End_calculate_logical_expression_$1744_1749:
 
 /* procedure _06d6__p___$1754 */
 
@@ -13738,7 +13571,6 @@ _06d6__p___$1754:
         int        $3 
         int        $3 
 x_06d6__p___$1754:
-End__06d6__p___$1754_1755:
 
 /* procedure get_logical_value */
 
@@ -13996,7 +13828,6 @@ logical_value_ok_$1782:
         xorb       %bl, %al 
         ret
 xget_logical_value:
-End_get_logical_value_1784:
 
 /* procedure _06f9__p___$1789 */
 
@@ -14013,7 +13844,6 @@ _06f9__p___$1789:
         int        $3 
         int        $3 
 x_06f9__p___$1789:
-End__06f9__p___$1789_1790:
 
 /* procedure identify_label_$1791 */
 
@@ -14043,7 +13873,6 @@ local_label_name_$1792:
         call       get_label_id_$688
         ret
 xidentify_label_$1791:
-End_identify_label_$1791_1796:
 
 /* procedure _0705__p___$1801 */
 
@@ -14060,7 +13889,6 @@ _0705__p___$1801:
         int        $3 
         int        $3 
 x_0705__p___$1801:
-End__0705__p___$1801_1802:
 
 /* procedure parse_address_$1803 */
 
@@ -14119,7 +13947,6 @@ no_size_prefix_$1807:
         popl       %esi 
         jmp        convert_expression
 xparse_address_$1803:
-End_parse_address_$1803_1808:
 
 /* procedure _0711__p___$1813 */
 
@@ -14136,14 +13963,12 @@ _0711__p___$1813:
         int        $3 
         int        $3 
 x_0711__p___$1813:
-End__0711__p___$1813_1814:
 
 /* procedure parse_line_contents_$1815 */
 
 parse_line_contents_$1815:
         movl       $0, parenthesis_stack_$106 
 xparse_line_contents_$1815:
-End_parse_line_contents_$1815_1816:
 
 /* procedure parse_instruction_arguments_$1817 */
 
@@ -14611,7 +14436,6 @@ contents_parsed_$1832:
         jne        invalid_expression_$579
         ret
 xparse_instruction_arguments_$1817:
-End_parse_instruction_arguments_$1817_1858:
 
 /* procedure _0743__p___$1863 */
 
@@ -14628,7 +14452,6 @@ _0743__p___$1863:
         int        $3 
         int        $3 
 x_0743__p___$1863:
-End__0743__p___$1863_1864:
 
 /* procedure parser_$1865 */
 
@@ -15165,7 +14988,6 @@ skip_parsing_pure_else_$1908:
         mov        %al, (%esp) 
         jmp        parse_next_line_$1878
 xparser_$1865:
-End_parser_$1865_1910:
 
 /* procedure _0777__p___$1915 */
 
@@ -15182,7 +15004,6 @@ _0777__p___$1915:
         int        $3 
         int        $3 
 x_0777__p___$1915:
-End__0777__p___$1915_1916:
 
 /* procedure mark_relocation */
 
@@ -15329,7 +15150,6 @@ mark_pe_relocation_$1919:
         popl       %eax 
         ret
 xmark_relocation:
-End_mark_relocation_1936:
 
 /* procedure _0791__p___$1941 */
 
@@ -15346,7 +15166,6 @@ _0791__p___$1941:
         int        $3 
         int        $3 
 x_0791__p___$1941:
-End__0791__p___$1941_1942:
 
 /* procedure close_pe_section_$1943 */
 
@@ -15406,7 +15225,6 @@ udata_ok_$1946:
         jz         format_limitations_exceeded_$573
         ret
 xclose_pe_section_$1943:
-End_close_pe_section_$1943_1947:
 
 /* procedure _079c__p___$1952 */
 
@@ -15423,7 +15241,6 @@ _079c__p___$1952:
         int        $3 
         int        $3 
 x_079c__p___$1952:
-End__079c__p___$1952_1953:
 
 /* procedure close_elf_segment_$1954 */
 
@@ -15470,7 +15287,6 @@ elf_segment_size_ok_$1957:
         andl       $-4096, %eax 
         ret
 xclose_elf_segment_$1954:
-End_close_elf_segment_$1954_1958:
 
 /* procedure _07a7__p___$1963 */
 
@@ -15487,7 +15303,6 @@ _07a7__p___$1963:
         int        $3 
         int        $3 
 x_07a7__p___$1963:
-End__07a7__p___$1963_1964:
 
 /* procedure close_elf64_segment_$1965 */
 
@@ -15543,7 +15358,6 @@ elf64_segment_size_ok_$1968:
         shll       $12, %eax 
         ret
 xclose_elf64_segment_$1965:
-End_close_elf64_segment_$1965_1969:
 
 /* procedure _07b2__p___$1974 */
 
@@ -15560,7 +15374,6 @@ _07b2__p___$1974:
         int        $3 
         int        $3 
 x_07b2__p___$1974:
-End__07b2__p___$1974_1975:
 
 /* procedure close_coff_section_$1976 */
 
@@ -15583,7 +15396,6 @@ close_coff_section_$1976:
 coff_section_ok_$1977:
         ret
 xclose_coff_section_$1976:
-End_close_coff_section_$1976_1978:
 
 /* procedure _07bb__p___$1983 */
 
@@ -15600,7 +15412,6 @@ _07bb__p___$1983:
         int        $3 
         int        $3 
 x_07bb__p___$1983:
-End__07bb__p___$1983_1984:
 
 /* procedure close_pass_$1985 */
 
@@ -15735,9 +15546,9 @@ directory_ok_$1998:
         cdq
 
 calculate_checksum_$2000:
-        mov        (%ebx), %cx 
+        mov        (%ebx), %dx 
         addl       %edx, %eax 
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         shrl       $16, %eax 
         addl       %edx, %eax 
         addl       $2, %ebx 
@@ -15747,7 +15558,6 @@ calculate_checksum_$2000:
         mov        %eax, 88(%ebx) 
         ret
 xclose_pass_$1985:
-End_close_pass_$1985_2001:
 
 /* procedure _07d2__p___$2006 */
 
@@ -15764,7 +15574,6 @@ _07d2__p___$2006:
         int        $3 
         int        $3 
 x_07d2__p___$2006:
-End__07d2__p___$2006_2007:
 
 /* procedure allocate_structure_data_$2008 */
 
@@ -15776,7 +15585,6 @@ allocate_structure_data_$2008:
         mov        %ebx, structures_buffer_$87 
         ret
 xallocate_structure_data_$2008:
-End_allocate_structure_data_$2008_2011:
 
 /* procedure _07dc__p___$2016 */
 
@@ -15793,7 +15601,6 @@ _07dc__p___$2016:
         int        $3 
         int        $3 
 x_07dc__p___$2016:
-End__07dc__p___$2016_2017:
 
 /* procedure open_binary_file_$2018 */
 
@@ -15840,7 +15647,6 @@ file_opened_$2022:
         popl       %esi 
         ret
 xopen_binary_file_$2018:
-End_open_binary_file_$2018_2023:
 
 /* procedure _07e8__p___$2028 */
 
@@ -15857,7 +15663,6 @@ _07e8__p___$2028:
         int        $3 
         int        $3 
 x_07e8__p___$2028:
-End__07e8__p___$2028_2029:
 
 /* procedure undefined_data_$2030 */
 
@@ -15872,7 +15677,6 @@ L2032_false__hla_:
 L2031_false__hla_:
         ret
 xundefined_data_$2030:
-End_undefined_data_$2030_2033:
 
 /* procedure _07f2__p___$2038 */
 
@@ -15889,7 +15693,6 @@ _07f2__p___$2038:
         int        $3 
         int        $3 
 x_07f2__p___$2038:
-End__07f2__p___$2038_2039:
 
 /* procedure generate_pe_data_$2040 */
 
@@ -16590,7 +16393,6 @@ fixups_done_$2143:
         popl       %esi 
         ret
 xgenerate_pe_data_$2040:
-End_generate_pe_data_$2040_2146:
 
 /* procedure _0863__p___$2151 */
 
@@ -16607,7 +16409,6 @@ _0863__p___$2151:
         int        $3 
         int        $3 
 x_0863__p___$2151:
-End__0863__p___$2151_2152:
 
 /* procedure write_mz_header_$2153 */
 
@@ -16683,7 +16484,6 @@ L2158_endif__hla_:
         call       write_$436
         ret
 xwrite_mz_header_$2153:
-End_write_mz_header_$2153_2159:
 
 /* procedure _0870__p___$2164 */
 
@@ -16700,7 +16500,6 @@ _0870__p___$2164:
         int        $3 
         int        $3 
 x_0870__p___$2164:
-End__0870__p___$2164_2165:
 
 /* procedure find_structure_data_$2166 */
 
@@ -16722,7 +16521,6 @@ no_such_structure_$2168:
         stc
         ret
 xfind_structure_data_$2166:
-End_find_structure_data_$2166_2170:
 
 /* procedure _087b__p___$2175 */
 
@@ -16739,7 +16537,6 @@ _087b__p___$2175:
         int        $3 
         int        $3 
 x_087b__p___$2175:
-End__087b__p___$2175_2176:
 
 /* procedure remove_structure_data_$2177 */
 
@@ -16757,7 +16554,6 @@ remove_structure_data_$2177:
         popl       %esi 
         ret
 xremove_structure_data_$2177:
-End_remove_structure_data_$2177_2178:
 
 /* procedure _0883__p___$2183 */
 
@@ -16774,7 +16570,6 @@ _0883__p___$2183:
         int        $3 
         int        $3 
 x_0883__p___$2183:
-End__0883__p___$2183_2184:
 
 /* procedure find_end_repeat_$2185 */
 
@@ -16784,7 +16579,6 @@ find_end_repeat_$2185:
         jne        unexpected_instruction_$606
         ret
 xfind_end_repeat_$2185:
-End_find_end_repeat_$2185_2186:
 
 /* procedure _088b__p___$2191 */
 
@@ -16801,7 +16595,6 @@ _088b__p___$2191:
         int        $3 
         int        $3 
 x_088b__p___$2191:
-End__088b__p___$2191_2192:
 
 /* procedure find_end_while_$2193 */
 
@@ -16811,7 +16604,6 @@ find_end_while_$2193:
         jne        unexpected_instruction_$606
         ret
 xfind_end_while_$2193:
-End_find_end_while_$2193_2194:
 
 /* procedure _0893__p___$2199 */
 
@@ -16828,7 +16620,6 @@ _0893__p___$2199:
         int        $3 
         int        $3 
 x_0893__p___$2199:
-End__0893__p___$2199_2200:
 
 /* procedure find_else_$2201 */
 
@@ -16845,7 +16636,6 @@ else_found_$2202:
         clc
         ret
 xfind_else_$2201:
-End_find_else_$2201_2203:
 
 /* procedure _089c__p___$2208 */
 
@@ -16862,7 +16652,6 @@ _089c__p___$2208:
         int        $3 
         int        $3 
 x_089c__p___$2208:
-End__089c__p___$2208_2209:
 
 /* procedure find_end_if_$2210 */
 
@@ -16872,7 +16661,6 @@ find_end_if_$2210:
         jne        unexpected_instruction_$606
         ret
 xfind_end_if_$2210:
-End_find_end_if_$2210_2211:
 
 /* procedure _08a4__p___$2216 */
 
@@ -16889,7 +16677,6 @@ _08a4__p___$2216:
         int        $3 
         int        $3 
 x_08a4__p___$2216:
-End__08a4__p___$2216_2217:
 
 /* procedure skip_line_$2218 */
 
@@ -16900,7 +16687,6 @@ skipLine_$2219:
         jnc        skipLine_$2219
         ret
 xskip_line_$2218:
-End_skip_line_$2218_2220:
 
 /* procedure _08ad__p___$2225 */
 
@@ -16917,7 +16703,6 @@ _08ad__p___$2225:
         int        $3 
         int        $3 
 x_08ad__p___$2225:
-End__08ad__p___$2225_2226:
 
 /* procedure skip_if_block_$2227 */
 
@@ -16938,7 +16723,6 @@ skip_after_else_$2229:
 if_block_skipped_$2228:
         ret
 xskip_if_block_$2227:
-End_skip_if_block_$2227_2230:
 
 /* procedure _08b7__p___$2235 */
 
@@ -16955,7 +16739,6 @@ _08b7__p___$2235:
         int        $3 
         int        $3 
 x_08b7__p___$2235:
-End__08b7__p___$2235_2236:
 
 /* procedure find_structure_end */
 
@@ -17027,7 +16810,6 @@ skip_if_$2243:
         call       skip_if_block_$2227
         jmp        find_end_directive_$2237
 xfind_structure_end:
-End_find_structure_end_2245:
 
 /* procedure define_data_$2246 */
 
@@ -17123,7 +16905,6 @@ xdefine_data_$2246:
 ;/* add esp, 4 ;Remove succeed address*/
         addl       $4, %esp 
         ret
-End_define_data_$2246_2264:
 
 /* procedure get_data_bytes_$2265 */
 
@@ -17165,7 +16946,6 @@ L2266_exitfor__hla_:
 
         ret
 xget_data_bytes_$2265:
-End_get_data_bytes_$2265_2271:
 
 /* procedure _08e0__p___$2276 */
 
@@ -17182,7 +16962,6 @@ _08e0__p___$2276:
         int        $3 
         int        $3 
 x_08e0__p___$2276:
-End__08e0__p___$2276_2277:
 
 /* procedure get_data_words_$2278 */
 
@@ -17236,7 +17015,6 @@ L2279_exitfor__hla_:
 
         ret
 xget_data_words_$2278:
-End_get_data_words_$2278_2287:
 
 /* procedure _08f0__p___$2292 */
 
@@ -17253,7 +17031,6 @@ _08f0__p___$2292:
         int        $3 
         int        $3 
 x_08f0__p___$2292:
-End__08f0__p___$2292_2293:
 
 /* procedure get_data_dwords_$2294 */
 
@@ -17312,7 +17089,6 @@ L2295_exitfor__hla_:
 
         ret
 xget_data_dwords_$2294:
-End_get_data_dwords_$2294_2298:
 
 /* procedure _08fb__p___$2303 */
 
@@ -17329,7 +17105,6 @@ _08fb__p___$2303:
         int        $3 
         int        $3 
 x_08fb__p___$2303:
-End__08fb__p___$2303_2304:
 
 /* procedure get_data_pwords_$2305 */
 
@@ -17357,7 +17132,7 @@ L2307_false__hla_:
         je         L2308_false__hla_
         call       mark_relocation
         stosl
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         stosw
         jmp        L2308_endif__hla_
 L2308_false__hla_:
@@ -17391,7 +17166,6 @@ L2306_exitfor__hla_:
 
         ret
 xget_data_pwords_$2305:
-End_get_data_pwords_$2305_2309:
 
 /* procedure _0906__p___$2314 */
 
@@ -17408,7 +17182,6 @@ _0906__p___$2314:
         int        $3 
         int        $3 
 x_0906__p___$2314:
-End__0906__p___$2314_2315:
 
 /* procedure get_data_qwords_$2316 */
 
@@ -17442,7 +17215,6 @@ L2317_exitfor__hla_:
 
         ret
 xget_data_qwords_$2316:
-End_get_data_qwords_$2316_2319:
 
 /* procedure _0910__p___$2324 */
 
@@ -17459,7 +17231,6 @@ _0910__p___$2324:
         int        $3 
         int        $3 
 x_0910__p___$2324:
-End__0910__p___$2324_2325:
 
 /* procedure get_data_twords_$2326 */
 
@@ -17539,7 +17310,6 @@ L2327_exitfor__hla_:
 
         ret
 xget_data_twords_$2326:
-End_get_data_twords_$2326_2331:
 
 /* procedure _091c__p___$2336 */
 
@@ -17556,7 +17326,6 @@ _091c__p___$2336:
         int        $3 
         int        $3 
 x_091c__p___$2336:
-End__091c__p___$2336_2337:
 
 /* procedure store_segment_prefix_if_necessary_$2338 */
 
@@ -17603,7 +17372,6 @@ segment_prefix_386_$2341:
 segment_prefix_ok_$2339:
         ret
 xstore_segment_prefix_if_necessary_$2338:
-End_store_segment_prefix_if_necessary_$2338_2343:
 
 /* procedure _0928__p___$2348 */
 
@@ -17620,7 +17388,6 @@ _0928__p___$2348:
         int        $3 
         int        $3 
 x_0928__p___$2348:
-End__0928__p___$2348_2349:
 
 /* procedure store_segment_prefix_$2350 */
 
@@ -17645,7 +17412,6 @@ segment_prefix_386_$2352:
 segment_prefix_ok_$2351:
         ret
 xstore_segment_prefix_$2350:
-End_store_segment_prefix_$2350_2354:
 
 /* procedure _0933__p___$2359 */
 
@@ -17662,7 +17428,6 @@ _0933__p___$2359:
         int        $3 
         int        $3 
 x_0933__p___$2359:
-End__0933__p___$2359_2360:
 
 /* procedure operand_16bit_$2361 */
 
@@ -17674,7 +17439,6 @@ operand_16bit_$2361:
 size_prefix_ok_$2362:
         ret
 xoperand_16bit_$2361:
-End_operand_16bit_$2361_2363:
 
 /* procedure _093c__p___$2368 */
 
@@ -17691,7 +17455,6 @@ _093c__p___$2368:
         int        $3 
         int        $3 
 x_093c__p___$2368:
-End__093c__p___$2368_2369:
 
 /* procedure operand_32bit_$2370 */
 
@@ -17703,7 +17466,6 @@ operand_32bit_$2370:
 size_prefix_ok_$2371:
         ret
 xoperand_32bit_$2370:
-End_operand_32bit_$2370_2372:
 
 /* procedure _0945__p___$2377 */
 
@@ -17720,7 +17482,6 @@ _0945__p___$2377:
         int        $3 
         int        $3 
 x_0945__p___$2377:
-End__0945__p___$2377_2378:
 
 /* procedure operand_64bit_$2379 */
 
@@ -17730,7 +17491,6 @@ operand_64bit_$2379:
         orb        $72, rex_prefix_$140 
         ret
 xoperand_64bit_$2379:
-End_operand_64bit_$2379_2380:
 
 /* procedure _094d__p___$2385 */
 
@@ -17747,7 +17507,6 @@ _094d__p___$2385:
         int        $3 
         int        $3 
 x_094d__p___$2385:
-End__094d__p___$2385_2386:
 
 /* procedure operand_autodetect_$2387 */
 
@@ -17770,7 +17529,6 @@ operand32bit_$2389:
 operand64bit_$2390:
         jmp        operand_64bit_$2379
 xoperand_autodetect_$2387:
-End_operand_autodetect_$2387_2391:
 
 /* procedure _0958__p___$2396 */
 
@@ -17787,7 +17545,6 @@ _0958__p___$2396:
         int        $3 
         int        $3 
 x_0958__p___$2396:
-End__0958__p___$2396_2397:
 
 /* procedure address_16bit_prefix_$2398 */
 
@@ -17800,7 +17557,6 @@ address_16bit_prefix_$2398:
 instruction_prefix_ok_$2399:
         ret
 xaddress_16bit_prefix_$2398:
-End_address_16bit_prefix_$2398_2400:
 
 /* procedure _0961__p___$2405 */
 
@@ -17817,7 +17573,6 @@ _0961__p___$2405:
         int        $3 
         int        $3 
 x_0961__p___$2405:
-End__0961__p___$2405_2406:
 
 /* procedure address_32bit_prefix_$2407 */
 
@@ -17830,7 +17585,6 @@ address_32bit_prefix_$2407:
 instruction_prefix_ok_$2408:
         ret
 xaddress_32bit_prefix_$2407:
-End_address_32bit_prefix_$2407_2409:
 
 /* procedure _096a__p___$2414 */
 
@@ -17847,7 +17601,6 @@ _096a__p___$2414:
         int        $3 
         int        $3 
 x_096a__p___$2414:
-End__096a__p___$2414_2415:
 
 /* procedure store_instruction_code_$2416 */
 
@@ -17880,7 +17633,6 @@ store_extended_code_$2420:
 instruction_code_ok_$2419:
         ret
 xstore_instruction_code_$2416:
-End_store_instruction_code_$2416_2421:
 
 /* procedure _0976__p___$2426 */
 
@@ -17897,7 +17649,6 @@ _0976__p___$2426:
         int        $3 
         int        $3 
 x_0976__p___$2426:
-End__0976__p___$2426_2427:
 
 /* procedure store_address_32bit_value_$2428 */
 
@@ -17917,7 +17668,6 @@ address_32bit_relocation_ok_$2429:
         stosl
         ret
 xstore_address_32bit_value_$2428:
-End_store_address_32bit_value_$2428_2430:
 
 /* procedure _097f__p___$2435 */
 
@@ -17934,7 +17684,6 @@ _097f__p___$2435:
         int        $3 
         int        $3 
 x_097f__p___$2435:
-End__097f__p___$2435_2436:
 
 /* procedure store_address_64bit_value_$2437 */
 
@@ -17956,7 +17705,6 @@ address_64bit_relocation_ok_$2438:
         stosl
         ret
 xstore_address_64bit_value_$2437:
-End_store_address_64bit_value_$2437_2439:
 
 /* procedure _0988__p___$2444 */
 
@@ -17973,7 +17721,6 @@ _0988__p___$2444:
         int        $3 
         int        $3 
 x_0988__p___$2444:
-End__0988__p___$2444_2445:
 
 /* procedure store_instruction_$2446 */
 
@@ -18071,11 +17818,11 @@ postbyte_16bit_$2461:
         jge        value_out_of_range_$607
         cmpl       $-32768, %edx 
         jl         value_out_of_range_$607
-        orw        %cx, %cx 
+        orw        %dx, %dx 
         jz         address_$2463
-        cmpw       $128, %cx 
+        cmpw       $128, %dx 
         jb         address_8bit_value_$2464
-        cmpw       $65408, %cx 
+        cmpw       $65408, %dx 
         jae        address_8bit_value_$2464
 
 address_16bit_value_$2462:
@@ -18096,9 +17843,9 @@ address_8bit_value_$2464:
         stosb
         movb       %dl, %al 
         stosb
-        cmpw       $128, %cx 
+        cmpw       $128, %dx 
         jge        value_out_of_range_$607
-        cmpw       $65408, %cx 
+        cmpw       $65408, %dx 
         jl         value_out_of_range_$607
         ret
 
@@ -18347,7 +18094,7 @@ addressing_16bit_$2486:
         jge        address_immediate_32bit_$2484
         cmpl       $-32768, %edx 
         jl         address_immediate_32bit_$2484
-        movzx      %cx, %edx 
+        movzx      %dx, %edx 
 
 address_immediate_16bit_$2485:
         call       address_16bit_prefix_$2398
@@ -18365,7 +18112,6 @@ address_immediate_16bit_$2485:
         jl         value_out_of_range_$607
         ret
 xstore_instruction_$2446:
-End_store_instruction_$2446_2488:
 
 /* procedure _09b9__p___$2493 */
 
@@ -18382,7 +18128,6 @@ _09b9__p___$2493:
         int        $3 
         int        $3 
 x_09b9__p___$2493:
-End__09b9__p___$2493_2494:
 
 /* procedure store_instruction_with_imm8_$2495 */
 
@@ -18393,7 +18138,6 @@ store_instruction_with_imm8_$2495:
         stosb
         ret
 xstore_instruction_with_imm8_$2495:
-End_store_instruction_with_imm8_$2495_2496:
 
 /* procedure _09c1__p___$2501 */
 
@@ -18410,7 +18154,6 @@ _09c1__p___$2501:
         int        $3 
         int        $3 
 x_09c1__p___$2501:
-End__09c1__p___$2501_2502:
 
 /* procedure store_instruction_with_imm16_$2503 */
 
@@ -18422,7 +18165,6 @@ store_instruction_with_imm16_$2503:
         stosw
         ret
 xstore_instruction_with_imm16_$2503:
-End_store_instruction_with_imm16_$2503_2504:
 
 /* procedure _09c9__p___$2509 */
 
@@ -18439,7 +18181,6 @@ _09c9__p___$2509:
         int        $3 
         int        $3 
 x_09c9__p___$2509:
-End__09c9__p___$2509_2510:
 
 /* procedure store_instruction_with_imm32_$2511 */
 
@@ -18451,7 +18192,6 @@ store_instruction_with_imm32_$2511:
         stosl
         ret
 xstore_instruction_with_imm32_$2511:
-End_store_instruction_with_imm32_$2511_2512:
 
 /* procedure _09d1__p___$2517 */
 
@@ -18468,7 +18208,6 @@ _09d1__p___$2517:
         int        $3 
         int        $3 
 x_09d1__p___$2517:
-End__09d1__p___$2517_2518:
 
 /* procedure get_simm32_$2519 */
 
@@ -18480,7 +18219,6 @@ get_simm32_$2519:
         jne        value_out_of_range_$607
         ret
 xget_simm32_$2519:
-End_get_simm32_$2519_2520:
 
 /* procedure _09d9__p___$2525 */
 
@@ -18497,7 +18235,6 @@ _09d9__p___$2525:
         int        $3 
         int        $3 
 x_09d9__p___$2525:
-End__09d9__p___$2525_2526:
 
 /* procedure store_nomem_instruction_$2527 */
 
@@ -18522,7 +18259,6 @@ nomem_rm_code_ok_$2529:
         stosb
         ret
 xstore_nomem_instruction_$2527:
-End_store_nomem_instruction_$2527_2530:
 
 /* procedure _09e3__p___$2535 */
 
@@ -18539,7 +18275,6 @@ _09e3__p___$2535:
         int        $3 
         int        $3 
 x_09e3__p___$2535:
-End__09e3__p___$2535_2536:
 
 /* procedure calculate_relative_address_$2537 */
 
@@ -18558,7 +18293,6 @@ calculate_relative_address_$2537:
 address_ok_$2538:
         ret
 xcalculate_relative_address_$2537:
-End_calculate_relative_address_$2537_2539:
 
 /* procedure _09ec__p___$2544 */
 
@@ -18575,7 +18309,6 @@ _09ec__p___$2544:
         int        $3 
         int        $3 
 x_09ec__p___$2544:
-End__09ec__p___$2544_2545:
 
 /* procedure get_address_$2546 */
 
@@ -18624,7 +18357,6 @@ address_size_prefix_ok_$2548:
 address_ok_$2549:
         ret
 xget_address_$2546:
-End_get_address_$2546_2550:
 
 /* procedure _09f7__p___$2555 */
 
@@ -18641,7 +18373,6 @@ _09f7__p___$2555:
         int        $3 
         int        $3 
 x_09f7__p___$2555:
-End__09f7__p___$2555_2556:
 
 /* procedure store_mov_reg_imm_code_$2557 */
 
@@ -18658,7 +18389,6 @@ mov_reg_imm_prefix_ok_$2558:
         call       store_instruction_code_$2416
         ret
 xstore_mov_reg_imm_code_$2557:
-End_store_mov_reg_imm_code_$2557_2559:
 
 /* procedure _0a00__p___$2564 */
 
@@ -18675,7 +18405,6 @@ _0a00__p___$2564:
         int        $3 
         int        $3 
 x_0a00__p___$2564:
-End__0a00__p___$2564_2565:
 
 /* procedure calculate_jump_offset_$2566 */
 
@@ -18703,7 +18432,6 @@ calculate_jump_offset_$2566:
 jump_offset_ok_$2567:
         ret
 xcalculate_jump_offset_$2566:
-End_calculate_jump_offset_$2566_2568:
 
 /* procedure _0a09__p___$2573 */
 
@@ -18720,7 +18448,6 @@ _0a09__p___$2573:
         int        $3 
         int        $3 
 x_0a09__p___$2573:
-End__0a09__p___$2573_2574:
 
 /* procedure check_for_short_jump_$2575 */
 
@@ -18776,7 +18503,6 @@ L2582_false__hla_:
         clc
         ret
 xcheck_for_short_jump_$2575:
-End_check_for_short_jump_$2575_2583:
 
 /* procedure _0a18__p___$2588 */
 
@@ -18793,7 +18519,6 @@ _0a18__p___$2588:
         int        $3 
         int        $3 
 x_0a18__p___$2588:
-End__0a18__p___$2588_2589:
 
 /* procedure make_mmx_prefix_$2590 */
 
@@ -18805,7 +18530,6 @@ make_mmx_prefix_$2590:
 no_mmx_prefix_$2591:
         ret
 xmake_mmx_prefix_$2590:
-End_make_mmx_prefix_$2590_2592:
 
 /* procedure _0a21__p___$2597 */
 
@@ -18822,7 +18546,6 @@ _0a21__p___$2597:
         int        $3 
         int        $3 
 x_0a21__p___$2597:
-End__0a21__p___$2597_2598:
 
 /* procedure get_nextbyte_$2599 */
 
@@ -18847,7 +18570,6 @@ get_nextbyte_$2599:
 nextbyte_ok_$2600:
         ret
 xget_nextbyte_$2599:
-End_get_nextbyte_$2599_2601:
 
 /* procedure _0a2a__p___$2606 */
 
@@ -18864,7 +18586,6 @@ _0a2a__p___$2606:
         int        $3 
         int        $3 
 x_0a2a__p___$2606:
-End__0a2a__p___$2606_2607:
 
 /* procedure match_register_size_$2608 */
 
@@ -18878,7 +18599,6 @@ match_register_size_$2608:
 register_size_ok_$2609:
         ret
 xmatch_register_size_$2608:
-End_match_register_size_$2608_2610:
 
 /* procedure _0a33__p___$2615 */
 
@@ -18895,7 +18615,6 @@ _0a33__p___$2615:
         int        $3 
         int        $3 
 x_0a33__p___$2615:
-End__0a33__p___$2615_2616:
 
 /* procedure convert_register_$2617 */
 
@@ -18921,7 +18640,6 @@ high_byte_register_$2619:
         orb        $128, rex_prefix_$140 
         jmp        match_register_size_$2608
 xconvert_register_$2617:
-End_convert_register_$2617_2620:
 
 /* procedure _0a3d__p___$2625 */
 
@@ -18938,7 +18656,6 @@ _0a3d__p___$2625:
         int        $3 
         int        $3 
 x_0a3d__p___$2625:
-End__0a3d__p___$2625_2626:
 
 /* procedure convert_fpu_register_$2627 */
 
@@ -18950,7 +18667,6 @@ convert_fpu_register_$2627:
         jne        invalid_operand_$583
         jmp        match_register_size_$2608
 xconvert_fpu_register_$2627:
-End_convert_fpu_register_$2627_2628:
 
 /* procedure _0a45__p___$2633 */
 
@@ -18967,7 +18683,6 @@ _0a45__p___$2633:
         int        $3 
         int        $3 
 x_0a45__p___$2633:
-End__0a45__p___$2633_2634:
 
 /* procedure convert_mmx_register_$2635 */
 
@@ -18992,7 +18707,6 @@ xmm_register_$2636:
         jne        invalid_operand_$583
         jmp        match_register_size_$2608
 xconvert_mmx_register_$2635:
-End_convert_mmx_register_$2635_2638:
 
 /* procedure _0a4f__p___$2643 */
 
@@ -19009,7 +18723,6 @@ _0a4f__p___$2643:
         int        $3 
         int        $3 
 x_0a4f__p___$2643:
-End__0a4f__p___$2643_2644:
 
 /* procedure get_jump_operator_$2645 */
 
@@ -19024,7 +18737,6 @@ get_jump_operator_$2645:
 jump_operator_ok_$2646:
         ret
 xget_jump_operator_$2645:
-End_get_jump_operator_$2645_2647:
 
 /* procedure _0a58__p___$2652 */
 
@@ -19041,7 +18753,6 @@ _0a58__p___$2652:
         int        $3 
         int        $3 
 x_0a58__p___$2652:
-End__0a58__p___$2652_2653:
 
 /* procedure make_stub_$2654 */
 
@@ -19123,7 +18834,7 @@ stub_from_file_$2655:
         xorl       %eax, %eax 
         rep stosl
         mov        $64, %edx 
-        xchgw      %cx, 24(%esi) 
+        xchgw      %dx, 24(%esi) 
         call       seek_$465
         movzx      6(%esi), %ecx 
         shll       $2, %ecx 
@@ -19132,7 +18843,7 @@ stub_from_file_$2655:
         movl       %edi, %edx 
         subl       %esi, %edx 
         shrl       $4, %edx 
-        xchgw      %cx, 8(%esi) 
+        xchgw      %dx, 8(%esi) 
         shll       $4, %edx 
         call       seek_$465
         movzx      4(%esi), %ecx 
@@ -19163,13 +18874,13 @@ stub_code_ok_$2668:
         call       close_$456
         movl       %edi, %edx 
         subl       %esi, %edx 
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         andw       $511, %ax 
         mov        %ax, 2(%esi) 
         decl       %edx 
         shrl       $9, %edx 
         incl       %edx 
-        mov        %cx, 4(%esi) 
+        mov        %dx, 4(%esi) 
         movl       %edi, %eax 
         subl       %esi, %eax 
         mov        %eax, 60(%esi) 
@@ -19231,7 +18942,6 @@ binary_heap_ok_$2671:
         popl       %esi 
         ret
 xmake_stub_$2654:
-End_make_stub_$2654_2676:
 
 /* procedure fasmAssembler */
 
@@ -19369,7 +19079,6 @@ next_pass_$2689:
 assemble_ok_$2690:
         ret
 xfasmAssembler:
-End_fasmAssembler_2691:
 
 /* procedure _0a84__p___$2696 */
 
@@ -19386,7 +19095,6 @@ _0a84__p___$2696:
         int        $3 
         int        $3 
 x_0a84__p___$2696:
-End__0a84__p___$2696_2697:
 
 /* procedure reserve_negative_$2698 */
 
@@ -19406,7 +19114,6 @@ L2700_false__hla_:
         clc
         ret
 xreserve_negative_$2698:
-End_reserve_negative_$2698_2701:
 
 /* procedure _0a8e__p___$2706 */
 
@@ -19423,7 +19130,6 @@ _0a8e__p___$2706:
         int        $3 
         int        $3 
 x_0a8e__p___$2706:
-End__0a8e__p___$2706_2707:
 
 /* procedure reserve_bytes_$2708 */
 
@@ -19480,7 +19186,6 @@ L2719_false__hla_:
         clc
         ret
 xreserve_bytes_$2708:
-End_reserve_bytes_$2708_2720:
 
 /* procedure _0aa1__p___$2725 */
 
@@ -19497,7 +19202,6 @@ _0aa1__p___$2725:
         int        $3 
         int        $3 
 x_0aa1__p___$2725:
-End__0aa1__p___$2725_2726:
 
 /* procedure reserve_words_$2727 */
 
@@ -19551,7 +19255,6 @@ words_stosw_ok_$2739:
         rep stosl
         jmp        reserved_data_$2737
 xreserve_words_$2727:
-End_reserve_words_$2727_2740:
 
 /* procedure _0ab5__p___$2745 */
 
@@ -19568,7 +19271,6 @@ _0ab5__p___$2745:
         int        $3 
         int        $3 
 x_0ab5__p___$2745:
-End__0ab5__p___$2745_2746:
 
 /* procedure reserve_dwords_$2747 */
 
@@ -19619,7 +19321,6 @@ zero_dwords_$2758:
         rep stosl
         jmp        reserved_data_$2759
 xreserve_dwords_$2747:
-End_reserve_dwords_$2747_2761:
 
 /* procedure _0aca__p___$2766 */
 
@@ -19636,7 +19337,6 @@ _0aca__p___$2766:
         int        $3 
         int        $3 
 x_0aca__p___$2766:
-End__0aca__p___$2766_2767:
 
 /* procedure reserve_pwords_$2768 */
 
@@ -19693,7 +19393,6 @@ words_stosw_ok_$2782:
         rep stosl
         jmp        reserved_data_$2780
 xreserve_pwords_$2768:
-End_reserve_pwords_$2768_2783:
 
 /* procedure _0ae0__p___$2788 */
 
@@ -19710,7 +19409,6 @@ _0ae0__p___$2788:
         int        $3 
         int        $3 
 x_0ae0__p___$2788:
-End__0ae0__p___$2788_2789:
 
 /* procedure reserve_qwords_$2790 */
 
@@ -19763,7 +19461,6 @@ zero_dwords_$2803:
         rep stosl
         jmp        reserved_data_$2804
 xreserve_qwords_$2790:
-End_reserve_qwords_$2790_2806:
 
 /* procedure _0af7__p___$2811 */
 
@@ -19780,7 +19477,6 @@ _0af7__p___$2811:
         int        $3 
         int        $3 
 x_0af7__p___$2811:
-End__0af7__p___$2811_2812:
 
 /* procedure reserve_twords_$2813 */
 
@@ -19837,7 +19533,6 @@ words_stosw_ok_$2827:
         rep stosl
         jmp        reserved_data_$2825
 xreserve_twords_$2813:
-End_reserve_twords_$2813_2828:
 
 /* procedure _0b0d__p___$2833 */
 
@@ -19854,7 +19549,6 @@ _0b0d__p___$2833:
         int        $3 
         int        $3 
 x_0b0d__p___$2833:
-End__0b0d__p___$2833_2834:
 
 /* procedure data_file_$2835 */
 
@@ -19926,7 +19620,6 @@ L2843_false__hla_:
         clc
         ret
 xdata_file_$2835:
-End_data_file_$2835_2844:
 
 /* procedure _0b1d__p___$2849 */
 
@@ -19943,7 +19636,6 @@ _0b1d__p___$2849:
         int        $3 
         int        $3 
 x_0b1d__p___$2849:
-End__0b1d__p___$2849_2850:
 
 /* procedure align_directive_$2851 */
 
@@ -20036,7 +19728,6 @@ L2863_false__hla_:
         clc
         ret
 xalign_directive_$2851:
-End_align_directive_$2851_2864:
 
 /* procedure _0b31__p___$2869 */
 
@@ -20053,7 +19744,6 @@ _0b31__p___$2869:
         int        $3 
         int        $3 
 x_0b31__p___$2869:
-End__0b31__p___$2869_2870:
 
 /* procedure assemble_line */
 
@@ -21441,7 +21131,7 @@ basic_al_imm_$2968:
 basic_reg_imm_16bit_$2965:
         call       operand_16bit_$2361
         call       get_word_value_$1535
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         mov        base_code_$132, %bl 
         shrb       $3, %bl 
         xchgb      %bl, postbyte_register_$134 
@@ -21449,9 +21139,9 @@ basic_reg_imm_16bit_$2965:
         jne        basic_reg_imm_16bit_store_$2969
         cmpb       $0, size_declared_$128 
         jne        basic_reg_imm_16bit_store_$2969
-        cmpw       $128, %cx 
+        cmpw       $128, %dx 
         jb         basic_reg_simm_8bit_$2970
-        cmpw       $65408, %cx 
+        cmpw       $65408, %dx 
         jae        basic_reg_simm_8bit_$2970
 
 basic_reg_imm_16bit_store_$2969:
@@ -21459,7 +21149,7 @@ basic_reg_imm_16bit_store_$2969:
         jz         basic_ax_imm_$2971
         movb       $129, base_code_$132 
         call       store_nomem_instruction_$2527
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2891
@@ -21474,7 +21164,7 @@ basic_reg_simm_8bit_$2970:
 basic_ax_imm_$2971:
         addb       $5, base_code_$132 
         call       store_instruction_code_$2416
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2891
@@ -22011,11 +21701,11 @@ mov_reg_imm_8bit_$3027:
 
 mov_reg_imm_16bit_$3028:
         call       get_word_value_$1535
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         call       operand_16bit_$2361
         mov        $184, %al 
         call       store_mov_reg_imm_code_$2557
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2891
@@ -22362,14 +22052,14 @@ test_al_imm_$3062:
 test_reg_imm_16bit_$3059:
         call       operand_16bit_$2361
         call       get_word_value_$1535
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         mov        postbyte_register_$134, %bl 
         movb       $0, postbyte_register_$134 
         movb       $247, base_code_$132 
         orb        %bl, %bl 
         jz         test_ax_imm_$3063
         call       store_nomem_instruction_$2527
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2891
@@ -22377,7 +22067,7 @@ test_reg_imm_16bit_$3059:
 test_ax_imm_$3063:
         movb       $169, base_code_$132 
         call       store_instruction_code_$2416
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         stosw
         jmp        instruction_assembled_$2891
 
@@ -22738,7 +22428,7 @@ push_imm_optimized_32bit_$3100:
 
 push_imm_optimized_16bit_$3099:
         call       get_word_value_$1535
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         call       operand_16bit_$2361
         cmpb       $0, value_type_$130 
         jne        push_imm_16bit_store_$3104
@@ -22757,13 +22447,13 @@ push_imm_8bit_$3103:
 
 push_imm_16bit_$3096:
         call       get_word_value_$1535
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         call       operand_16bit_$2361
 
 push_imm_16bit_store_$3104:
         movb       $104, base_code_$132 
         call       store_instruction_code_$2416
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        push_done_$3083
@@ -23284,9 +22974,9 @@ ret_imm_ok_$3142:
         jz         simple_ret_$3140
 
 ret_imm_store_$3143:
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         call       store_instruction_code_$2416
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         stosw
         jmp        instruction_assembled_$2891
 
@@ -24172,7 +23862,7 @@ imul_reg_reg_imm_16bit_$3213:
         pushl      %ebx 
         call       get_word_value_$1535
         popl       %ebx 
-        movw       %ax, %cx 
+        movw       %ax, %dx 
         cmpb       $0, value_type_$130 
         jne        imul_reg_reg_imm_16bit_store_$3216
         cmpb       $0, size_declared_$128 
@@ -24185,7 +23875,7 @@ imul_reg_reg_imm_16bit_$3213:
 imul_reg_reg_imm_16bit_store_$3216:
         movb       $105, base_code_$132 
         call       store_nomem_instruction_$2527
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         call       mark_relocation
         stosw
         jmp        instruction_assembled_$2891
@@ -25108,7 +24798,7 @@ cmps_instruction_$190:
         jnz        invalid_address_$576
         orb        %ch, %bl 
         jnz        invalid_address_$576
-        popw       %cx 
+        popw       %dx 
         popw       %ax 
         cmpb       $1, segment_register_$135 
         ja         invalid_address_$576
@@ -25882,11 +25572,11 @@ fucompp_instruction_$246:
         jmp        instruction_assembled_$2891
 
 fxch_instruction_$248:
-        mov        $473, %cx 
+        mov        $473, %dx 
         jmp        fpu_single_operand_$3343
 
 ffreep_instruction_$231:
-        mov        $223, %cx 
+        mov        $223, %dx 
         jmp        fpu_single_operand_$3343
 
 ffree_instruction_$230:
@@ -25904,7 +25594,7 @@ fpu_single_operand_$3343:
         movl       %ebx, %esi 
         shlb       $3, %dh 
         orb        $193, %dh 
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         stosw
         jmp        instruction_assembled_$2891
 
@@ -25914,7 +25604,7 @@ fpu_streg_$3344:
         shlb       $3, %dh 
         orb        %al, %dh 
         orb        $192, %dh 
-        movw       %cx, %ax 
+        movw       %dx, %ax 
         stosw
         jmp        instruction_assembled_$2891
 
@@ -27562,8 +27252,8 @@ public_allowed_$3425:
         cmpl       $15, %eax 
         jb         invalid_use_of_symbol_$585
         je         reserved_word_used_as_symbol_$597
-        mov        current_pass_$111, %cx 
-        mov        %cx, 18(%eax) 
+        mov        current_pass_$111, %dx 
+        mov        %dx, 18(%eax) 
         orb        $8, 8(%eax) 
         incl       %esi 
         mov        free_additional_memory_$53, %ebx 
@@ -28782,14 +28472,14 @@ subsystem_setting_$3506:
         jne        invalid_value_$586
         cmpb       $2, 10(%esi) 
         ja         invalid_value_$586
-        mov        8(%esi), %cx 
-        cmpw       $32768, %cx 
+        mov        8(%esi), %dx 
+        cmpw       $32768, %dx 
         je         zero_version_$3509
         mov        4(%esi), %eax 
-        cmpw       $7, %cx 
+        cmpw       $7, %dx 
         jg         invalid_value_$586
         mov        $7, %cx 
-        subw       %cx, %cx 
+        subw       %dx, %cx 
         mov        4(%esi), %eax 
         shrl       %cl, %eax 
         movl       %eax, %ebx 
@@ -29013,7 +28703,6 @@ dll_flag_ok_$3530:
 wdm_flag_ok_$3531:
         jmp        instruction_assembled_$2891
 xassemble_line:
-End_assemble_line_3532:
 
 /* procedure _0dcd__p___$3537 */
 
@@ -29030,7 +28719,6 @@ _0dcd__p___$3537:
         int        $3 
         int        $3 
 x_0dcd__p___$3537:
-End__0dcd__p___$3537_3538:
 
 /* procedure write_code_$3539 */
 
@@ -29043,7 +28731,6 @@ write_code_$3539:
         call       write_$436
         ret
 xwrite_code_$3539:
-End_write_code_$3539_3540:
 
 /* procedure _0dd5__p___$3545 */
 
@@ -29060,7 +28747,6 @@ _0dd5__p___$3545:
         int        $3 
         int        $3 
 x_0dd5__p___$3545:
-End__0dd5__p___$3545_3546:
 
 /* procedure store_symbol_name_$3547 */
 
@@ -29095,7 +28781,6 @@ add_string_$3549:
         popl       %esi 
         ret
 xstore_symbol_name_$3547:
-End_store_symbol_name_$3547_3552:
 
 /* procedure _0de1__p___$3557 */
 
@@ -29112,7 +28797,6 @@ _0de1__p___$3557:
         int        $3 
         int        $3 
 x_0de1__p___$3557:
-End__0de1__p___$3557_3558:
 
 /* procedure store_section_index_$3559 */
 
@@ -29121,7 +28805,7 @@ store_section_index_$3559:
         movl       %ecx, %eax 
         shll       $8, %eax 
         mov        %eax, (%ebx) 
-        incw       %cx 
+        incw       %dx 
         jz         format_limitations_exceeded_$573
         movl       %edx, %eax 
         shll       $16, %eax 
@@ -29129,14 +28813,13 @@ store_section_index_$3559:
         testb      $64, 20(%ebx) 
         jz         section_index_ok_$3560
         orb        $-1, %ah 
-        incw       %cx 
+        incw       %dx 
         jz         format_limitations_exceeded_$573
 
 section_index_ok_$3560:
         stosl
         ret
 xstore_section_index_$3559:
-End_store_section_index_$3559_3561:
 
 /* procedure _0dea__p___$3566 */
 
@@ -29153,7 +28836,6 @@ _0dea__p___$3566:
         int        $3 
         int        $3 
 x_0dea__p___$3566:
-End__0dea__p___$3566_3567:
 
 /* procedure get_public_value_$3568 */
 
@@ -29169,7 +28851,6 @@ get_public_value_$3568:
 public_value_ok_$3569:
         ret
 xget_public_value_$3568:
-End_get_public_value_$3568_3570:
 
 /* procedure _0df3__p___$3575 */
 
@@ -29186,7 +28867,6 @@ _0df3__p___$3575:
         int        $3 
         int        $3 
 x_0df3__p___$3575:
-End__0df3__p___$3575_3576:
 
 /* procedure store_elf_machine_word_$3577 */
 
@@ -29200,7 +28880,6 @@ store_elf_machine_word_$3577:
 elf_machine_word_ok_$3578:
         ret
 xstore_elf_machine_word_$3577:
-End_store_elf_machine_word_$3577_3579:
 
 /* procedure _0dfc__p___$3584 */
 
@@ -29217,7 +28896,6 @@ _0dfc__p___$3584:
         int        $3 
         int        $3 
 x_0dfc__p___$3584:
-End__0dfc__p___$3584_3585:
 
 /* procedure formatter_$3586 */
 
@@ -29851,7 +29529,7 @@ section_symbol_ok_$3678:
         addl       $32, %esi 
         cmpl       free_additional_memory_$53, %ebx 
         jne        find_next_section_$3673
-        incw       %cx 
+        incw       %dx 
         jz         format_limitations_exceeded_$573
         mov        %edx, current_section_$100 
         mov        symbols_stream_$95, %esi 
@@ -29892,17 +29570,17 @@ make_public_symbol_$3682:
         jnz        elf64_public_$3685
         cmpb       $2, %dl 
         jne        invalid_use_of_symbol_$585
-        mov        14(%eax), %cx 
+        mov        14(%eax), %dx 
         jmp        section_for_public_ok_$3686
 
 elf64_public_$3685:
         cmpb       $4, %dl 
         jne        invalid_use_of_symbol_$585
-        mov        6(%eax), %cx 
+        mov        6(%eax), %dx 
         jmp        section_for_public_ok_$3686
 
 public_absolute_$3684:
-        mov        $65521, %cx 
+        mov        $65521, %dx 
 
 section_for_public_ok_$3686:
         mov        4(%esi), %eax 
@@ -30320,21 +29998,18 @@ sym_section_ok_$3726:
         call       write_$436
         jmp        output_written_$3625
 xformatter_$3586:
-End_formatter_$3586_3733:
 
 /* procedure HWexcept__hla_ */
 
 HWexcept__hla_:
         jmp        shorthwExcept__hla_
 xHWexcept__hla_:
-End_HWexcept__hla__3739:
 
 /* procedure DfltExHndlr__hla_ */
 
 DfltExHndlr__hla_:
         jmp        shortDfltExcept__hla_
 xDfltExHndlr__hla_:
-End_DfltExHndlr__hla__3741:
 
 /* procedure _0e9f__p___$3747 */
 
@@ -30351,7 +30026,6 @@ _0e9f__p___$3747:
         int        $3 
         int        $3 
 x_0e9f__p___$3747:
-End__0e9f__p___$3747_3748:
 
 /* procedure Raise__hla_ */
 
@@ -30371,7 +30045,6 @@ DoThisOne_$3750:
         popl       %ebp 
         ret
 xRaise__hla_:
-End_Raise__hla__3751:
 
 /* procedure _0ea8__p___$3756 */
 
@@ -30388,7 +30061,6 @@ _0ea8__p___$3756:
         int        $3 
         int        $3 
 x_0ea8__p___$3756:
-End__0ea8__p___$3756_3757:
 
 /* procedure shortDfltExcept__hla_ */
 
@@ -30403,7 +30075,6 @@ shortDfltExcept__hla_:
         pushl      $1 
         call       exitProcess_$14
 xshortDfltExcept__hla_:
-End_shortDfltExcept__hla__3759:
 
 /* procedure _0eb0__p___$3764 */
 
@@ -30420,7 +30091,6 @@ _0eb0__p___$3764:
         int        $3 
         int        $3 
 x_0eb0__p___$3764:
-End__0eb0__p___$3764_3765:
 
 /* procedure shorthwExcept__hla_ */
 
@@ -30428,7 +30098,6 @@ shorthwExcept__hla_:
         mov        $1, %eax 
         ret
 xshorthwExcept__hla_:
-End_shorthwExcept__hla__3766:
 
 /* procedure fasmDebug_$3768 */
 
@@ -30443,7 +30112,6 @@ fasmDebug_$3768:
         int        $3 
         int        $3 
 xfasmDebug_$3768:
-End_fasmDebug_$3768_3769:
 
 /* procedure _fasmMain */
 
@@ -30910,7 +30578,6 @@ QuitMain__hla__$3736:
         pushl      $0 
         call       exitProcess_$14
 x_fasmMain:
-End__fasmMain_3824:
 
 
 

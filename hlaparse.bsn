@@ -1064,6 +1064,25 @@ extern int yylex( union YYSTYPE *yylval );
 		int		lazy;
 	}ranges;
 	
+	// The following is used to process switch/case/default/endswitch statements:
+	
+	struct
+	{
+		unsigned	cnt;
+		int			minval;
+		int			startOfCases;
+		int			defaultLbl;
+		int			exitLbl;
+		int			*cases;
+		int			*caseLbls;
+	}cases;
+	
+	struct
+	{
+		unsigned	cnt;
+		int			*cases;
+	} caseVals;
+	
 }
   
 
@@ -1272,6 +1291,11 @@ union	YYSTYPE	forReturnVal;
 %token elseifTkn
 %token elseTkn
 %token endifTkn
+
+%token switchTkn
+%token caseTkn
+%token defaultTkn
+%token endswitchTkn
 
 %token whileTkn
 %token doTkn
@@ -4234,7 +4258,7 @@ Reg16a:
 	|	dxTkn
 		{
 			_here;
-			$<u>$ = reg_cx;
+			$<u>$ = reg_dx;
 		}
 	
 	|	spTkn
@@ -46539,14 +46563,7 @@ StaticExpr:
 				// See if this symbol is in the StaticList. Use the
 				// existing static name if it is:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>2, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>2 );
 				_if( sList == NULL )
 				
 					/*
@@ -46643,14 +46660,7 @@ StaticExpr:
 				// See if this symbol is in the StaticList. Use the
 				// existing static name if it is:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>2, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>2 );
 				_if( sList == NULL )
 				
 					sprintf( StaticName, "%s" symsep "%d", $<idStr>2, LblCntr );
@@ -62933,17 +62943,15 @@ OneStmt:
 			
 				// See if this symbol is in the static list:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>2, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>2 );
 				_if( sList != NULL )
 			
 					sn = hlastrdup( sList->StaticName );
+					
+					// As we are emitting the label at this point,
+					// "fix" this symbol.
+					
+					sList->Fixed = 1;
 			
 				_else
 					
@@ -62977,7 +62985,7 @@ OneStmt:
 
 			/*
 			** Set the Type field to non-NULL to indicate
-			** that it's already defined..
+			** that it's already defined.
 			*/
 
 			SymbolTable->Type = SymbolTable;
@@ -63062,17 +63070,11 @@ OneStmt:
 			
 				// See if this symbol is in the static list:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>2, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>2 );
 				_if( sList != NULL )
 			
 					sn = hlastrdup( sList->StaticName );
+					sList->Fixed = 1;	// Because we're defining the symbol.
 			
 				_else
 					
@@ -68223,6 +68225,51 @@ SingleStmt:
 
 	
 	
+// Handle FP arithmetic instructions that have a constant operand
+
+
+SingleStmt:
+		FP_arith_instr		/* $1 */
+		Lparen				/* $2 */
+		fConstExpr			/* $3 */
+		Rparen				/* $4 */
+		{					/* $5 */
+
+			struct adrsYYS adrs;
+			char name [ 256 ];
+
+			_here;
+			_if( IsReal( $<v.pType>3 ))
+				
+				// Extend real32 and real64 constants to real80
+				// (always compatible, so just ignore return result):
+				
+				IsCompatible( &real80_ste, YYS &$<v>3 );
+
+				sprintf( name, "L%d_fpconst" sympost, LblCntr++ );
+				startStrSeg();
+				OutValue( name, &real64_ste, YYS &$<v>3 );
+				endStrSeg();
+				
+				initAdrs( &adrs, -1, -1, 0, 0 );
+				adrs.StaticName = hlastrdup( name );
+				adrs.Size = 8;
+				fp_arith_mem_instr( $<u>1, &adrs );
+				FreeValue( YYS &$<v>3 );
+				
+			_else
+			
+				yyerror( "FP instructions require real constant operands" );
+				
+			_endif
+			$<returns>$ = hlastrdup2( "st0" );
+			_here;
+		}
+	;
+	
+
+	
+	
 // Handle FP/Integer arithmetic instructions that have a single memory operand
 
 
@@ -68240,8 +68287,7 @@ SingleStmt:
 			$<returns>$ = hlastrdup2( "st0" );
 			_here;
 		}
-	;
-	
+	;	
 
 		
 			
@@ -72723,14 +72769,7 @@ SingleStmt:
 			
 				// See if this symbol is in the static list:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>5, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>5 );
 				_if( sList != NULL )
 			
 					initAdrs2( &adrs, sList->Name, -1, -1, 0, 0 );
@@ -72818,14 +72857,7 @@ SingleStmt:
 
 				// See if this symbol is in the static list:
 				
-				sList = StaticList;
-				_while( sList != NULL )
-				
-					_breakif( _streq( $<idStr>3, sList->Name ));
-					sList = sList->Next;
-
-				_endwhile
-				
+				sList = searchStatic( $<idStr>3 );
 				_if( sList != NULL )
 			
 					initAdrs2( &adrs, sList->Name, -1, -1, 0, 0 );
@@ -81893,14 +81925,7 @@ EmitJmp:
 					// See if this symbol is in the StaticList. Use the
 					// existing static name if it is:
 					
-					sList = StaticList;
-					_while( sList != NULL )
-					
-						_breakif( _streq( $<idStr>-1, sList->Name ));
-						sList = sList->Next;
-
-					_endwhile
-					
+					sList = searchStatic( $<idStr>-1 );
 					_if( sList == NULL )
 					
 						/*
@@ -81936,13 +81961,10 @@ EmitJmp:
 			** Emit the instruction for this conditional jump instruction.
 			*/
 
-			EmitBackPatchds( "L%d_be" sympost, LblCntr, target );
-
-			sprintf( tmpLabel, "L%d_be" sympost, LblCntr++);
 			EmitBooleanExpr
 			(
 				$<opnode>-3,
-				tmpLabel,
+				target,
 				$<v.u.unsval>0
 			);
 
@@ -82424,7 +82446,7 @@ ExitIfLabel6:
  **	endif
  */
 
-SingleStmt:
+				SingleStmt:
 		ifTkn			/* $1  */
 		Lparen			/* $2  */
 		stmtsTkn		/* $3  */
@@ -82819,6 +82841,472 @@ GetThen:
 
 
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// Handle the switch HLL statement here.
+
+SingleStmt:
+		switchTkn		// $1
+		Lparen			// $2
+		fReg32			// $3
+		Rparen			// $4
+		SwitchLabel		// $5
+		InitCaseCnt		// $6
+		OneOrMoreCases	// $7
+		OptionalDefault	// $8
+		endswitchTkn	// $9
+		{
+			int 			sorted;
+			int 			temp;
+			int				spread;
+			int				index;
+			int				maxCase;
+			int				curCase;
+			char			*codeForCases;
+			struct adrsYYS	adrs;
+			char			jmpTbl[64];
+			char			jmpToEnd[64];
+			char			label[64];
+			char			msg[128];
+			
+			_here;
+			
+			// Sort the case table here:
+			// Just use a stupid bubble sort because there are rarely more
+			// than a couple dozen cases in a switch statement. 
+			
+			assert( $<cases.cnt>6 > 0 );
+			_do
+			
+				
+				sorted = 1;
+				_for( int i = 1, i < $<cases.cnt>6, ++i )
+				
+					_if( (int) $<cases.cases>6[i-1] > (int) $<cases.cases>6[i] )
+					
+						sorted = 0;
+						temp = $<cases.cases>6[i-1];
+						$<cases.cases>6[i-1] = $<cases.cases>6[i];
+						$<cases.cases>6[i] = temp;
+						
+						temp = $<cases.caseLbls>6[i-1];
+						$<cases.caseLbls>6[i-1] = $<cases.caseLbls>6[i];
+						$<cases.caseLbls>6[i] = temp;
+						
+					_endif
+					
+				_endfor
+						
+			_until( sorted );
+			
+			// Make a quick pass through the table and make sure there
+			// are no duplicate entries:
+			
+			_for( int i = 1, i < $<cases.cnt>6, ++i )
+			
+				_if( $<cases.cases>6[i-1] == $<cases.cases>6[i] )
+				
+					sprintf
+					( 
+						msg, 
+						"Duplicate case value: %d", 
+						$<cases.cases>6[i] 
+					);
+					yyerror( msg );
+					
+				_endif
+				
+			_endfor
+
+			// Grab all the code emitted for the cases so
+			// we can insert the indirect jump in front of it.
+			
+			codeForCases = getFileStr( $<cases.startOfCases>6 );
+			
+			
+			// Emit the jmp table at this point.
+			// Note that this goes to the constants (strings) section,
+			// not into the current code section.
+			//
+			// Begin by doing some sanity checks to make
+			// sure the table isn't too big or too sparse:
+			
+			spread = $<cases.cases>6[ $<cases.cnt>6 - 1 ] - $<cases.cases>6[ 0 ];
+			
+			// First, check to see if we're even going to emit a jump table.
+			// If there are three or fewer cases, or if the count is small
+			// and the spread is large, then we're going to emit a sequence
+			// of cmp/Jcc instructions.
+			
+			_if
+			( 
+					$<cases.cnt>6 <= 3
+				||	(spread > 256 && $<cases.cnt>6 < 32) 
+			)
+			
+				// At this point, the cases don't justify the use of
+				// a jump table. Just emit a sequence of cmp/je instructions.
+				
+				_for( int i=0, i < $<cases.cnt>6, ++i )
+				
+					EmitGeneric_c_r
+					( 
+						cmp_instr, 
+						$<cases.cases>6[i], 
+						$<reg.encoding>3 
+					);
+					sprintf( label, "L$%d_case", $<cases.caseLbls>6[i] );
+					EmitCondJump( je_instr, label );
+					
+				_endfor
+				
+				// At the end of the cmp/JE sequence, emit a jump to the
+				// default case:
+				
+				sprintf( label, "L$%d_default", $<u>5 );
+				EmitJmpLabel( label );
+			
+			_elseif( spread > 16384 )
+			
+				yyerror( "Spread of case values is too large" );
+				
+			_else
+			
+				_if( spread > 4096 )
+			
+					WarnNear
+					( 
+						"The case table is going to be very large", 
+						"switch" 
+					);
+					
+				_endif
+				_if( spread/16 > $<cases.cnt>6 )
+			
+					WarnNear
+					( 
+						"The case table is very sparse", 
+						"switch" 
+					);
+					
+				_endif
+				
+				// Okay, emit the jmp table:
+				
+				startStrSeg();	// Put the jump table in the constants section.
+				EmitTypedLabel( jmpTbl, tDWord );
+				maxCase = $<cases.cases>6[ $<cases.cnt>6 - 1 ];
+				curCase = $<cases.cases>6[0];
+				index = 0;
+				_while( curCase <= maxCase )
+
+					_if( curCase == $<cases.cases>6[index] )
+					
+						sprintf( label, "L$%d_case", $<cases.caseLbls>6[index] );
+						++index;
+					
+					_else	// Fill in default address
+					
+						sprintf( label, "L$%d_default", $<u>5 );
+						 
+					_endif
+					EmitOffset( label, 0 );
+					++curCase;
+				
+				_endwhile 
+				endStrSeg();	// Return back to the code section.
+				
+				// Compare the value against the minimum and maximum range
+				// values and bail to the default case if it's out of range:
+				//
+				// Note: special case for the minimum case is zero
+				
+				_if( $<cases.cases>6[0] != 0 )
+				
+					EmitGeneric_c_r
+					( 
+						cmp_instr, 
+						$<cases.cases>6[0], 
+						$<reg.encoding>3 
+					);
+					sprintf( label, "L$%d_default", $<u>5 );
+					EmitCondJump( jl_instr, label );
+					
+				_endif
+				EmitGeneric_c_r
+				( 
+					cmp_instr, 
+					$<cases.cases>6[ $<cases.cnt>6 - 1 ], 
+					$<reg.encoding>3 
+				);
+				sprintf( label, "L$%d_default", $<u>5 );
+				EmitCondJump( jg_instr, label );
+					
+				// Okay, emit the indirect jump statement:
+				
+				sprintf( jmpTbl, "L$%d_jmpTbl", $<u>5 );
+				initAdrs2
+				( 
+					&adrs,
+					jmpTbl,
+					-1, 
+					$<reg.encoding>3,
+					4,
+					-$<cases.cases>6[0] * 4	// minimum index into table.
+				);
+				EmitJmp_m( &adrs );
+				
+			_endif
+			
+			// Emit the code for all the cases after the indirect jump
+			// (or sequence of cmp/Jcc instrs if we bailed on the
+			// conditional jump).
+			
+			asmPuts( codeForCases );
+			free2( vss codeForCases );
+			
+			// Emit the end of switch label:
+			
+			EmitStmtLblNum( "L$%d_endswitch", $<u>5 );
+			
+			// If there was no default clause, we need to emit
+			// a default label as well:
+			
+			_if( $<u>8 )
+			
+				EmitStmtLblNum( "L$%d_default", $<u>5 );
+				
+			_endif
+				 
+				
+		}
+	;
+	
+// Handle the default clause here:
+
+OptionalDefault:
+		Empty
+		{
+			$<u>$ = 1;	// Need a default label at the end
+		}
+		
+	|	defaultTkn
+		{
+			char jmpToEnd[64];
+
+			// Emit a jmp from the previous case to the
+			// end of the switch statement:
+			
+			sprintf( jmpToEnd, "L$%d_endswitch", $<u>-2 );
+			EmitJmpLabel( jmpToEnd );
+			
+			// Emit the label for the default case:
+			
+			sprintf( jmpToEnd, "L$%d_default", $<u>-2 );
+			EmitGlobalStmtLbl( jmpToEnd );
+		}
+		Stmts
+		{
+			$<u>$ = 0;	// No default label needed.
+		}
+	;
+		
+	
+// SwitchLabel-
+//
+//	Generates a unique label constant for this particular switch stmt.
+
+SwitchLabel:
+		{
+			$<u>$ = LblCntr++;
+		}
+	;	
+
+
+// Handle all the cases:		
+
+InitCaseCnt:
+		{
+			$<cases.cnt>$ = 0;				// Total number of cases.
+			$<cases.exitLbl>$ = $<u>0;		// Where a case jumps when it's done.
+			$<cases.defaultLbl>$ = $<u>0;	// The initial default case.
+			
+			// Save a pointer to the start of the cases code so we can
+			// insert the indirect jump and the jump table before this code.
+			
+			$<cases.startOfCases>$ = asmBuf->offset;
+		}
+	;
+	
+// Switch statements must have at least one "case" clause:
+
+OneOrMoreCases:
+		caseTkn				// $1
+		Lparen				// $2
+		OneOrMoreCaseVals	// $3
+		EmitCaseLbl			// $4
+		Rparen				// $5
+		Stmts				// $6
+		{
+			// Handle the first case here.
+			// Note that we do not need to emit a JMP to
+			// the end of the switch before this guy.
+			
+			// Allocate storage for, and copy all the case values to the 
+			// caseVals.cases array.
+			
+			$<cases.cnt>0 += $<caseVals.cnt>3;
+			$<cases.cases>0 = malloc2( sizeof( int ) * $<caseVals.cnt>3 );
+			memcpy
+			( 
+				$<cases.cases>0, 
+				$<caseVals.cases>3,
+				$<caseVals.cnt>3 * sizeof( int )
+			);
+			
+			// Allocate storage for, and copy the case label to the
+			// caseVals.caseLbls array:
+			
+			$<cases.caseLbls>0 = malloc2( sizeof( int ) * $<caseVals.cnt>3 );
+			_for( int i=0, i < $<caseVals.cnt>3, ++i )
+			
+				$<cases.caseLbls>0[i] = $<u>4;
+				
+			_endfor
+			free2( vss $<caseVals.cases>3 );			 
+		}
+		
+	|	OneOrMoreCases		// $1
+		caseTkn				// $2
+		{					// $3
+		
+			char jmpToEnd[64];
+
+			// Emit a jmp from the previous case to the
+			// end of the switch statement:
+			
+			sprintf( jmpToEnd, "L$%d_endswitch", $<cases.exitLbl>0 );
+			EmitJmpLabel( jmpToEnd );
+
+		}
+		Lparen				// $4
+		OneOrMoreCaseVals	// $5
+		EmitCaseLbl			// $6
+		Rparen				// $7
+		Stmts				// $8
+		{
+			int		startCase;
+			
+			(void) $<u>3;	// To shut up bison.
+
+			// Okay, handle the current case.
+
+			startCase = $<cases.cnt>0;
+			$<cases.cnt>0 += $<caseVals.cnt>5;
+			
+			// Allocate storage for, and copy all the case values to the 
+			// caseVals.cases array.
+			
+			$<cases.cases>0 = 
+				realloc( $<cases.cases>0, sizeof( int ) * $<cases.cnt>0 );
+				
+			assert( $<cases.cases>0 != NULL );
+			
+			memcpy
+			( 
+				&$<cases.cases>0[ startCase ], 
+				$<caseVals.cases>5,
+				$<caseVals.cnt>5 * sizeof( int )
+			);
+			
+			// Allocate storage for, and copy the case label to the
+			// caseVals.caseLbls array:
+			
+			$<cases.caseLbls>0 = 
+				realloc( $<cases.caseLbls>0, sizeof( int ) * $<cases.cnt>0 );
+				
+			assert( $<cases.caseLbls>0 != NULL );
+			_for( int i=0, i < $<caseVals.cnt>5, ++i )
+			
+				$<cases.caseLbls>0[ startCase + i ] = $<u>6;
+				
+			_endfor			 
+			free2( vss $<caseVals.cases>5 );			 
+		}
+	;
+
+
+// EmitCaseLbl-
+//
+//	Emits a label for the current case.
+//  The $<u>$ attribute returns the label number associated with this label.
+	
+EmitCaseLbl:
+		{
+			char globLbl[64];
+			
+			$<u>$ = LblCntr++;
+			sprintf( globLbl, "L$%d_case", $<u>$ );
+			EmitGlobalStmtLbl( globLbl );
+		}
+	;
+
+// Handle case constants within a case clause, e.g, "case( 1,2,3 )":
+// This is ugly, like IndexList and DimList, but there are rarely more
+// than one or two cases in a case statement, so all the memcpy'ing that
+// takes place won't affect performance that much.
+
+OneOrMoreCaseVals:	
+			ConstOnlyExpr		// $1
+			{
+				// Handle the first case (that is, the first constant
+				// within the "case" clause).
+				
+				$<caseVals.cnt>$ = 1;	// Initialize the count to one.
+				
+				// Allocate storage for this single element:
+				
+				$<caseVals.cases>$ =
+					malloc2
+					( 
+						sizeof( int ) 
+					);
+
+				// Store away this single value:
+				
+				*$<caseVals.cases>$ = $<v.u.unsval>1;
+				_here;
+			}
+
+		|	OneOrMoreCaseVals	// $1
+			','					// $2 
+			ConstOnlyExpr		// $3
+			{
+				// Handle the 2nd through nth items in the case clause
+				// here. We need to bump up the count, allocate storage
+				// to hold everything encountered thus far, copy every
+				// thing encountered thus far, and then store away
+				// the current value at the end of the list.
+				
+				++$<caseVals.cnt>$;
+				$<caseVals.cases>$ =
+					malloc2
+					( 
+						sizeof( unsigned long ) * ( $<caseVals.cnt>$ )
+					);
+
+				memcpy
+				( 
+					$<caseVals.cases>$, 
+					$<caseVals.cases>1,
+					sizeof( int ) * ($<caseVals.cnt>$ - 1 )
+				);
+				$<caseVals.cases>$[$<caseVals.cnt>$-1] = $<v.u.intval>3;
+				free2( vss $<caseVals.cases>1 );
+				_here; 
+
+			}
+		;
 
 /****************************************************************************/
 
@@ -89923,7 +90411,7 @@ _begin( main )
 				// then use the internal version of FASM
 				// to compile to an OBJ file.
 				
-				_if( targetOS == windows_os || targetOS == linux_os )
+				_if( targetOS == windows_os )
 				 
 					assembler = fasm;
 					useCFASM = 1;
@@ -89933,7 +90421,7 @@ _begin( main )
 				
 					yyerror
 					( 
-						"Object output is available only under Windows and Linux" 
+						"COFF object output is available only under Windows" 
 					);
 					assembler = gas;
 					useCFASM = 0;
@@ -89948,17 +90436,24 @@ _begin( main )
 				// then use the internal version of FASM
 				// to compile to an ELF OBJ file.
 				
-				_if( targetOS == windows_os || targetOS == linux_os )
+				_if( targetOS == linux_os )
 
 					assembler = fasm;
 					useCFASM = 1;
 					objFmt = 1;
+					fprintf
+					(
+						MsgOut, 
+						"Direct object output under Linux has some known issues\n"
+						"(fails on some distributions) -- Recommend using GAS\n"
+						"as the back-end assembler\n" 
+					);
 					
 				_else
 				
 					yyerror
 					( 
-						"Object output is available only under Windows and Linux" 
+						"ELF object output is available only under Linux" 
 					);
 					assembler = gas;
 					useCFASM = 0;

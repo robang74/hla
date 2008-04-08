@@ -1,5 +1,5 @@
 // Assembly code emitted by HLA compiler
-// Version 1.102 build 18583 (prototype)
+// Version 1.102 build 18688 (prototype)
 // HLA compiler written by Randall Hyde
 // GAS compatible output
 
@@ -1232,7 +1232,6 @@ lcLoop_$100:
         mov        4(%esp), %eax 
         ret
 xlowercase:
-End_lowercase_101:
 
 /* procedure SearchHash */
 
@@ -1307,7 +1306,6 @@ failure_$102:
         xorl       %eax, %eax 
         ret
 xSearchHash:
-End_SearchHash_110:
 
 /* procedure SearchNext */
 
@@ -1794,7 +1792,6 @@ failure_$141:
         xorl       %eax, %eax 
         ret
 xSearchNext:
-End_SearchNext_150:
 
 /* procedure strcpylc */
 
@@ -1824,7 +1821,6 @@ cpyLoop_$151:
         popl       %ebx 
         ret
 xstrcpylc:
-End_strcpylc_152:
 
 /* procedure compactType */
 
@@ -1942,7 +1938,6 @@ xcompactType:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_compactType_177:
 
 /* procedure InRange */
 
@@ -2921,7 +2916,6 @@ isPointer_$207:
         popl       %ebx 
         ret
 xInRange:
-End_InRange_255:
 
 /* procedure MakeCompAsm */
 
@@ -4211,7 +4205,6 @@ xMakeCompAsm:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_MakeCompAsm_574:
 
 /* procedure UnsLT */
 
@@ -4249,7 +4242,6 @@ xUnsLT:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_UnsLT_578:
 
 /* procedure UnsLE */
 
@@ -4287,7 +4279,6 @@ xUnsLE:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_UnsLE_582:
 
 /* procedure UnsGT */
 
@@ -4325,7 +4316,6 @@ xUnsGT:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_UnsGT_586:
 
 /* procedure UnsGE */
 
@@ -4363,7 +4353,6 @@ xUnsGE:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_UnsGE_590:
 
 /* procedure IntLT */
 
@@ -4401,7 +4390,6 @@ xIntLT:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_IntLT_594:
 
 /* procedure IntLE */
 
@@ -4439,7 +4427,6 @@ xIntLE:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_IntLE_598:
 
 /* procedure IntGT */
 
@@ -4477,7 +4464,6 @@ xIntGT:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_IntGT_602:
 
 /* procedure IntGE */
 
@@ -4515,7 +4501,6 @@ xIntGE:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_IntGE_606:
 
 /* procedure negval */
 
@@ -4736,7 +4721,6 @@ xnegval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_negval_711:
 
 /* procedure notval */
 
@@ -5041,7 +5025,6 @@ xnotval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_notval_786:
 
 /* procedure addval */
 
@@ -5457,7 +5440,6 @@ xaddval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_addval_897:
 
 /* procedure subval */
 
@@ -5842,7 +5824,6 @@ xsubval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_subval_1000:
 
 /* procedure mul128_$1001 */
 
@@ -5897,7 +5878,6 @@ mul128_$1001:
         popl       %edx 
         ret
 xmul128_$1001:
-End_mul128_$1001_1002:
 
 /* procedure mulval */
 
@@ -6134,12 +6114,12 @@ _03ed__switch_otherwise___$1079:
 _03ee__switch_endcase___$1030:
         popl       %edi 
         popl       %esi 
+        popl       %ecx 
         popl       %ebx 
 xmulval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_mulval_1081:
 
 /* procedure div128_$1082 */
 
@@ -6225,7 +6205,6 @@ xdiv128_$1082:
         movl       %ebp, %esp 
         popl       %ebp 
         ret        $40
-End_div128_$1082_1085:
 
 /* procedure divval */
 
@@ -6263,7 +6242,7 @@ _case5_4__$1104:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7734 
+        pushl      $7735 
 
         pushl      $L1106_str__hla_ 
 
@@ -6282,7 +6261,7 @@ L1105_false__hla_:
         pushl      (%esi) 
         pushl      %edi 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         call       div128_$1082
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%ecx) 
@@ -6331,7 +6310,7 @@ _case5_10__$1121:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7795 
+        pushl      $7796 
 
         pushl      $L1106_str__hla_ 
 
@@ -6350,7 +6329,7 @@ L1122_false__hla_:
         pushl      (%esi) 
         pushl      %edi 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         call       div128_$1082
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
@@ -6435,7 +6414,7 @@ L1138_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7912 
+        pushl      $7913 
 
         pushl      $L1106_str__hla_ 
 
@@ -6454,7 +6433,7 @@ L1139_false__hla_:
         pushl      (%esi) 
         pushl      %edi 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         call       div128_$1082
         popfl
         jns        L1140_false__hla_
@@ -6512,7 +6491,7 @@ _case5_16__$1149:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7991 
+        pushl      $7992 
 
         pushl      $L1106_str__hla_ 
 
@@ -6539,7 +6518,7 @@ _case5_17__$1154:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8009 
+        pushl      $8010 
 
         pushl      $L1106_str__hla_ 
 
@@ -6569,7 +6548,7 @@ _case5_18__$1160:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8034 
+        pushl      $8035 
 
         pushl      $L1106_str__hla_ 
 
@@ -6604,7 +6583,6 @@ xdivval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_divval_1170:
 
 /* procedure modval */
 
@@ -6642,7 +6620,7 @@ _case6_4__$1189:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8108 
+        pushl      $8109 
 
         pushl      $L1106_str__hla_ 
 
@@ -6660,7 +6638,7 @@ L1190_false__hla_:
         pushl      4(%esi) 
         pushl      (%esi) 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         pushl      %edi 
         call       div128_$1082
         movb       $6, (%ebx) 
@@ -6710,7 +6688,7 @@ _case6_10__$1205:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8170 
+        pushl      $8171 
 
         pushl      $L1106_str__hla_ 
 
@@ -6728,7 +6706,7 @@ L1206_false__hla_:
         pushl      4(%esi) 
         pushl      (%esi) 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         pushl      %edi 
         call       div128_$1082
         movb       $12, (%ebx) 
@@ -6814,7 +6792,7 @@ L1222_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8287 
+        pushl      $8288 
 
         pushl      $L1106_str__hla_ 
 
@@ -6832,7 +6810,7 @@ L1223_false__hla_:
         pushl      4(%esi) 
         pushl      (%esi) 
         pushl      %ebp 
-        add        $-16, (%esp) 
+        addl       $-16, (%esp) 
         pushl      %edi 
         call       div128_$1082
         popfl
@@ -6901,7 +6879,6 @@ xmodval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_modval_1236:
 
 /* procedure shlval */
 
@@ -6938,7 +6915,6 @@ xshlval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_shlval_1239:
 
 /* procedure shrval */
 
@@ -6975,7 +6951,6 @@ xshrval:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_shrval_1242:
 
 /* procedure bigmaxUns */
 
@@ -7031,7 +7006,6 @@ xbigmaxUns:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_bigmaxUns_1246:
 
 /* procedure bigmaxInt */
 
@@ -7087,7 +7061,6 @@ xbigmaxInt:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_bigmaxInt_1250:
 
 /* procedure bigminUns */
 
@@ -7143,7 +7116,6 @@ xbigminUns:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_bigminUns_1254:
 
 /* procedure bigminInt */
 
@@ -7199,7 +7171,6 @@ xbigminInt:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_bigminInt_1258:
 
 /* procedure NumToStr_$1259 */
 
@@ -7231,7 +7202,6 @@ L1261_false__hla_:
         movb       $0, (%edi) 
         ret
 xNumToStr_$1259:
-End_NumToStr_$1259_1262:
 
 /* procedure UnsToStr */
 
@@ -7251,7 +7221,6 @@ xUnsToStr:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_UnsToStr_1263:
 
 /* procedure IntToStr */
 
@@ -7288,7 +7257,6 @@ xIntToStr:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_IntToStr_1265:
 
 /* procedure MulReslt10_$1266 */
 
@@ -7341,7 +7309,7 @@ Overflow_$1267:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8287 
+        pushl      $8288 
 
         pushl      $L1269_str__hla_ 
 
@@ -7350,7 +7318,6 @@ Overflow_$1267:
         popl       %ebx 
         ret
 xMulReslt10_$1266:
-End_MulReslt10_$1266_1270:
 
 /* procedure DecStrToInt */
 
@@ -7417,7 +7384,6 @@ xDecStrToInt:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_DecStrToInt_1274:
 
 /* procedure BinStrToInt */
 
@@ -7446,7 +7412,7 @@ ForEachDigit_$1276:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8287 
+        pushl      $8288 
 
         pushl      $L1277_str__hla_ 
 
@@ -7501,7 +7467,6 @@ xBinStrToInt:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_BinStrToInt_1279:
 
 /* procedure HexStrToInt */
 
@@ -7539,7 +7504,7 @@ L1283_repeat__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8287 
+        pushl      $8288 
 
         pushl      $L1285_str__hla_ 
 
@@ -7601,7 +7566,6 @@ xHexStrToInt:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_HexStrToInt_1287:
 
 /* procedure real80to64 */
 
@@ -7617,7 +7581,6 @@ xreal80to64:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_real80to64_1288:
 
 /* procedure real80to32 */
 
@@ -7634,7 +7597,6 @@ xreal80to32:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_real80to32_1289:
 
 /* procedure unsf80 */
 
@@ -7649,7 +7611,6 @@ xunsf80:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_unsf80_1290:
 
 /* procedure f80int */
 
@@ -7667,7 +7628,6 @@ xf80int:
         movl       %ebp, %esp 
         popl       %ebp 
         ret
-End_f80int_1292:
 
 /* procedure fadd80 */
 
@@ -7682,7 +7642,6 @@ fadd80:
         popl       %ebp 
         ret
 xfadd80:
-End_fadd80_1293:
 
 /* procedure fsub80 */
 
@@ -7697,7 +7656,6 @@ fsub80:
         popl       %ebp 
         ret
 xfsub80:
-End_fsub80_1294:
 
 /* procedure fmul80 */
 
@@ -7712,7 +7670,6 @@ fmul80:
         popl       %ebp 
         ret
 xfmul80:
-End_fmul80_1295:
 
 /* procedure fdiv80 */
 
@@ -7727,7 +7684,6 @@ fdiv80:
         popl       %ebp 
         ret
 xfdiv80:
-End_fdiv80_1296:
 
 /* procedure fneg80 */
 
@@ -7741,7 +7697,6 @@ fneg80:
         popl       %ebp 
         ret
 xfneg80:
-End_fneg80_1297:
 
 /* procedure fabs80 */
 
@@ -7755,7 +7710,6 @@ fabs80:
         popl       %ebp 
         ret
 xfabs80:
-End_fabs80_1298:
 
 /* procedure fmax80 */
 
@@ -7779,7 +7733,6 @@ L1299_endif__hla_:
         popl       %ebp 
         ret
 xfmax80:
-End_fmax80_1300:
 
 /* procedure fmin80 */
 
@@ -7803,7 +7756,6 @@ L1301_endif__hla_:
         popl       %ebp 
         ret
 xfmin80:
-End_fmin80_1302:
 
 /* procedure feq80 */
 
@@ -7820,7 +7772,6 @@ feq80:
         popl       %ebp 
         ret
 xfeq80:
-End_feq80_1303:
 
 /* procedure fne80 */
 
@@ -7837,7 +7788,6 @@ fne80:
         popl       %ebp 
         ret
 xfne80:
-End_fne80_1304:
 
 /* procedure flt80 */
 
@@ -7854,7 +7804,6 @@ flt80:
         popl       %ebp 
         ret
 xflt80:
-End_flt80_1305:
 
 /* procedure fle80 */
 
@@ -7871,7 +7820,6 @@ fle80:
         popl       %ebp 
         ret
 xfle80:
-End_fle80_1306:
 
 /* procedure fgt80 */
 
@@ -7888,7 +7836,6 @@ fgt80:
         popl       %ebp 
         ret
 xfgt80:
-End_fgt80_1307:
 
 /* procedure fge80 */
 
@@ -7905,7 +7852,6 @@ fge80:
         popl       %ebp 
         ret
 xfge80:
-End_fge80_1308:
 
 /* procedure ceil80 */
 
@@ -7962,7 +7908,6 @@ L1311_endif__hla_:
         popl       %ebp 
         ret
 xceil80:
-End_ceil80_1317:
 
 /* procedure floor80 */
 
@@ -8001,7 +7946,6 @@ L1320_endif__hla_:
         popl       %ebp 
         ret
 xfloor80:
-End_floor80_1323:
 
 /* procedure cos80 */
 
@@ -8015,7 +7959,6 @@ cos80:
         popl       %ebp 
         ret
 xcos80:
-End_cos80_1324:
 
 /* procedure sin80 */
 
@@ -8029,7 +7972,6 @@ sin80:
         popl       %ebp 
         ret
 xsin80:
-End_sin80_1325:
 
 /* procedure tan80 */
 
@@ -8044,7 +7986,6 @@ tan80:
         popl       %ebp 
         ret
 xtan80:
-End_tan80_1326:
 
 /* procedure log80 */
 
@@ -8061,7 +8002,6 @@ log80:
         popl       %ebp 
         ret
 xlog80:
-End_log80_1327:
 
 /* procedure log1080 */
 
@@ -8078,7 +8018,6 @@ log1080:
         popl       %ebp 
         ret
 xlog1080:
-End_log1080_1328:
 
 /* procedure sqrt80 */
 
@@ -8092,7 +8031,6 @@ sqrt80:
         popl       %ebp 
         ret
 xsqrt80:
-End_sqrt80_1329:
 
 /* procedure exp80 */
 
@@ -8120,7 +8058,6 @@ exp80:
         popl       %ebp 
         ret
 xexp80:
-End_exp80_1332:
 
 /* procedure DigitsToRightOfDecPt_$1335 */
 
@@ -8151,7 +8088,6 @@ L1337_exitloop__hla_:
 EndDigits_$1338:
         ret
 xDigitsToRightOfDecPt_$1335:
-End_DigitsToRightOfDecPt_$1335_1339:
 
 /* procedure atold */
 
@@ -8544,7 +8480,6 @@ ExitAtold_$1385:
         popl       %ebp 
         ret
 xatold:
-End_atold_1386:
 
 /* procedure htoa_$1387 */
 
@@ -8561,7 +8496,6 @@ htoa_$1387:
         popl       %eax 
         ret
 xhtoa_$1387:
-End_htoa_$1387_1388:
 
 /* procedure FPDigits_$1389 */
 
@@ -8690,7 +8624,6 @@ L1397_endif__hla_:
         movl       %edx, %eax 
         ret
 xFPDigits_$1389:
-End_FPDigits_$1389_1415:
 
 /* procedure e80Str */
 
@@ -8774,7 +8707,6 @@ L1420_endif__hla_:
         popl       %ebp 
         ret
 xe80Str:
-End_e80Str_1423:
 
 
 

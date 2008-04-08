@@ -1,4 +1,4 @@
-//#define _ratc
+// #define _ratc
 
 // Define the following if you want to allow mallocs of zero bytes.
 // Comment this out if you want to raise an assertion on zero-byte mallocs.

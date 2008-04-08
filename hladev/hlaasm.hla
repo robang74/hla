@@ -7528,6 +7528,7 @@ begin mulval;
 	endswitch;		
 	pop( edi );
 	pop( esi );
+	pop( ecx );
 	pop( ebx );
 
 end mulval;	

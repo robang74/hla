@@ -465,7 +465,11 @@ _begin( CheckStatic )
 						StaticList->DefinedSym->StaticName 
 					)
 				)
-				
+					
+					// shouldn't be emitting backpatches any more
+					// (they don't work on Mac OSX).
+					// Catch this if we attempt it.
+					
 					EmitBackPatchss
 					(
 						StaticList->StaticName,
@@ -526,6 +530,10 @@ _begin( CheckStatic )
 						)
 					)
 					
+						// shouldn't be emitting backpatches any more
+						// (they don't work on Mac OSX).
+						// Catch this if we attempt it.
+						
 						EmitBackPatchss
 						(
 							StaticList->StaticName,
@@ -547,6 +555,30 @@ _begin( CheckStatic )
 
 _end( CheckStatic )
 
+
+// searchStatic-
+//
+//	Searches through the static list for a particular symbol (that has not
+// been fixed). Returns NULL if not found (or if the only occurrences found
+// were all fixed), returns a pointer to the static list entry of the 
+// symbol if it is found.
+ 
+struct StaticListType*
+searchStatic( char *symbolToFind )
+_begin( searchStatic )
+
+	struct StaticListType *sList;
+	
+	sList = StaticList;
+	_while( sList != NULL )
+	
+		_breakif( _streq( symbolToFind, sList->Name ) && !sList->Fixed );
+		sList = sList->Next;
+
+	_endwhile
+	_return sList;			
+
+_end( searchStatic )
 
 
 /***********************************************************/
@@ -895,6 +927,10 @@ _begin( CheckFwdRef )
 
 					_if( _strne( flist->StaticName, s->StaticName ))
 					
+						// shouldn't be emitting backpatches any more
+						// (they don't work on Mac OSX).
+						// Catch this if we attempt it.
+						
 						EmitBackPatchss
 						(
 							flist->StaticName,

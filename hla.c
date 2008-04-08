@@ -4,7 +4,7 @@
 /*                                            */
 /* This is the "shell" for the HLA compiler.  */
 /* The purpose of this program is to collect  */
-/* and process Windows/Linux command line     */
+/* and process Windows/Linux command line     */	 
 /* parameters, reformat them, and then run    */
 /* the actual HLA compiler, the assembler,    */
 /* the linker, and (in the case of Windows)   */
@@ -67,13 +67,15 @@ FILE *MsgOut;
 //	ObjFmt 	  - specifies the ultimate object code format.
 //	Internal  - If true, use internal FASM to directly produce an OBJ file.
 //  targetOS  - The OS under which the (user's) compiled code is to run.
+//	gasSyntax - Select standard Gas syntax or Mac OSX gas syntax if 
+//					SourceFmt is "gas".
 			
 #if defined(linux_c)
 
 	#undef  windows_c 
 	#define unixOS
 	enum	OSChoice		targetOS 	= linux_os;
-	enum	AsmChoice		SourceFmt 	= fasm;
+	enum	AsmChoice		SourceFmt 	= gas;
 	enum	gasChoice		gasSyntax	= stdGas;
 	enum	ObjFormat		ObjFmt 		= elf;
 	enum	LinkerChoice	linker 		= ld;
@@ -3199,15 +3201,38 @@ _begin( main )
 
 				_elseif( SourceFmt == gas )
 
-					sprintf
-					(
-						CmdLine, 
-						"as -o %s %s %s \"%s\"",
-						ObjName,
-						AsmOpts,
-						backEndAsmOptions,
-						AsmName
+					_if( gasSyntax == macGas )
+					
+						// On the mac, we need to run CPP first
+						// to handle any back-patches that
+						// generated #define statements.
+						
+						sprintf
+						(
+							CmdLine,
+							"cpp --traditional-cpp \"%s\" \"%s.s\"; " 
+							"as -o %s %s %s \"%s.s\"",
+							AsmName,
+							AsmName,
+							ObjName,
+							AsmOpts,
+							backEndAsmOptions,
+							AsmName
 						);
+					
+					_else
+					
+						sprintf
+						(
+							CmdLine, 
+							"as -o %s %s %s \"%s\"",
+							ObjName,
+							AsmOpts,
+							backEndAsmOptions,
+							AsmName
+						);
+						
+					_endif
 
 				_endif
 
@@ -3231,8 +3256,6 @@ _begin( main )
 				CurMLResult = system( CmdLine );
 				MLResult += CurMLResult;
 					
-
-				
 				// If the assembly was successful, change the name
 				// of the file so that it is now an ".obj" file.
 				

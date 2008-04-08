@@ -2704,14 +2704,14 @@ _begin( EndProc )
 		
 		_case( gas )
 		
-			asmPrintf
-			(
-				"End_%s_%d:\n",
-				ProcName,
-				LblCntr
-			);
 			_if( targetOS != windows_os && targetOS != macOS_os )
 			
+				asmPrintf
+				(
+					"End_%s_%d:\n",
+					ProcName,
+					LblCntr
+				);
 				asmPrintf
 				(
 					"  .size %s,End_%s_%d-%s\n\n",
@@ -4322,7 +4322,7 @@ _begin( implied_instr )
 		&&	instr < sysenter_instr 
 		&&	!(assembler == tasm && instr == rsm_instr )
 	)
-			
+		
 		asmPrintf
 		( 
 			"        %s%s\n",
@@ -9454,7 +9454,7 @@ _begin(EmitMov_c_r  )
 	assert( isReg( dest ));
 	
 	_if( sourceOutput || testMode )
-	
+ 
 		cnstToImmStr( cnst, cnstStr );
 
 	_endif
@@ -20243,7 +20243,7 @@ _begin( BeginMain )
 			
 				asmPrintf( " .global _start\n" );
 				asmPrintf( "_start:\n" );
-				
+			
 			_elseif( assembler == fasm )
 			
 				asmPrintf
@@ -20259,12 +20259,13 @@ _begin( BeginMain )
 			_endif
 			
 			EmitMov_r_r( reg_esp, reg_eax );
-			asmPrintf( "_findEnvp_:\n" );
+			asmPrintf( "_findEnvp_$$_:\n" );
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 			initAdrs1( &adrs, reg_eax, 0 );
+			adrs.Size = 4;
 			EmitGeneric_c_m( cmp_instr, 0, &adrs );
 //				asmPrintf( " cmp dword ptr [eax], 0\n" );
-			EmitCondJump( jne_instr, "_findEnvp_" );
+			EmitCondJump( jne_instr, "_findEnvp_$$_" );
 //				asmPrintf( " jne _findEnvp_\n" );
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 //				asmPrintf( " add eax,4\n" );
@@ -20281,7 +20282,7 @@ _begin( BeginMain )
 			initMov_m_r( reg_esp, 0, reg_eax, 4 );
 
 			initAdrs2( &adrs, "_argc" sympost, -1, -1, 0, 0 );
-			EmitMov_m_r( &adrs, reg_eax, 4 );
+			EmitMov_r_m( reg_eax, &adrs, 4 );
 			
 		_endcase
 		
@@ -20291,7 +20292,7 @@ _begin( BeginMain )
 			asmPrintf( "_start:\n" );
 			EmitMov_r_r( reg_esp, reg_eax );
 			
-			asmPrintf( "_findEnvp_:\n" );
+			asmPrintf( "_findEnvp_$$_:\n" );
 //			asmPrintf( " add eax,4\n" );
 //			asmPrintf( " cmp dword ptr [eax], 0\n" );
 //			asmPrintf( " jne _findEnvp_\n" );
@@ -20309,9 +20310,10 @@ _begin( BeginMain )
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 			initAdrs1( &adrs, reg_eax, 0 );
 			adrs.forcedSize = 4;
+			adrs.Size = 4;
 			EmitGeneric_c_m( cmp_instr, 0, &adrs );
 //				asmPrintf( " cmp dword ptr [eax], 0\n" );
-			EmitCondJump( jne_instr, "_findEnvp_" );
+			EmitCondJump( jne_instr, "_findEnvp_$$_" );
 //				asmPrintf( " jne _findEnvp_\n" );
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 //				asmPrintf( " add eax,4\n" );
@@ -20328,7 +20330,7 @@ _begin( BeginMain )
 			initMov_m_r( reg_esp, 0, reg_eax, 4 );
 
 			initAdrs2( &adrs, "_argc" sympost, -1, -1, 0, 0 );
-			EmitMov_m_r( &adrs, reg_eax, 4 );
+			EmitMov_r_m( reg_eax, &adrs, 4 );
 
 			
 		_endcase
@@ -20336,17 +20338,18 @@ _begin( BeginMain )
 		_case( macOS_os )
 		
 	 		
-			asmPrintf( " .globl _start\n" );
-			asmPrintf( "_start:\n" );
+			asmPrintf( " .globl start\n" );
+			asmPrintf( "start:\n" );
 			EmitMov_r_r( reg_esp, reg_eax );
 			
-			asmPrintf( "_findEnvp_:\n" );
+			asmPrintf( "_findEnvp_$$_:\n" );
 
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 			initAdrs1( &adrs, reg_eax, 0 );
 			adrs.forcedSize = 4;
+			adrs.Size = 4;
 			EmitGeneric_c_m( cmp_instr, 0, &adrs );
-			EmitCondJump( jne_instr, "_findEnvp_" );
+			EmitCondJump( jne_instr, "_findEnvp_$$_" );
 			EmitGeneric_c_r( add_instr, 4, reg_eax );
 			
 			initAdrs2( &adrs, "_envp" sympost, -1, -1, 0, 0 );
@@ -20360,7 +20363,7 @@ _begin( BeginMain )
 			initMov_m_r( reg_esp, 0, reg_eax, 4 );
 
 			initAdrs2( &adrs, "_argc" sympost, -1, -1, 0, 0 );
-			EmitMov_m_r( &adrs, reg_eax, 4 );
+			EmitMov_r_m( reg_eax, &adrs, 4 );
 
 			
 			
@@ -21229,7 +21232,6 @@ _begin( OutValue )
 
 			// First, emit the actual string data:
 
-			EmitAlign( 4 );
 			_for
 			( 
 				int CurElement = 0, 
@@ -21254,7 +21256,8 @@ _begin( OutValue )
 				_endif
 
 			_endfor
-			//
+
+
 			// Begin by emiting the pointers to the strings.
 
 			_for
@@ -21397,46 +21400,65 @@ _begin( OutValue )
 			)
 			
 				memcpy( &v, CurValue, sizeof( union YYSTYPE ));
-				_for
-				( 
-					int CurElement=0, 
-					CurElement < Value->v.NumElements,
-					++CurElement
-				)
 				
-					_switch( size )
+				_switch( size )
+				
+					_case( 1 )
 					
-						_case( 1 )
-						
+						_for
+						( 
+							int CurElement=1, 
+							CurElement < Value->v.NumElements,
+							++CurElement
+						)
 							allTheSame = 
 								v.v.u.bytes[0] == CurValue->v.u.bytes[0];
-								
+							
 							_breakif( !allTheSame );
+							++CurValue;
 							
-						_endcase
-							
-						_case( 2 )
+						_endfor
 						
+					_endcase
+						
+					_case( 2 )
+					
+						_for
+						( 
+							int CurElement=1, 
+							CurElement < Value->v.NumElements,
+							++CurElement
+						)
 							allTheSame = 
 								v.v.u.words[0] == CurValue->v.u.words[0];
 								
 							_breakif( !allTheSame );
+							++CurValue;
 							
-						_endcase
-							
-						_case( 4 )
+						_endfor
 						
+						
+					_endcase
+						
+					_case( 4 )
+					
+						_for
+						( 
+							int CurElement=1, 
+							CurElement < Value->v.NumElements,
+							++CurElement
+						)
 							allTheSame = 
 								v.v.u.dwords[0] == CurValue->v.u.dwords[0];
 								
 							_breakif( !allTheSame );
+							++CurValue;
 							
-						_endcase
-							
-					_endswitch
-					++CurValue;
-				
-				_endfor
+						_endfor
+						
+					_endcase
+						
+				_endswitch
 				CurValue = (union YYSTYPE *) Value->v.u.ArrayOfValues;
 				_if( allTheSame )
 				
@@ -26407,6 +26429,7 @@ _begin( OutputMemParm )
 									push_r( regnum );
 									initAdrs1( &tAdrs, reg_esp, 0 );
 									tAdrs.forcedSize = 4;
+									tAdrs.Size = 4;
 									EmitGeneric_c_m
 									( 
 										add_instr, 

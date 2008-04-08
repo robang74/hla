@@ -793,7 +793,8 @@ _btr            btr
 _bts            bts           
 _bx    			bx    
 _byte			byte
-_call           call          
+_call           call
+_case			case          
 _cbw            cbw           
 _cdq            cdq           
 _ch    			ch    
@@ -920,7 +921,8 @@ _cwde           cwde
 _cx    			cx    
 _daa            daa           
 _das            das           
-_dec            dec           
+_dec            dec 
+_default		default          
 _dh    			dh    
 _di    			di    
 _div            div           
@@ -963,7 +965,8 @@ _endlabel       endlabel
 _endreadonly    endreadonly
 _endrecord      endrecord   
 _endstatic      endstatic   
-_endstorage     endstorage  
+_endstorage     endstorage 
+_endswitch		endswitch 
 _endtry         endtry      
 _endtype        endtype     
 _endunion       endunion    
@@ -1498,7 +1501,8 @@ _sub            sub
 _subpd          subpd      
 _subps          subps      
 _subsd          subsd      
-_subss          subss      
+_subss          subss 
+_switch			switch     
 _sysenter       sysenter   
 _sysexit        sysexit    
 _tbyte			tbyte
@@ -5669,6 +5673,10 @@ _zstring		zstring
 {_elseif}          { testRW( elseifTkn );      }
 {_else}            { testRW( elseTkn );        }
 {_endif}           { testRW( endifTkn );       }
+{_switch}          { testRW( switchTkn );      }
+{_case}            { testRW( caseTkn );        }
+{_default}         { testRW( defaultTkn );     }
+{_endswitch}       { testRW( endswitchTkn );   }
 {_while}           { testRW( whileTkn );       }
 {_do}              { testRW( doTkn );          }
 {_endwhile}        { testRW( endwhileTkn );    }
@@ -5703,6 +5711,10 @@ _zstring		zstring
 ~{_elseif}        { _return elseifTkn;        }
 ~{_else}          { _return elseTkn;          }
 ~{_endif}         { _return endifTkn;         }
+~{_switch}        { _return switchTkn;        }
+~{_case}          { _return caseTkn;          }
+~{_default}       { _return defaultTkn;       }
+~{_endswitch}     { _return endswitchTkn;     }
 ~{_while}         { _return whileTkn;         }
 ~{_do}            { _return doTkn;            }
 ~{_endwhile}      { _return endwhileTkn;      }

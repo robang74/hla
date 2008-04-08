@@ -1,2 +1,2 @@
-#define VersionInformation "Version 1.102 build 18587 (prototype)"
+#define VersionInformation "Version 1.102 build 18816 (prototype)"
 

@@ -1,5 +1,5 @@
 ; Assembly code emitted by HLA compiler
-; Version 1.102 build 18583 (prototype)
+; Version 1.102 build 18688 (prototype)
 ; HLA compiler written by Randall Hyde
 ; MASM compatible output
 
@@ -6099,6 +6099,7 @@ _03d9__switch_otherwise___$1059:
 _03da__switch_endcase___$1010:
         pop        edi
         pop        esi
+        pop        ecx
         pop        ebx
 x_mulval:
         mov        esp, ebp 
@@ -6224,7 +6225,7 @@ _case5_4__$1082:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      7734
+        pushd      7735
 
         pushd      offset32 L1084_str__hla_
 
@@ -6292,7 +6293,7 @@ _case5_10__$1099:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      7795
+        pushd      7796
 
         pushd      offset32 L1084_str__hla_
 
@@ -6396,7 +6397,7 @@ L1116_false__hla_:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      7912
+        pushd      7913
 
         pushd      offset32 L1084_str__hla_
 
@@ -6473,7 +6474,7 @@ _case5_16__$1127:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      7991
+        pushd      7992
 
         pushd      offset32 L1084_str__hla_
 
@@ -6500,7 +6501,7 @@ _case5_17__$1132:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8009
+        pushd      8010
 
         pushd      offset32 L1084_str__hla_
 
@@ -6530,7 +6531,7 @@ _case5_18__$1138:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8034
+        pushd      8035
 
         pushd      offset32 L1084_str__hla_
 
@@ -6601,7 +6602,7 @@ _case6_4__$1166:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8108
+        pushd      8109
 
         pushd      offset32 L1084_str__hla_
 
@@ -6669,7 +6670,7 @@ _case6_10__$1182:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8170
+        pushd      8171
 
         pushd      offset32 L1084_str__hla_
 
@@ -6773,7 +6774,7 @@ L1199_false__hla_:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8287
+        pushd      8288
 
         pushd      offset32 L1084_str__hla_
 
@@ -7280,7 +7281,7 @@ Overflow_$1234:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8287
+        pushd      8288
 
         pushd      offset32 L1236_str__hla_
 
@@ -7381,7 +7382,7 @@ ForEachDigit_$1241:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8287
+        pushd      8288
 
         pushd      offset32 L1242_str__hla_
 
@@ -7472,7 +7473,7 @@ L1247_repeat__hla_:
         sub        esp, 28 
         and        esp, -16 
         pushd      offset32 L516_str__hla_
-        pushd      8287
+        pushd      8288
 
         pushd      offset32 L1249_str__hla_
 

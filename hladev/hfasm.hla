@@ -21619,21 +21619,26 @@ proc( assemble_line );
 	mov( $0E9DA, ax );
 	stosw;
 	jmp instruction_assembled;
+	
   fxch_instruction::
 	mov( $01D9, dx );
 	jmp fpu_single_operand;
+	
   ffreep_instruction::
 	mov( $00DF, dx );
 	jmp fpu_single_operand;
+	
   ffree_instruction::
 	mov( $0DD, dl );
 	mov( al, dh );
+	
   fpu_single_operand:
 	mov( esi, ebx );
 	lodsb;
 	call get_size_operator;
 	cmp( al, $10 );
 	je fpu_streg;
+
 	or( dh, dh );
 	jz invalid_operand;
 	mov( ebx, esi );
@@ -23285,15 +23290,26 @@ proc( assemble_line );
 	mov( al, [edx+5] );
 	mov( al, [edx+6] );
 	mov( al, [edx+$14] );
-	mov( 3, (type byte [edx+$12]) );
+	
+// Need to emit brand at offset 7
+// Brand Values:
+//	netbsd = 2
+// 	linux  = 3
+//   solaris = 6
+//   freebsd = 9
+//   openbsd = 12
+//   qnx = ???
+	
+	mov( 3, (type byte [edx+$12]) );	// e_machine = EM_386
 	mov( $34, (type byte [edx+$28]) );
 	mov( $28, (type byte [edx+$2E]) );
 	mov( 32, code_type );
 	cmp( (type word [esi]), $1D19 );
 	je format_elf_exe;
+	
 	mov( 2, labels_type );
   elf_header_ok:
-	mov( 1, (type byte [edx+$10]) );
+	mov( 1, (type byte [edx+$10]) );	// e_type = ET_REL
 	mov( additional_memory, eax );
 	mov( eax, symbols_stream );
 	mov( eax, ebx );
@@ -23319,6 +23335,7 @@ proc( assemble_line );
 	jz instruction_assembled;
 	mov( 8, (type byte [ebx+$10]) );
 	jmp instruction_assembled;
+	
   format_elf64:
 	mov( edi, edx );
 	mov( $40 >> 2, ecx );
@@ -23344,6 +23361,7 @@ proc( assemble_line );
   elf_section:
 	bt( 0, format_flags );
 	jc illegal_instruction;
+	
 	call close_coff_section;
 	mov( free_additional_memory, ebx );
 	lea( eax, [ebx+$20] );
@@ -23352,6 +23370,7 @@ proc( assemble_line );
 	mov( ebx, current_section );
 	inc( (type word number_of_sections) );
 	jz format_limitations_exceeded;
+	
 	xor( eax, eax );
 	mov( al, [ebx] );
 	mov( edi, [ebx+8] );
@@ -23362,10 +23381,13 @@ proc( assemble_line );
 	mov( ebx, org_symbol );
 	test( 8, format_flags );
 	jnz elf64_labels_type;
+	
 	mov( 2, labels_type );
 	jmp elf_labels_type_ok;
+	
   elf64_labels_type:
 	mov( 4, labels_type );
+	
   elf_labels_type_ok:
 	mov( eax, [ebx+$10] );
 	mov( %10, al );
@@ -23373,20 +23395,24 @@ proc( assemble_line );
 	lodsw;
 	cmp( ax, '(' );
 	jne invalid_argument;
+	
 	mov( esi, [ebx+4] );
 	mov( [esi], ecx );
 	lea( esi, [esi+ecx+1+4] );
   elf_section_flags:
 	cmp( (type byte [esi]), $1C );
 	je elf_section_alignment;
+	
 	cmp( (type byte [esi]), $19 );
 	jne elf_section_settings_ok;
+	
 	inc( esi );
 	lodsb;
 	sub( 28, al );
 	xor( %11, al );
 	test( _byte( !%10 ), al );
 	jnz invalid_argument;
+	
 	mov( al, cl );
 	mov( 1, al );
 	shl( cl, al );
@@ -23394,37 +23420,46 @@ proc( assemble_line );
 	jnz setting_already_specified;
 	or( al, (type byte [ebx+$14]) );
 	jmp elf_section_flags;
+	
   elf_section_alignment:
 	inc( esi );
 	lodsb;
 	or( al, al );
 	jnz invalid_argument;
+	
 	lodsb;
 	cmp( al, '(' );
 	jne invalid_argument;
+	
 	cmp( (type byte [esi]), '.' );
 	je invalid_value;
+	
 	push( ebx );
 	call get_dword_value;
 	pop( ebx );
 	cmp( value_type, 0 );
 	jne invalid_use_of_symbol;
+	
 	mov( eax, edx );
 	dec( edx );
 	test( edx, eax );
 	jnz invalid_value;
 	or( eax, eax );
 	jz invalid_value;
+	
 	xchg( eax, [ebx+$10] );
 	or( eax, eax );
 	jnz setting_already_specified;
 	jmp elf_section_flags;
+	
   elf_section_settings_ok:
 	cmp( (type dword [ebx+$10]), 0 );
 	jne instruction_assembled;
+	
 	mov( 4, (type dword [ebx+$10]) );
 	test( 8, format_flags );
 	jz instruction_assembled;
+	
 	mov( 8, (type byte [ebx+$10]) );
 	jmp instruction_assembled;
 	
@@ -23434,15 +23469,19 @@ proc( assemble_line );
 	mov( $8048000, image_base );
 	cmp( (type byte [esi]), $80 );
 	jne elf_exe_base_ok;
+	
 	lodsw;
 	cmp( ah, '(' );
 	jne invalid_argument;
+	
 	cmp( (type byte [esi]), '.' );
 	je invalid_value;
+	
 	push( edx );
 	call get_dword_value;
 	cmp( value_type, 0 );
 	jne invalid_use_of_symbol;
+	
 	mov( eax, image_base );
 	pop( edx );
   elf_exe_base_ok:
@@ -23452,6 +23491,7 @@ proc( assemble_line );
 	mov( $20 >> 2, ecx );
 	cmp( current_pass, 0 );
 	je init_elf_segments;
+	
 	intmul( number_of_sections, ecx );
   init_elf_segments:
 	xor( eax, eax );
@@ -23488,18 +23528,22 @@ proc( assemble_line );
 	mov( 0, image_base_high );
 	cmp( (type byte [esi]), $80 );
 	jne elf64_exe_base_ok;
+	
 	lodsw;
 	cmp( ah, '(' );
 	jne invalid_argument;
 	cmp( (type byte [esi]), '.' );
 	je invalid_value;
+	
 	push( edx );
 	call get_qword_value;
 	cmp( value_type, 0 );
 	jne invalid_use_of_symbol;
+	
 	mov( eax, image_base );
 	mov( edx, image_base_high );
 	pop( edx );
+	
   elf64_exe_base_ok:
 	mov( 2, (type byte [edx+$10]) );
 	mov( $38, (type byte [edx+$36]) );
@@ -23507,6 +23551,7 @@ proc( assemble_line );
 	mov( $38 >> 2, ecx );
 	cmp( current_pass, 0 );
 	je init_elf64_segments;
+	
 	intmul( number_of_sections, ecx );
   init_elf64_segments:
 	xor( eax, eax );
@@ -23541,33 +23586,43 @@ proc( assemble_line );
 	mov( edi, org_start );
 	mov( edi, symbols_stream );
 	jmp instruction_assembled;
+	
   elf_entry:
 	lodsb;
 	cmp( al, '(' );
 	jne invalid_argument;
+	
 	cmp( (type byte [esi]), '.' );
 	je invalid_value;
+	
 	test( 8, format_flags );
 	jnz elf64_entry;
+	
 	call get_dword_value;
 	cmp( value_type, 0 );
 	jne invalid_use_of_symbol;
+	
 	mov( code_start, edx );
 	mov( eax, [edx+$18] );
 	jmp instruction_assembled;
+	
   elf64_entry:
 	call get_qword_value;
 	cmp( value_type, 0 );
 	jne invalid_use_of_symbol;
+	
 	mov( code_start, ebx );
 	mov( eax, [ebx+$18] );
 	mov( edx, [ebx+$1C] );
 	jmp instruction_assembled;
+	
   elf_segment:
 	bt( 0, format_flags );
 	jnc illegal_instruction;
+	
 	test( 8, format_flags );
 	jnz elf64_segment;
+	
 	call close_elf_segment;
 	push( eax );
 	mov( number_of_sections, ebx );
@@ -23576,6 +23631,7 @@ proc( assemble_line );
 	add( $34, ebx );
 	cmp( ebx, symbols_stream );
 	jb new_elf_segment;
+	
 	mov( symbols_stream, ebx );
 	sub( $20, ebx );
 	push( edi );
@@ -23588,25 +23644,32 @@ proc( assemble_line );
   new_elf_segment:
 	mov( 1, (type byte [ebx]) );
 	mov( $1000, (type word [ebx+$1C]) );
+	
   elf_segment_flags:
 	cmp( (type byte [esi]), $19 );
 	jne elf_segment_flags_ok;
+	
 	lodsw;
 	sub( 28, ah );
 	jbe invalid_argument;
+	
 	cmp( ah, 1 );
 	je mark_elf_segment_flag;
+	
 	cmp( ah, 3 );
 	ja invalid_argument;
+	
 	xor( 1, ah );
 	cmp( ah, 2 );
 	je mark_elf_segment_flag;
+	
 	inc( ah );
   mark_elf_segment_flag:
 	test( ah, [ebx+$18] );
 	jnz setting_already_specified;
 	or( ah, [ebx+$18] );
 	jmp elf_segment_flags;
+	
   elf_segment_flags_ok:
 	mov( edi, eax );
 	sub( code_start, eax );
@@ -23642,6 +23705,7 @@ proc( assemble_line );
 	add( $40, ebx );
 	cmp( ebx, symbols_stream );
 	jb new_elf64_segment;
+	
 	mov( symbols_stream, ebx );
 	sub( $38, ebx );
 	push( edi );
@@ -23651,28 +23715,35 @@ proc( assemble_line );
 	rep.stosd;
 	pop( edi );
 	or( -1, next_pass_needed );
+	
   new_elf64_segment:
 	mov( 1, (type byte [ebx]) );
 	mov( $1000, (type word [ebx+$30]) );
+	
   elf64_segment_flags:
 	cmp( (type byte [esi]), $19 );
 	jne elf64_segment_flags_ok;
 	lodsw;
 	sub( 28, ah );
 	jbe invalid_argument;
+	
 	cmp( ah, 1 );
 	je mark_elf64_segment_flag;
+	
 	cmp( ah, 3 );
 	ja invalid_argument;
+	
 	xor( 1, ah );
 	cmp( ah, 2 );
 	je mark_elf64_segment_flag;
+	
 	inc( ah );
   mark_elf64_segment_flag:
 	test( ah, [ebx+4] );
 	jnz setting_already_specified;
 	or( ah, [ebx+4] );
 	jmp elf64_segment_flags;
+	
   elf64_segment_flags_ok:
 	mov( edi, ecx );
 	sub( code_start, ecx );

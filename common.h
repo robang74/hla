@@ -600,6 +600,7 @@ extern void AddGlobalCset( char );
 extern struct flt80 MakeReal( union YYSTYPE *Value );
 extern void FreeSym( struct SymNode *symbol );
 extern void CheckStatic( struct StaticListType *StaticList, int MainPgm );
+extern struct StaticListType *searchStatic( char *symbolToFind );
 extern void CheckPtrs( void );
 extern void PatchPtrs( void );
 extern void ClrArray( union YYSTYPE *d );

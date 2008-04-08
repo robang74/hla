@@ -1,5 +1,5 @@
 // Assembly code emitted by HLA compiler
-// Version 1.102 build 18688 (prototype)
+// Version 1.102 build 18871 (prototype)
 // HLA compiler written by Randall Hyde
 // GAS compatible output
 
@@ -854,15 +854,15 @@ jmpTbl_$508:
         .long      x_$257
         .long      s_$256
         .long      s_$256
-ten_$1260 :.long  0xa
-fcw_$1291 :.word  0xfff
-fcwSave_$1309 :.space     2
-fcw_$1310 :.space     2
-fcwSave_$1318 :.space     2
-fcw_$1319 :.space     2
-SaveCW_$1330 :.space     2
-MaskedCW_$1331 :.space     2
-PotTbl_$1333:
+ten_$835 :.long  0xa
+fcw_$866 :.word  0xfff
+fcwSave_$884 :.space     2
+fcw_$885 :.space     2
+fcwSave_$893 :.space     2
+fcw_$894 :.space     2
+SaveCW_$905 :.space     2
+MaskedCW_$906 :.space     2
+PotTbl_$908:
         .byte      0x9b,0x97,0x20,0x8a,0x2,0x52,0x60,0xc4,0x25,0x75
         .byte      0xe5,0x5d,0x3d,0xc5,0x5d,0x3b,0x8b,0x9e,0x92,0x5a
         .byte      0x17,0xc,0x75,0x81,0x86,0x75,0x76,0xc9,0x48,0x4d
@@ -877,23 +877,23 @@ PotTbl_$1333:
         .byte      0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xc8,0x5,0x40
         .byte      0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xa0,0x2,0x40
         .byte      0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80,0xff,0x3f
-Delimiters_$1334 :.byte  0x1,0x26,0x0,0x0,0x1,0x10,0x0,0xc,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0
-TenTo17_$1390:
+Delimiters_$909 :.byte  0x1,0x26,0x0,0x0,0x1,0x10,0x0,0xc,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0
+TenTo17_$965:
         .byte      0x0,0x0,0x0,0xc5,0x2e,0xbc,0xa2,0xb1,0x37,0x40
-TenTo16_$1391:
+TenTo16_$966:
         .byte      0x0,0x0,0x0,0x4,0xbf,0xc9,0x1b,0x8e,0x34,0x40
-OneE10_$1392:
+OneE10_$967:
         .byte      0x0,0x0,0x0,0x0,0x0,0xf9,0x2,0x95,0x20,0x40
-OneEm10_$1393:
+OneEm10_$968:
         .byte      0xbf,0xd5,0xed,0xbd,0xce,0xfe,0xe6,0xdb,0xdd,0x3f
-Ten_$1394:
+Ten_$969:
         .byte      0x0,0x0,0x0,0x0,0x0,0x0,0x0,0xa0,0x2,0x40
-FiveEm18_$1395:
+FiveEm18_$970:
         .byte      0x64,0xb4,0xa4,0x36,0x32,0xaa,0x77,0xb8,0xc5,0x3f
-temp_$1396 :.space     8
-Digits_$1416 :.space     32
-Exponent_$1417 :.space     4
-Sign_$1418 :.space     1
+temp_$971 :.space     8
+Digits_$991 :.space     32
+Exponent_$992 :.space     4
+Sign_$993 :.space     1
 
 
 
@@ -948,20 +948,47 @@ L541_str__hla_:
  .byte 0
 
         .balign    (4)
-L704_len__hla_ :.long      0x29
+L632_len__hla_ :.long      0x29
         .long      0x29
-L704_str__hla_:
+L632_str__hla_:
 
  .ascii "'-' operand must be numeric or cset value"
  .byte 0
 
  .byte 0
  .byte 0
+L$607_jmpTbl:
+        .long      (L$619_case+0)
+        .long      (L$621_case+0)
+        .long      (L$623_case+0)
+        .long      (L$625_case+0)
+        .long      (L$627_case+0)
+        .long      (L$609_case+0)
+        .long      (L$611_case+0)
+        .long      (L$613_case+0)
+        .long      (L$615_case+0)
+        .long      (L$616_case+0)
+        .long      (L$618_case+0)
+        .long      (L$608_case+0)
+        .long      (L$610_case+0)
+        .long      (L$612_case+0)
+        .long      (L$614_case+0)
+        .long      (L$617_case+0)
+        .long      (L$607_default+0)
+        .long      (L$607_default+0)
+        .long      (L$628_case+0)
+        .long      (L$629_case+0)
+        .long      (L$630_case+0)
+        .long      (L$607_default+0)
+        .long      (L$607_default+0)
+        .long      (L$607_default+0)
+        .long      (L$607_default+0)
+        .long      (L$631_case+0)
 
         .balign    (4)
-L780_len__hla_ :.long      0x2c
+L652_len__hla_ :.long      0x2c
         .long      0x2c
-L780_str__hla_:
+L652_str__hla_:
 
  .ascii "'!' operand must be boolean or integer value"
  .byte 0
@@ -969,21 +996,160 @@ L780_str__hla_:
  .byte 0
  .byte 0
  .byte 0
+L$635_jmpTbl:
+        .long      (L$636_case+0)
+        .long      (L$635_default+0)
+        .long      (L$639_case+0)
+        .long      (L$642_case+0)
+        .long      (L$643_case+0)
+        .long      (L$646_case+0)
+        .long      (L$651_case+0)
+        .long      (L$637_case+0)
+        .long      (L$640_case+0)
+        .long      (L$644_case+0)
+        .long      (L$647_case+0)
+        .long      (L$649_case+0)
+        .long      (L$651_case+0)
+        .long      (L$637_case+0)
+        .long      (L$640_case+0)
+        .long      (L$644_case+0)
+        .long      (L$647_case+0)
+        .long      (L$651_case+0)
+L$654_jmpTbl:
+        .long      (L$655_case+0)
+        .long      (L$661_case+0)
+        .long      (L$668_case+0)
+        .long      (L$673_case+0)
+        .long      (L$680_case+0)
+        .long      (L$659_case+0)
+        .long      (L$665_case+0)
+        .long      (L$671_case+0)
+        .long      (L$676_case+0)
+        .long      (L$678_case+0)
+        .long      (L$681_case+0)
+        .long      (L$657_case+0)
+        .long      (L$664_case+0)
+        .long      (L$670_case+0)
+        .long      (L$675_case+0)
+        .long      (L$682_case+0)
+        .long      (L$654_default+0)
+        .long      (L$654_default+0)
+        .long      (L$683_case+0)
+        .long      (L$684_case+0)
+        .long      (L$685_case+0)
+        .long      (L$654_default+0)
+        .long      (L$654_default+0)
+        .long      (L$654_default+0)
+        .long      (L$654_default+0)
+        .long      (L$686_case+0)
+L$688_jmpTbl:
+        .long      (L$689_case+0)
+        .long      (L$693_case+0)
+        .long      (L$697_case+0)
+        .long      (L$701_case+0)
+        .long      (L$706_case+0)
+        .long      (L$692_case+0)
+        .long      (L$696_case+0)
+        .long      (L$700_case+0)
+        .long      (L$704_case+0)
+        .long      (L$705_case+0)
+        .long      (L$707_case+0)
+        .long      (L$691_case+0)
+        .long      (L$695_case+0)
+        .long      (L$699_case+0)
+        .long      (L$703_case+0)
+        .long      (L$708_case+0)
+        .long      (L$688_default+0)
+        .long      (L$688_default+0)
+        .long      (L$709_case+0)
+        .long      (L$710_case+0)
+        .long      (L$711_case+0)
+        .long      (L$688_default+0)
+        .long      (L$688_default+0)
+        .long      (L$688_default+0)
+        .long      (L$688_default+0)
+        .long      (L$712_case+0)
+L$716_jmpTbl:
+        .long      (L$717_case+0)
+        .long      (L$717_case+0)
+        .long      (L$717_case+0)
+        .long      (L$717_case+0)
+        .long      (L$717_case+0)
+        .long      (L$723_case+0)
+        .long      (L$723_case+0)
+        .long      (L$723_case+0)
+        .long      (L$723_case+0)
+        .long      (L$723_case+0)
+        .long      (L$723_case+0)
+        .long      (L$730_case+0)
+        .long      (L$730_case+0)
+        .long      (L$730_case+0)
+        .long      (L$730_case+0)
+        .long      (L$730_case+0)
+        .long      (L$716_default+0)
+        .long      (L$716_default+0)
+        .long      (L$739_case+0)
+        .long      (L$740_case+0)
+        .long      (L$741_case+0)
+        .long      (L$716_default+0)
+        .long      (L$716_default+0)
+        .long      (L$716_default+0)
+        .long      (L$716_default+0)
+        .long      (L$742_case+0)
 
         .balign    (4)
-L1106_len__hla_ :.long      0x1a
+L751_len__hla_ :.long      0x1a
         .long      0x1a
-L1106_str__hla_:
+L751_str__hla_:
 
  .ascii "Attempted division by zero"
  .byte 0
 
  .byte 0
+L$748_jmpTbl:
+        .long      (L$749_case+0)
+        .long      (L$749_case+0)
+        .long      (L$749_case+0)
+        .long      (L$749_case+0)
+        .long      (L$749_case+0)
+        .long      (L$757_case+0)
+        .long      (L$757_case+0)
+        .long      (L$757_case+0)
+        .long      (L$757_case+0)
+        .long      (L$757_case+0)
+        .long      (L$757_case+0)
+        .long      (L$765_case+0)
+        .long      (L$765_case+0)
+        .long      (L$765_case+0)
+        .long      (L$765_case+0)
+        .long      (L$765_case+0)
+        .long      (L$748_default+0)
+        .long      (L$748_default+0)
+        .long      (L$775_case+0)
+        .long      (L$777_case+0)
+        .long      (L$780_case+0)
+L$785_jmpTbl:
+        .long      (L$786_case+0)
+        .long      (L$786_case+0)
+        .long      (L$786_case+0)
+        .long      (L$786_case+0)
+        .long      (L$786_case+0)
+        .long      (L$793_case+0)
+        .long      (L$793_case+0)
+        .long      (L$793_case+0)
+        .long      (L$793_case+0)
+        .long      (L$793_case+0)
+        .long      (L$793_case+0)
+        .long      (L$801_case+0)
+        .long      (L$801_case+0)
+        .long      (L$801_case+0)
+        .long      (L$801_case+0)
+        .long      (L$801_case+0)
 
         .balign    (4)
-L1269_len__hla_ :.long      0x25
+L844_len__hla_ :.long      0x25
         .long      0x25
-L1269_str__hla_:
+L844_str__hla_:
 
  .ascii "Decimal integer constant is too large"
  .byte 0
@@ -992,9 +1158,9 @@ L1269_str__hla_:
  .byte 0
 
         .balign    (4)
-L1277_len__hla_ :.long      0x1c
+L852_len__hla_ :.long      0x1c
         .long      0x1c
-L1277_str__hla_:
+L852_str__hla_:
 
  .ascii "Binary constant is too large"
  .byte 0
@@ -1004,9 +1170,9 @@ L1277_str__hla_:
  .byte 0
 
         .balign    (4)
-L1285_len__hla_ :.long      0x21
+L860_len__hla_ :.long      0x21
         .long      0x21
-L1285_str__hla_:
+L860_str__hla_:
 
  .ascii "Hexadecimal constant is too large"
  .byte 0
@@ -1043,179 +1209,6 @@ jmpTbl_$111:
         .long      ecx26_$138
         .long      ecx27_$139
         .long      ecx28_$140
-_0263__switch_jmptbl___$709:
-        .long      _case0_11__$666
-        .long      _case0_12__$671
-        .long      _case0_13__$676
-        .long      _case0_14__$681
-        .long      _case0_15__$686
-        .long      _case0_1__$626
-        .long      _case0_3__$634
-        .long      _case0_5__$642
-        .long      _case0_7__$650
-        .long      _case0_8__$654
-        .long      _case0_10__$662
-        .long      _case0_0__$621
-        .long      _case0_2__$630
-        .long      _case0_4__$638
-        .long      _case0_6__$646
-        .long      _case0_9__$658
-        .long      _0261__switch_otherwise___$703
-        .long      _0261__switch_otherwise___$703
-        .long      _case0_16__$690
-        .long      _case0_17__$694
-        .long      _case0_18__$698
-        .long      _0261__switch_otherwise___$703
-        .long      _0261__switch_otherwise___$703
-        .long      _0261__switch_otherwise___$703
-        .long      _0261__switch_otherwise___$703
-        .long      _case0_19__$702
-        .long      _0261__switch_otherwise___$703
-_02cc__switch_jmptbl___$785:
-        .long      _case1_0__$726
-        .long      _02ca__switch_otherwise___$779
-        .long      _case1_3__$737
-        .long      _case1_6__$747
-        .long      _case1_7__$751
-        .long      _case1_10__$761
-        .long      _case1_15__$777
-        .long      _case1_1__$731
-        .long      _case1_5__$742
-        .long      _case1_9__$756
-        .long      _case1_12__$766
-        .long      _case1_13__$771
-        .long      _case1_16__$778
-        .long      _case1_2__$732
-        .long      _case1_4__$741
-        .long      _case1_8__$755
-        .long      _case1_11__$765
-        .long      _case1_14__$776
-        .long      _02ca__switch_otherwise___$779
-_0317__switch_jmptbl___$896:
-        .long      _case2_0__$801
-        .long      _case2_3__$817
-        .long      _case2_6__$833
-        .long      _case2_9__$847
-        .long      _case2_13__$866
-        .long      _case2_2__$812
-        .long      _case2_5__$827
-        .long      _case2_8__$842
-        .long      _case2_11__$856
-        .long      _case2_12__$861
-        .long      _case2_14__$870
-        .long      _case2_1__$807
-        .long      _case2_4__$823
-        .long      _case2_7__$838
-        .long      _case2_10__$852
-        .long      _case2_15__$874
-        .long      _0315__switch_otherwise___$895
-        .long      _0315__switch_otherwise___$895
-        .long      _case2_16__$878
-        .long      _case2_17__$882
-        .long      _case2_18__$886
-        .long      _0315__switch_otherwise___$895
-        .long      _0315__switch_otherwise___$895
-        .long      _0315__switch_otherwise___$895
-        .long      _0315__switch_otherwise___$895
-        .long      _case2_19__$890
-        .long      _0315__switch_otherwise___$895
-_0386__switch_jmptbl___$999:
-        .long      _case3_0__$912
-        .long      _case3_3__$926
-        .long      _case3_6__$939
-        .long      _case3_9__$952
-        .long      _case3_13__$969
-        .long      _case3_2__$922
-        .long      _case3_5__$935
-        .long      _case3_8__$948
-        .long      _case3_11__$961
-        .long      _case3_12__$965
-        .long      _case3_14__$973
-        .long      _case3_1__$918
-        .long      _case3_4__$931
-        .long      _case3_7__$944
-        .long      _case3_10__$957
-        .long      _case3_15__$977
-        .long      _0384__switch_otherwise___$998
-        .long      _0384__switch_otherwise___$998
-        .long      _case3_16__$981
-        .long      _case3_17__$985
-        .long      _case3_18__$989
-        .long      _0384__switch_otherwise___$998
-        .long      _0384__switch_otherwise___$998
-        .long      _0384__switch_otherwise___$998
-        .long      _0384__switch_otherwise___$998
-        .long      _case3_19__$993
-        .long      _0384__switch_otherwise___$998
-_03ef__switch_jmptbl___$1080:
-        .long      _case4_0__$1017
-        .long      _case4_1__$1018
-        .long      _case4_2__$1019
-        .long      _case4_3__$1020
-        .long      _case4_4__$1021
-        .long      _case4_5__$1031
-        .long      _case4_6__$1032
-        .long      _case4_7__$1033
-        .long      _case4_8__$1034
-        .long      _case4_9__$1035
-        .long      _case4_10__$1036
-        .long      _case4_11__$1046
-        .long      _case4_12__$1047
-        .long      _case4_13__$1048
-        .long      _case4_14__$1049
-        .long      _case4_15__$1050
-        .long      _03ed__switch_otherwise___$1079
-        .long      _03ed__switch_otherwise___$1079
-        .long      _case4_16__$1062
-        .long      _case4_17__$1066
-        .long      _case4_18__$1070
-        .long      _03ed__switch_otherwise___$1079
-        .long      _03ed__switch_otherwise___$1079
-        .long      _03ed__switch_otherwise___$1079
-        .long      _03ed__switch_otherwise___$1079
-        .long      _case4_19__$1074
-        .long      _03ed__switch_otherwise___$1079
-_0442__switch_jmptbl___$1169:
-        .long      _case5_0__$1100
-        .long      _case5_1__$1101
-        .long      _case5_2__$1102
-        .long      _case5_3__$1103
-        .long      _case5_4__$1104
-        .long      _case5_5__$1116
-        .long      _case5_6__$1117
-        .long      _case5_7__$1118
-        .long      _case5_8__$1119
-        .long      _case5_9__$1120
-        .long      _case5_10__$1121
-        .long      _case5_11__$1132
-        .long      _case5_12__$1133
-        .long      _case5_13__$1134
-        .long      _case5_14__$1135
-        .long      _case5_15__$1136
-        .long      _0440__switch_otherwise___$1168
-        .long      _0440__switch_otherwise___$1168
-        .long      _case5_16__$1149
-        .long      _case5_17__$1154
-        .long      _case5_18__$1160
-        .long      _0440__switch_otherwise___$1168
-_0497__switch_jmptbl___$1235:
-        .long      _case6_0__$1185
-        .long      _case6_1__$1186
-        .long      _case6_2__$1187
-        .long      _case6_3__$1188
-        .long      _case6_4__$1189
-        .long      _case6_5__$1200
-        .long      _case6_6__$1201
-        .long      _case6_7__$1202
-        .long      _case6_8__$1203
-        .long      _case6_9__$1204
-        .long      _case6_10__$1205
-        .long      _case6_11__$1216
-        .long      _case6_12__$1217
-        .long      _case6_13__$1218
-        .long      _case6_14__$1219
-        .long      _case6_15__$1220
-        .long      _0495__switch_otherwise___$1234
 
 /* procedure lowercase */
 
@@ -3086,7 +3079,7 @@ L517_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4032 
+        pushl      $4030 
 
         pushl      $L521_str__hla_ 
 
@@ -3119,7 +3112,7 @@ L523_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4070 
+        pushl      $4068 
 
         pushl      $L521_str__hla_ 
 
@@ -3184,7 +3177,7 @@ L527_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4167 
+        pushl      $4165 
 
         pushl      $L528_str__hla_ 
 
@@ -3213,7 +3206,7 @@ L529_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4200 
+        pushl      $4198 
 
         pushl      $L528_str__hla_ 
 
@@ -3248,7 +3241,7 @@ L530_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4236 
+        pushl      $4234 
 
         pushl      $L528_str__hla_ 
 
@@ -3283,7 +3276,7 @@ L534_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4267 
+        pushl      $4265 
 
         pushl      $L528_str__hla_ 
 
@@ -3333,7 +3326,7 @@ L538_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4329 
+        pushl      $4327 
 
         pushl      $L541_str__hla_ 
 
@@ -3365,7 +3358,7 @@ L542_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4356 
+        pushl      $4354 
 
         pushl      $L541_str__hla_ 
 
@@ -3400,7 +3393,7 @@ L545_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4390 
+        pushl      $4388 
 
         pushl      $L541_str__hla_ 
 
@@ -3435,7 +3428,7 @@ L549_false__hla_:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $4420 
+        pushl      $4418 
 
         pushl      $L541_str__hla_ 
 
@@ -4517,133 +4510,117 @@ negval:
         mov        20(%ebp), %edi 
         mov        24(%ebp), %esi 
         movzx      16(%ebp), %eax 
-        jmp        _0266__switch_doCase___$617
-
-_case0_0__$621:
+        cmpl       $2, %eax 
+        jl         L$607_default
+        cmpl       $27, %eax 
+        jg         L$607_default
+        jmp *      L$607_jmpTbl-8(,%eax,4) 
+L$608_case:
         movb       $13, (%edi) 
         movl       $int8_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_1__$626:
+        jmp        L$607_endswitch
+L$609_case:
         movb       $7, (%edi) 
         movl       $byte_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_2__$630:
+        jmp        L$607_endswitch
+L$610_case:
         movb       $14, (%edi) 
         movl       $int16_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_3__$634:
+        jmp        L$607_endswitch
+L$611_case:
         movb       $8, (%edi) 
         movl       $word_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_4__$638:
+        jmp        L$607_endswitch
+L$612_case:
         movb       $15, (%edi) 
         movl       $int32_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_5__$642:
+        jmp        L$607_endswitch
+L$613_case:
         movb       $9, (%edi) 
         movl       $dword_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_6__$646:
+        jmp        L$607_endswitch
+L$614_case:
         movb       $16, (%edi) 
         movl       $int64_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_7__$650:
+        jmp        L$607_endswitch
+L$615_case:
         movb       $10, (%edi) 
         movl       $qword_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_8__$654:
+        jmp        L$607_endswitch
+L$616_case:
         movb       $11, (%edi) 
         movl       $tbyte_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_9__$658:
+        jmp        L$607_endswitch
+L$617_case:
         movb       $17, (%edi) 
         movl       $int128_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_10__$662:
+        jmp        L$607_endswitch
+L$618_case:
         movb       $12, (%edi) 
         movl       $lword_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_11__$666:
+        jmp        L$607_endswitch
+L$619_case:
         movb       $13, (%edi) 
         movl       $int8_ste, (%esi) 
         cmpb       $128, (%ebx) 
-        jnae       L667_false__hla_
+        jnae       L620_false__hla_
         movb       $14, (%edi) 
         movl       $int16_ste, (%esi) 
-L667_false__hla_:
-        jmp        _0262__switch_endcase___$625
-
-_case0_12__$671:
+L620_false__hla_:
+        jmp        L$607_endswitch
+L$621_case:
         movb       $14, (%edi) 
         movl       $int16_ste, (%esi) 
         cmpb       $128, 1(%ebx) 
-        jnae       L672_false__hla_
+        jnae       L622_false__hla_
         movb       $15, (%edi) 
         movl       $int32_ste, (%esi) 
-L672_false__hla_:
-        jmp        _0262__switch_endcase___$625
-
-_case0_13__$676:
+L622_false__hla_:
+        jmp        L$607_endswitch
+L$623_case:
         movb       $15, (%edi) 
         movl       $int32_ste, (%esi) 
         cmpb       $128, 3(%ebx) 
-        jnae       L677_false__hla_
+        jnae       L624_false__hla_
         movb       $16, (%edi) 
         movl       $int64_ste, (%esi) 
-L677_false__hla_:
-        jmp        _0262__switch_endcase___$625
-
-_case0_14__$681:
+L624_false__hla_:
+        jmp        L$607_endswitch
+L$625_case:
         movb       $16, (%edi) 
         movl       $int64_ste, (%esi) 
         cmpb       $128, 7(%ebx) 
-        jnae       L682_false__hla_
+        jnae       L626_false__hla_
         movb       $17, (%edi) 
         movl       $int128_ste, (%esi) 
-L682_false__hla_:
-        jmp        _0262__switch_endcase___$625
-
-_case0_15__$686:
+L626_false__hla_:
+        jmp        L$607_endswitch
+L$627_case:
         movb       $17, (%edi) 
         movl       $int128_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_16__$690:
+        jmp        L$607_endswitch
+L$628_case:
         flds       (%ebx) 
         fchs
         fstps      (%ecx) 
         movb       $20, (%edi) 
         movl       $real32_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_17__$694:
+        jmp        L$607_endswitch
+L$629_case:
         fldl       (%ebx) 
         fchs
         fstpl      (%ecx) 
         movb       $21, (%edi) 
         movl       $real64_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_18__$698:
+        jmp        L$607_endswitch
+L$630_case:
         fldt       (%ebx) 
         fchs
         fstpt      (%ecx) 
         movb       $22, (%edi) 
         movl       $real80_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_case0_19__$702:
+        jmp        L$607_endswitch
+L$631_case:
         mov        (%ebx), %eax 
         notl       %eax 
         mov        %eax, (%ecx) 
@@ -4658,17 +4635,16 @@ _case0_19__$702:
         mov        %eax, 12(%ecx) 
         movb       $27, (%edi) 
         movl       $cset_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_0261__switch_otherwise___$703:
+        jmp        L$607_endswitch
+L$607_default:
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $5807 
+        pushl      $5805 
 
-        pushl      $L704_str__hla_ 
+        pushl      $L632_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
@@ -4680,18 +4656,9 @@ _0261__switch_otherwise___$703:
         mov        %eax, 12(%ecx) 
         movb       $2, (%edi) 
         movl       $uns8_ste, (%esi) 
-        jmp        _0262__switch_endcase___$625
-
-_0266__switch_doCase___$617:
-        cmpl       $2, %eax 
-        jb         _0261__switch_otherwise___$703
-        cmpl       $27, %eax 
-        ja         _0261__switch_otherwise___$703
-        jmp *      _0263__switch_jmptbl___$709-8(,%eax,4) 
-
-_0262__switch_endcase___$625:
+L$607_endswitch:
         cmpb       $17, 16(%ebp) 
-        jnbe       L710_false__hla_
+        jnbe       L633_false__hla_
         xorl       %eax, %eax 
         subl       (%ebx), %eax 
         mov        %eax, (%ecx) 
@@ -4711,7 +4678,7 @@ _0262__switch_endcase___$625:
 
         call       compactType
         addl       $12, %esp 
-L710_false__hla_:
+L633_false__hla_:
         popl       %esi 
         popl       %edi 
         popl       %edx 
@@ -4737,9 +4704,10 @@ notval:
         mov        20(%ebp), %edi 
         mov        24(%ebp), %esi 
         movzx      16(%ebp), %eax 
-        jmp        _02cf__switch_doCase___$722
-
-_case1_0__$726:
+        cmpl       $17, %eax 
+        jg         L$635_default
+        jmp *      L$635_jmpTbl(,%eax,4) 
+L$636_case:
         movzx      (%ebx), %eax 
         andb       $1, %al 
         xorb       $1, %al 
@@ -4749,19 +4717,16 @@ _case1_0__$726:
         movl       $0, 12(%ecx) 
         movb       $0, (%edi) 
         movl       $boolean_ste, (%esi) 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_1__$731:
-
-_case1_2__$732:
+        jmp        L$635_endswitch
+L$637_case:
         mov        (%ebx), %eax 
         movb       %ah, %al 
         orl        4(%ebx), %eax 
         orl        8(%ebx), %eax 
         orl        12(%ebx), %eax 
-        jz         L733_false__hla_
+        jz         L638_false__hla_
         mov        $-1, %eax 
-L733_false__hla_:
+L638_false__hla_:
         notl       %eax 
         mov        %eax, (%ecx) 
         mov        %eax, 4(%ecx) 
@@ -4772,9 +4737,8 @@ L733_false__hla_:
         mov        %al, (%ecx) 
         movb       $7, (%edi) 
         movl       $byte_ste, (%esi) 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_3__$737:
+        jmp        L$635_endswitch
+L$639_case:
         mov        (%ebx), %al 
         notb       %al 
         orl        $-256, %eax 
@@ -4785,18 +4749,15 @@ _case1_3__$737:
         mov        %eax, 12(%ecx) 
         movb       $7, (%edi) 
         movl       $byte_ste, (%esi) 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_4__$741:
-
-_case1_5__$742:
+        jmp        L$635_endswitch
+L$640_case:
         movsx      2(%ebx), %eax 
         orl        4(%ebx), %eax 
         orl        8(%ebx), %eax 
         orl        12(%ebx), %eax 
-        jz         L743_false__hla_
+        jz         L641_false__hla_
         orl        $-1, %eax 
-L743_false__hla_:
+L641_false__hla_:
         notl       %eax 
         mov        %eax, (%ecx) 
         mov        %eax, 4(%ecx) 
@@ -4814,9 +4775,8 @@ L743_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_6__$747:
+        jmp        L$635_endswitch
+L$642_case:
         mov        (%ebx), %ax 
         notw       %ax 
         orl        $-65536, %eax 
@@ -4834,9 +4794,8 @@ _case1_6__$747:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_7__$751:
+        jmp        L$635_endswitch
+L$643_case:
         mov        (%ebx), %eax 
         notl       %eax 
         mov        %eax, (%ecx) 
@@ -4853,17 +4812,14 @@ _case1_7__$751:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_8__$755:
-
-_case1_9__$756:
+        jmp        L$635_endswitch
+L$644_case:
         mov        4(%ebx), %eax 
         orl        8(%ebx), %eax 
         orl        12(%ebx), %eax 
-        jz         L757_false__hla_
+        jz         L645_false__hla_
         orl        $-1, %eax 
-L757_false__hla_:
+L645_false__hla_:
         notl       %eax 
         mov        %eax, 4(%ecx) 
         mov        %eax, 8(%ecx) 
@@ -4880,9 +4836,8 @@ L757_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_10__$761:
+        jmp        L$635_endswitch
+L$646_case:
         mov        (%ebx), %eax 
         notl       %eax 
         mov        %eax, (%ecx) 
@@ -4901,16 +4856,13 @@ _case1_10__$761:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_11__$765:
-
-_case1_12__$766:
+        jmp        L$635_endswitch
+L$647_case:
         mov        8(%ebx), %eax 
         orl        12(%ebx), %eax 
-        jz         L767_false__hla_
+        jz         L648_false__hla_
         mov        $-1, %eax 
-L767_false__hla_:
+L648_false__hla_:
         notl       %eax 
         mov        %eax, 8(%ecx) 
         mov        %eax, 12(%ecx) 
@@ -4929,14 +4881,13 @@ L767_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_13__$771:
+        jmp        L$635_endswitch
+L$649_case:
         movzx      10(%ebx), %eax 
         orl        12(%ebx), %eax 
-        jz         L772_false__hla_
+        jz         L650_false__hla_
         orl        $-1, %eax 
-L772_false__hla_:
+L650_false__hla_:
         notl       %eax 
         mov        %ax, 10(%ecx) 
         mov        %eax, 12(%ecx) 
@@ -4958,13 +4909,8 @@ L772_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_case1_14__$776:
-
-_case1_15__$777:
-
-_case1_16__$778:
+        jmp        L$635_endswitch
+L$651_case:
         mov        (%ebx), %eax 
         notl       %eax 
         mov        %eax, (%ecx) 
@@ -4986,17 +4932,16 @@ _case1_16__$778:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _02cb__switch_endcase___$730
-
-_02ca__switch_otherwise___$779:
+        jmp        L$635_endswitch
+L$635_default:
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $6212 
+        pushl      $6210 
 
-        pushl      $L780_str__hla_ 
+        pushl      $L652_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
@@ -5008,14 +4953,7 @@ _02ca__switch_otherwise___$779:
         mov        %eax, 12(%ecx) 
         movb       $2, (%edi) 
         movl       $uns8_ste, (%esi) 
-        jmp        _02cb__switch_endcase___$730
-
-_02cf__switch_doCase___$722:
-        cmpl       $17, %eax 
-        ja         _02ca__switch_otherwise___$779
-        jmp *      _02cc__switch_jmptbl___$785(,%eax,4) 
-
-_02cb__switch_endcase___$730:
+L$635_endswitch:
         popl       %esi 
         popl       %edi 
         popl       %edx 
@@ -5040,27 +4978,29 @@ addval:
         mov        16(%ebp), %ebx 
         mov        20(%ebp), %ecx 
         movzx      (%ebx), %eax 
-        jmp        _031a__switch_doCase___$797
-
-_case2_0__$801:
+        cmpl       $2, %eax 
+        jl         L$654_default
+        cmpl       $27, %eax 
+        jg         L$654_default
+        jmp *      L$654_jmpTbl-8(,%eax,4) 
+L$655_case:
         mov        (%esi), %al 
         addb       %al, (%edi) 
-        jc         L802_false__hla_
+        jc         L656_false__hla_
         movb       $0, 1(%edi) 
-        jmp        L802_endif__hla_
-L802_false__hla_:
+        jmp        L656_endif__hla_
+L656_false__hla_:
         movb       $1, 1(%edi) 
         movb       $3, (%ebx) 
         movl       $uns16_ste, (%ecx) 
-L802_endif__hla_:
+L656_endif__hla_:
         xorl       %eax, %eax 
         mov        %ax, 2(%edi) 
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_1__$807:
+        jmp        L$654_endswitch
+L$657_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5071,53 +5011,50 @@ _case2_1__$807:
         adcl       %eax, 12(%edi) 
         movsx      (%edi), %eax 
         cmpb       1(%edi), %ah 
-        je         L808_false__hla_
+        je         L658_false__hla_
         movb       $14, (%ebx) 
         movl       $int16_ste, (%ecx) 
-L808_false__hla_:
-        jmp        _0316__switch_endcase___$806
-
-_case2_2__$812:
+L658_false__hla_:
+        jmp        L$654_endswitch
+L$659_case:
         mov        (%esi), %al 
         addb       %al, (%edi) 
-        jc         L813_false__hla_
+        jc         L660_false__hla_
         movb       $0, 1(%edi) 
-        jmp        L813_endif__hla_
-L813_false__hla_:
+        jmp        L660_endif__hla_
+L660_false__hla_:
         movb       $1, 1(%edi) 
         movb       $8, (%ebx) 
         movl       $word_ste, (%ecx) 
-L813_endif__hla_:
+L660_endif__hla_:
         xorl       %eax, %eax 
         mov        %ax, 2(%edi) 
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_3__$817:
+        jmp        L$654_endswitch
+L$661_case:
         mov        (%esi), %ax 
         addw       %ax, (%edi) 
-        jc         L818_false__hla_
+        jc         L662_false__hla_
         movw       $0, 2(%edi) 
         cmpb       $0, 1(%edi) 
-        jne        L819_false__hla_
+        jne        L663_false__hla_
         movb       $2, (%ebx) 
         movl       $uns8_ste, (%ecx) 
-L819_false__hla_:
-        jmp        L818_endif__hla_
-L818_false__hla_:
+L663_false__hla_:
+        jmp        L662_endif__hla_
+L662_false__hla_:
         movw       $1, 2(%edi) 
         movb       $4, (%ebx) 
         movl       $uns32_ste, (%ecx) 
-L818_endif__hla_:
+L662_endif__hla_:
         xorl       %eax, %eax 
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_4__$823:
+        jmp        L$654_endswitch
+L$664_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5135,39 +5072,37 @@ _case2_4__$823:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_5__$827:
+        jmp        L$654_endswitch
+L$665_case:
         mov        (%esi), %ax 
         addw       %ax, (%edi) 
-        jc         L828_false__hla_
+        jc         L666_false__hla_
         movw       $0, 2(%edi) 
         cmpb       $0, 1(%edi) 
-        jne        L829_false__hla_
+        jne        L667_false__hla_
         movb       $7, (%ebx) 
         movl       $byte_ste, (%ecx) 
-L829_false__hla_:
-        jmp        L828_endif__hla_
-L828_false__hla_:
+L667_false__hla_:
+        jmp        L666_endif__hla_
+L666_false__hla_:
         movw       $1, 2(%edi) 
         movb       $9, (%ebx) 
         movl       $dword_ste, (%ecx) 
-L828_endif__hla_:
+L666_endif__hla_:
         xorl       %eax, %eax 
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_6__$833:
+        jmp        L$654_endswitch
+L$668_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
-        jc         L834_false__hla_
+        jc         L669_false__hla_
         movl       $0, 4(%edi) 
-        jmp        L834_endif__hla_
-L834_false__hla_:
+        jmp        L669_endif__hla_
+L669_false__hla_:
         movl       $1, 4(%edi) 
-L834_endif__hla_:
+L669_endif__hla_:
         xorl       %eax, %eax 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
@@ -5180,9 +5115,8 @@ L834_endif__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_7__$838:
+        jmp        L$654_endswitch
+L$670_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5200,17 +5134,16 @@ _case2_7__$838:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_8__$842:
+        jmp        L$654_endswitch
+L$671_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
-        jc         L843_false__hla_
+        jc         L672_false__hla_
         movl       $0, 4(%edi) 
-        jmp        L843_endif__hla_
-L843_false__hla_:
+        jmp        L672_endif__hla_
+L672_false__hla_:
         movl       $1, 4(%edi) 
-L843_endif__hla_:
+L672_endif__hla_:
         xorl       %eax, %eax 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
@@ -5223,19 +5156,18 @@ L843_endif__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_9__$847:
+        jmp        L$654_endswitch
+L$673_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
         adcl       %eax, 4(%edi) 
-        jc         L848_false__hla_
+        jc         L674_false__hla_
         movl       $0, 8(%edi) 
-        jmp        L848_endif__hla_
-L848_false__hla_:
+        jmp        L674_endif__hla_
+L674_false__hla_:
         movl       $1, 8(%edi) 
-L848_endif__hla_:
+L674_endif__hla_:
         movl       $0, 12(%edi) 
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%ecx) 
@@ -5246,9 +5178,8 @@ L848_endif__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_10__$852:
+        jmp        L$654_endswitch
+L$675_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5266,19 +5197,18 @@ _case2_10__$852:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_11__$856:
+        jmp        L$654_endswitch
+L$676_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
         adcl       %eax, 4(%edi) 
-        jc         L857_false__hla_
+        jc         L677_false__hla_
         movl       $0, 8(%edi) 
-        jmp        L857_endif__hla_
-L857_false__hla_:
+        jmp        L677_endif__hla_
+L677_false__hla_:
         movl       $1, 8(%edi) 
-L857_endif__hla_:
+L677_endif__hla_:
         movl       $0, 12(%edi) 
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
@@ -5289,21 +5219,20 @@ L857_endif__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_12__$861:
+        jmp        L$654_endswitch
+L$678_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
         adcl       %eax, 4(%edi) 
         mov        8(%esi), %ax 
         adcw       %ax, 8(%esi) 
-        jc         L862_false__hla_
+        jc         L679_false__hla_
         movw       $0, 10(%edi) 
-        jmp        L862_endif__hla_
-L862_false__hla_:
+        jmp        L679_endif__hla_
+L679_false__hla_:
         movw       $1, 10(%edi) 
-L862_endif__hla_:
+L679_endif__hla_:
         movl       $0, 12(%edi) 
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
@@ -5314,9 +5243,8 @@ L862_endif__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_13__$866:
+        jmp        L$654_endswitch
+L$680_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5334,9 +5262,8 @@ _case2_13__$866:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_14__$870:
+        jmp        L$654_endswitch
+L$681_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5354,9 +5281,8 @@ _case2_14__$870:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_15__$874:
+        jmp        L$654_endswitch
+L$682_case:
         mov        (%esi), %eax 
         addl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5374,9 +5300,8 @@ _case2_15__$874:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0316__switch_endcase___$806
-
-_case2_16__$878:
+        jmp        L$654_endswitch
+L$683_case:
         flds       (%esi) 
         flds       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5387,9 +5312,8 @@ _case2_16__$878:
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_17__$882:
+        jmp        L$654_endswitch
+L$684_case:
         fldl       (%esi) 
         fldl       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5399,9 +5323,8 @@ _case2_17__$882:
         xorl       %eax, %eax 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_18__$886:
+        jmp        L$654_endswitch
+L$685_case:
         fldt       (%esi) 
         fldt       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5409,9 +5332,8 @@ _case2_18__$886:
         xorl       %eax, %eax 
         mov        %ax, 10(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_case2_19__$890:
+        jmp        L$654_endswitch
+L$686_case:
         mov        (%esi), %eax 
         orl        %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5420,18 +5342,8 @@ _case2_19__$890:
         orl        %eax, 8(%edi) 
         mov        12(%esi), %eax 
         orl        %eax, 12(%edi) 
-        jmp        _0316__switch_endcase___$806
-
-_031a__switch_doCase___$797:
-        cmpl       $2, %eax 
-        jb         _0315__switch_otherwise___$895
-        cmpl       $27, %eax 
-        ja         _0315__switch_otherwise___$895
-        jmp *      _0317__switch_jmptbl___$896-8(,%eax,4) 
-
-_0315__switch_otherwise___$895:
-
-_0316__switch_endcase___$806:
+L$654_endswitch:
+L$654_default:
         popl       %ebx 
         popl       %ecx 
         popl       %edi 
@@ -5455,9 +5367,12 @@ subval:
         mov        16(%ebp), %ebx 
         mov        20(%ebp), %ecx 
         movzx      (%ebx), %eax 
-        jmp        _0389__switch_doCase___$908
-
-_case3_0__$912:
+        cmpl       $2, %eax 
+        jl         L$688_default
+        cmpl       $27, %eax 
+        jg         L$688_default
+        jmp *      L$688_jmpTbl-8(,%eax,4) 
+L$689_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        $0, %eax 
@@ -5465,10 +5380,10 @@ _case3_0__$912:
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jns        L913_false__hla_
+        jns        L690_false__hla_
         movb       $14, (%ebx) 
         movl       $int16_ste, (%ecx) 
-L913_false__hla_:
+L690_false__hla_:
         pushl      %ecx 
         pushl      %ebx 
 
@@ -5476,9 +5391,8 @@ L913_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_1__$918:
+        jmp        L$688_endswitch
+L$691_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5494,9 +5408,8 @@ _case3_1__$918:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_2__$922:
+        jmp        L$688_endswitch
+L$692_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        $0, %eax 
@@ -5511,9 +5424,8 @@ _case3_2__$922:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_3__$926:
+        jmp        L$688_endswitch
+L$693_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        $0, %eax 
@@ -5521,10 +5433,10 @@ _case3_3__$926:
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jns        L927_false__hla_
+        jns        L694_false__hla_
         movb       $15, (%ebx) 
         movl       $int32_ste, (%ecx) 
-L927_false__hla_:
+L694_false__hla_:
         pushl      %ecx 
         pushl      %ebx 
 
@@ -5532,9 +5444,8 @@ L927_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_4__$931:
+        jmp        L$688_endswitch
+L$695_case:
         mov        (%esi), %ax 
         subw       %ax, (%edi) 
         pushfl
@@ -5553,9 +5464,8 @@ _case3_4__$931:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_5__$935:
+        jmp        L$688_endswitch
+L$696_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5571,9 +5481,8 @@ _case3_5__$935:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_6__$939:
+        jmp        L$688_endswitch
+L$697_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        $0, %eax 
@@ -5581,10 +5490,10 @@ _case3_6__$939:
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jns        L940_false__hla_
+        jns        L698_false__hla_
         movb       $16, (%ebx) 
         movl       $int64_ste, (%ecx) 
-L940_false__hla_:
+L698_false__hla_:
         pushl      %ecx 
         pushl      %ebx 
 
@@ -5592,9 +5501,8 @@ L940_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_7__$944:
+        jmp        L$688_endswitch
+L$699_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5610,9 +5518,8 @@ _case3_7__$944:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_8__$948:
+        jmp        L$688_endswitch
+L$700_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5628,9 +5535,8 @@ _case3_8__$948:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_9__$952:
+        jmp        L$688_endswitch
+L$701_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5639,10 +5545,10 @@ _case3_9__$952:
         sbbl       $0, %eax 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jns        L953_false__hla_
+        jns        L702_false__hla_
         movb       $17, (%ebx) 
         movl       $int128_ste, (%ecx) 
-L953_false__hla_:
+L702_false__hla_:
         pushl      %ecx 
         pushl      %ebx 
 
@@ -5650,9 +5556,8 @@ L953_false__hla_:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_10__$957:
+        jmp        L$688_endswitch
+L$703_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5668,9 +5573,8 @@ _case3_10__$957:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_11__$961:
+        jmp        L$688_endswitch
+L$704_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5686,9 +5590,8 @@ _case3_11__$961:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_12__$965:
+        jmp        L$688_endswitch
+L$705_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5704,9 +5607,8 @@ _case3_12__$965:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_13__$969:
+        jmp        L$688_endswitch
+L$706_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5722,9 +5624,8 @@ _case3_13__$969:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_14__$973:
+        jmp        L$688_endswitch
+L$707_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5740,9 +5641,8 @@ _case3_14__$973:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_15__$977:
+        jmp        L$688_endswitch
+L$708_case:
         mov        (%esi), %eax 
         subl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -5758,9 +5658,8 @@ _case3_15__$977:
 
         call       compactType
         addl       $12, %esp 
-        jmp        _0385__switch_endcase___$917
-
-_case3_16__$981:
+        jmp        L$688_endswitch
+L$709_case:
         flds       (%esi) 
         flds       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5769,9 +5668,8 @@ _case3_16__$981:
         mov        %eax, 4(%edi) 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0385__switch_endcase___$917
-
-_case3_17__$985:
+        jmp        L$688_endswitch
+L$710_case:
         fldl       (%esi) 
         fldl       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5779,9 +5677,8 @@ _case3_17__$985:
         xorl       %eax, %eax 
         mov        %eax, 8(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0385__switch_endcase___$917
-
-_case3_18__$989:
+        jmp        L$688_endswitch
+L$711_case:
         fldt       (%esi) 
         fldt       (%edi) 
         faddp      %st(0), %st(1) 
@@ -5789,9 +5686,8 @@ _case3_18__$989:
         xorl       %eax, %eax 
         mov        %ax, 10(%edi) 
         mov        %eax, 12(%edi) 
-        jmp        _0385__switch_endcase___$917
-
-_case3_19__$993:
+        jmp        L$688_endswitch
+L$712_case:
         mov        (%esi), %eax 
         notl       %eax 
         andl       %eax, (%edi) 
@@ -5804,18 +5700,8 @@ _case3_19__$993:
         mov        12(%esi), %eax 
         notl       %eax 
         andl       %eax, 12(%edi) 
-        jmp        _0385__switch_endcase___$917
-
-_0389__switch_doCase___$908:
-        cmpl       $2, %eax 
-        jb         _0384__switch_otherwise___$998
-        cmpl       $27, %eax 
-        ja         _0384__switch_otherwise___$998
-        jmp *      _0386__switch_jmptbl___$999-8(,%eax,4) 
-
-_0384__switch_otherwise___$998:
-
-_0385__switch_endcase___$917:
+L$688_endswitch:
+L$688_default:
         popl       %ebx 
         popl       %ecx 
         popl       %edi 
@@ -5825,9 +5711,9 @@ xsubval:
         popl       %ebp 
         ret
 
-/* procedure mul128_$1001 */
+/* procedure mul128_$714 */
 
-mul128_$1001:
+mul128_$714:
         pushl      %edx 
         mov        (%esi), %eax 
         mull       (%edi) 
@@ -5877,7 +5763,7 @@ mul128_$1001:
         mov        %eax, 12(%edi) 
         popl       %edx 
         ret
-xmul128_$1001:
+xmul128_$714:
 
 /* procedure mulval */
 
@@ -5894,101 +5780,76 @@ mulval:
         mov        20(%ebp), %ecx 
         mov        16(%ebp), %ebx 
         movzx      (%ebx), %eax 
-        jmp        _03f2__switch_doCase___$1013
-
-_case4_0__$1017:
-
-_case4_1__$1018:
-
-_case4_2__$1019:
-
-_case4_3__$1020:
-
-_case4_4__$1021:
-        call       mul128_$1001
+        cmpl       $2, %eax 
+        jl         L$716_default
+        cmpl       $27, %eax 
+        jg         L$716_default
+        jmp *      L$716_jmpTbl-8(,%eax,4) 
+L$717_case:
+        call       mul128_$714
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%ecx) 
         cmpl       $0, 8(%edi) 
-        jne        L1022_false__hla_
+        jne        L718_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1022_false__hla_
+        jne        L718_false__hla_
         movb       $5, (%ebx) 
         movl       $uns64_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1024_false__hla_
+        jne        L720_false__hla_
         movb       $4, (%ebx) 
         movl       $uns32_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1025_false__hla_
+        jne        L721_false__hla_
         movb       $3, (%ebx) 
         movl       $uns16_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1026_false__hla_
+        jne        L722_false__hla_
         movb       $2, (%ebx) 
         movl       $uns8_ste, (%ecx) 
-L1026_false__hla_:
-L1025_false__hla_:
-L1024_false__hla_:
-L1022_false__hla_:
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_5__$1031:
-
-_case4_6__$1032:
-
-_case4_7__$1033:
-
-_case4_8__$1034:
-
-_case4_9__$1035:
-
-_case4_10__$1036:
-        call       mul128_$1001
+L722_false__hla_:
+L721_false__hla_:
+L720_false__hla_:
+L718_false__hla_:
+        jmp        L$716_endswitch
+L$723_case:
+        call       mul128_$714
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
         cmpw       $0, 10(%edi) 
-        jne        L1037_false__hla_
+        jne        L724_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1037_false__hla_
+        jne        L724_false__hla_
         movb       $11, (%ebx) 
         movl       $tbyte_ste, (%ecx) 
         cmpw       $0, 8(%edi) 
-        jne        L1039_false__hla_
+        jne        L726_false__hla_
         movb       $10, (%ebx) 
         movl       $qword_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1040_false__hla_
+        jne        L727_false__hla_
         movb       $9, (%ebx) 
         movl       $dword_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1041_false__hla_
+        jne        L728_false__hla_
         movb       $8, (%ebx) 
         movl       $word_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1042_false__hla_
+        jne        L729_false__hla_
         movb       $7, (%ebx) 
         movl       $byte_ste, (%ecx) 
-L1042_false__hla_:
-L1041_false__hla_:
-L1040_false__hla_:
-L1039_false__hla_:
-L1037_false__hla_:
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_11__$1046:
-
-_case4_12__$1047:
-
-_case4_13__$1048:
-
-_case4_14__$1049:
-
-_case4_15__$1050:
+L729_false__hla_:
+L728_false__hla_:
+L727_false__hla_:
+L726_false__hla_:
+L724_false__hla_:
+        jmp        L$716_endswitch
+L$730_case:
         mov        15(%edi), %al 
         xorb       15(%esi), %al 
         pushfl
         cmpb       $0, 15(%edi) 
-        jnl        L1051_false__hla_
+        jnl        L731_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6001,9 +5862,9 @@ _case4_15__$1050:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1051_false__hla_:
+L731_false__hla_:
         cmpb       $0, 15(%esi) 
-        jnl        L1052_false__hla_
+        jnl        L732_false__hla_
         xorl       %eax, %eax 
         subl       (%esi), %eax 
         mov        %eax, (%esi) 
@@ -6016,10 +5877,10 @@ L1051_false__hla_:
         mov        $0, %eax 
         sbbl       12(%esi), %eax 
         mov        %eax, 12(%esi) 
-L1052_false__hla_:
-        call       mul128_$1001
+L732_false__hla_:
+        call       mul128_$714
         popfl
-        jns        L1053_false__hla_
+        jns        L733_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6032,66 +5893,62 @@ L1052_false__hla_:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1053_false__hla_:
+L733_false__hla_:
         movb       $17, (%ebx) 
         movl       $int128_ste, (%ecx) 
         movsx      7(%edi), %eax 
         movb       %ah, %al 
         cmpl       8(%edi), %eax 
-        jne        L1054_false__hla_
+        jne        L734_false__hla_
         cmpl       12(%edi), %eax 
-        jne        L1054_false__hla_
+        jne        L734_false__hla_
         movb       $16, (%ebx) 
         movl       $int64_ste, (%ecx) 
         movsx      3(%edi), %eax 
         movb       %ah, %al 
         cmpl       4(%edi), %eax 
-        jne        L1056_false__hla_
+        jne        L736_false__hla_
         movb       $15, (%ebx) 
         movl       $int32_ste, (%ecx) 
         movsx      1(%edi), %eax 
         movb       %ah, %al 
         cmpw       %ax, 2(%edi) 
-        jne        L1057_false__hla_
+        jne        L737_false__hla_
         movb       $14, (%ebx) 
         movl       $int16_ste, (%ecx) 
         movsx      (%edi), %ax 
         cmpb       %ah, 1(%edi) 
-        jne        L1058_false__hla_
+        jne        L738_false__hla_
         movb       $13, (%ebx) 
         movl       $int8_ste, (%ecx) 
-L1058_false__hla_:
-L1057_false__hla_:
-L1056_false__hla_:
-L1054_false__hla_:
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_16__$1062:
+L738_false__hla_:
+L737_false__hla_:
+L736_false__hla_:
+L734_false__hla_:
+        jmp        L$716_endswitch
+L$739_case:
         flds       (%esi) 
         flds       (%edi) 
         fmulp      %st(0), %st(1) 
         fstpt      (%edi) 
         movb       $22, (%ebx) 
         movl       $real80_ste, (%ecx) 
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_17__$1066:
+        jmp        L$716_endswitch
+L$740_case:
         fldl       (%esi) 
         fldl       (%edi) 
         fmulp      %st(0), %st(1) 
         fstpt      (%edi) 
         movb       $22, (%ebx) 
         movl       $real80_ste, (%ecx) 
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_18__$1070:
+        jmp        L$716_endswitch
+L$741_case:
         fldt       (%esi) 
         fldt       (%edi) 
         fmulp      %st(0), %st(1) 
         fstpt      (%edi) 
-        jmp        _03ee__switch_endcase___$1030
-
-_case4_19__$1074:
+        jmp        L$716_endswitch
+L$742_case:
         mov        (%esi), %eax 
         andl       %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -6100,18 +5957,8 @@ _case4_19__$1074:
         andl       %eax, 8(%edi) 
         mov        12(%esi), %eax 
         andl       %eax, 12(%edi) 
-        jmp        _03ee__switch_endcase___$1030
-
-_03f2__switch_doCase___$1013:
-        cmpl       $2, %eax 
-        jb         _03ed__switch_otherwise___$1079
-        cmpl       $27, %eax 
-        ja         _03ed__switch_otherwise___$1079
-        jmp *      _03ef__switch_jmptbl___$1080-8(,%eax,4) 
-
-_03ed__switch_otherwise___$1079:
-
-_03ee__switch_endcase___$1030:
+L$716_endswitch:
+L$716_default:
         popl       %edi 
         popl       %esi 
         popl       %ecx 
@@ -6121,9 +5968,9 @@ xmulval:
         popl       %ebp 
         ret
 
-/* procedure div128_$1082 */
+/* procedure div128_$744 */
 
-div128_$1082:
+div128_$744:
         pushl      %ebp 
         movl       %esp, %ebp 
         subl       $16, %esp 
@@ -6136,8 +5983,8 @@ div128_$1082:
         mov        %eax, -8(%ebp) 
         mov        %eax, -4(%ebp) 
         mov        $128, %ecx 
-L1083_false__hla_:
-L1083_repeat__hla_:
+L745_false__hla_:
+L745_repeat__hla_:
         shll       $1, 32(%ebp) 
         rcll       $1, 36(%ebp) 
         rcll       $1, 40(%ebp) 
@@ -6148,20 +5995,20 @@ L1083_repeat__hla_:
         rcll       $1, -4(%ebp) 
         mov        -4(%ebp), %eax 
         cmpl       28(%ebp), %eax 
-        ja         L1084_true__hla_
-        jb         L1084_false__hla_
+        ja         L746_true__hla_
+        jb         L746_false__hla_
         mov        -8(%ebp), %eax 
         cmpl       24(%ebp), %eax 
-        ja         L1084_true__hla_
-        jb         L1084_false__hla_
+        ja         L746_true__hla_
+        jb         L746_false__hla_
         mov        -12(%ebp), %eax 
         cmpl       20(%ebp), %eax 
-        ja         L1084_true__hla_
-        jb         L1084_false__hla_
+        ja         L746_true__hla_
+        jb         L746_false__hla_
         mov        -16(%ebp), %eax 
         cmpl       16(%ebp), %eax 
-        jb         L1084_false__hla_
-L1084_true__hla_:
+        jb         L746_false__hla_
+L746_true__hla_:
         mov        16(%ebp), %eax 
         subl       %eax, -16(%ebp) 
         mov        20(%ebp), %eax 
@@ -6174,11 +6021,11 @@ L1084_true__hla_:
         adcl       $0, 36(%ebp) 
         adcl       $0, 40(%ebp) 
         adcl       $0, 44(%ebp) 
-L1084_false__hla_:
+L746_false__hla_:
         decl       %ecx 
-L1083_continue__hla_:
-        jnz        L1083_repeat__hla_
-L1083_exitloop__hla_:
+L745_continue__hla_:
+        jnz        L745_repeat__hla_
+L745_exitloop__hla_:
 
         mov        12(%ebp), %edi 
         mov        32(%ebp), %eax 
@@ -6201,7 +6048,7 @@ L1083_exitloop__hla_:
         popl       %edi 
         popl       %ecx 
         popl       %eax 
-xdiv128_$1082:
+xdiv128_$744:
         movl       %ebp, %esp 
         popl       %ebp 
         ret        $40
@@ -6221,36 +6068,31 @@ divval:
         mov        20(%ebp), %ecx 
         mov        16(%ebp), %ebx 
         movzx      (%ebx), %eax 
-        jmp        _0445__switch_doCase___$1096
-
-_case5_0__$1100:
-
-_case5_1__$1101:
-
-_case5_2__$1102:
-
-_case5_3__$1103:
-
-_case5_4__$1104:
+        cmpl       $2, %eax 
+        jl         L$748_default
+        cmpl       $22, %eax 
+        jg         L$748_default
+        jmp *      L$748_jmpTbl-8(,%eax,4) 
+L$749_case:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1105_false__hla_
+        jnz        L750_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7735 
+        pushl      $7733 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1105_false__hla_:
+L750_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6262,63 +6104,52 @@ L1105_false__hla_:
         pushl      %edi 
         pushl      %ebp 
         addl       $-16, (%esp) 
-        call       div128_$1082
+        call       div128_$744
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%ecx) 
         cmpl       $0, 8(%edi) 
-        jne        L1107_false__hla_
+        jne        L752_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1107_false__hla_
+        jne        L752_false__hla_
         movb       $5, (%ebx) 
         movl       $uns64_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1109_false__hla_
+        jne        L754_false__hla_
         movb       $4, (%ebx) 
         movl       $uns32_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1110_false__hla_
+        jne        L755_false__hla_
         movb       $3, (%ebx) 
         movl       $uns16_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1111_false__hla_
+        jne        L756_false__hla_
         movb       $2, (%ebx) 
         movl       $uns8_ste, (%ecx) 
-L1111_false__hla_:
-L1110_false__hla_:
-L1109_false__hla_:
-L1107_false__hla_:
-        jmp        _0441__switch_endcase___$1115
-
-_case5_5__$1116:
-
-_case5_6__$1117:
-
-_case5_7__$1118:
-
-_case5_8__$1119:
-
-_case5_9__$1120:
-
-_case5_10__$1121:
+L756_false__hla_:
+L755_false__hla_:
+L754_false__hla_:
+L752_false__hla_:
+        jmp        L$748_endswitch
+L$757_case:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1122_false__hla_
+        jnz        L758_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7796 
+        pushl      $7794 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1122_false__hla_:
+L758_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6330,52 +6161,43 @@ L1122_false__hla_:
         pushl      %edi 
         pushl      %ebp 
         addl       $-16, (%esp) 
-        call       div128_$1082
+        call       div128_$744
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
         cmpw       $0, 10(%edi) 
-        jne        L1123_false__hla_
+        jne        L759_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1123_false__hla_
+        jne        L759_false__hla_
         movb       $11, (%ebx) 
         movl       $tbyte_ste, (%ecx) 
         cmpw       $0, 8(%edi) 
-        jne        L1125_false__hla_
+        jne        L761_false__hla_
         movb       $10, (%ebx) 
         movl       $qword_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1126_false__hla_
+        jne        L762_false__hla_
         movb       $9, (%ebx) 
         movl       $dword_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1127_false__hla_
+        jne        L763_false__hla_
         movb       $8, (%ebx) 
         movl       $word_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1128_false__hla_
+        jne        L764_false__hla_
         movb       $7, (%ebx) 
         movl       $byte_ste, (%ecx) 
-L1128_false__hla_:
-L1127_false__hla_:
-L1126_false__hla_:
-L1125_false__hla_:
-L1123_false__hla_:
-        jmp        _0441__switch_endcase___$1115
-
-_case5_11__$1132:
-
-_case5_12__$1133:
-
-_case5_13__$1134:
-
-_case5_14__$1135:
-
-_case5_15__$1136:
+L764_false__hla_:
+L763_false__hla_:
+L762_false__hla_:
+L761_false__hla_:
+L759_false__hla_:
+        jmp        L$748_endswitch
+L$765_case:
         mov        15(%edi), %al 
         xorb       15(%esi), %al 
         pushfl
         cmpb       $0, 15(%edi) 
-        jnl        L1137_false__hla_
+        jnl        L766_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6388,9 +6210,9 @@ _case5_15__$1136:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1137_false__hla_:
+L766_false__hla_:
         cmpb       $0, 15(%esi) 
-        jnl        L1138_false__hla_
+        jnl        L767_false__hla_
         xorl       %eax, %eax 
         subl       (%esi), %eax 
         mov        %eax, (%esi) 
@@ -6403,26 +6225,26 @@ L1137_false__hla_:
         mov        $0, %eax 
         sbbl       12(%esi), %eax 
         mov        %eax, 12(%esi) 
-L1138_false__hla_:
+L767_false__hla_:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1139_false__hla_
+        jnz        L768_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7913 
+        pushl      $7911 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1139_false__hla_:
+L768_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6434,9 +6256,9 @@ L1139_false__hla_:
         pushl      %edi 
         pushl      %ebp 
         addl       $-16, (%esp) 
-        call       div128_$1082
+        call       div128_$744
         popfl
-        jns        L1140_false__hla_
+        jns        L769_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6449,108 +6271,105 @@ L1139_false__hla_:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1140_false__hla_:
+L769_false__hla_:
         movb       $17, (%ebx) 
         movl       $int128_ste, (%ecx) 
         movsx      7(%edi), %eax 
         movb       %ah, %al 
         cmpl       8(%edi), %eax 
-        jne        L1141_false__hla_
+        jne        L770_false__hla_
         cmpl       12(%edi), %eax 
-        jne        L1141_false__hla_
+        jne        L770_false__hla_
         movb       $16, (%ebx) 
         movl       $int64_ste, (%ecx) 
         movsx      3(%edi), %eax 
         movb       %ah, %al 
         cmpl       4(%edi), %eax 
-        jne        L1143_false__hla_
+        jne        L772_false__hla_
         movb       $15, (%ebx) 
         movl       $int32_ste, (%ecx) 
         movsx      1(%edi), %eax 
         movb       %ah, %al 
         cmpw       %ax, 2(%edi) 
-        jne        L1144_false__hla_
+        jne        L773_false__hla_
         movb       $14, (%ebx) 
         movl       $int16_ste, (%ecx) 
         movsx      (%edi), %ax 
         cmpb       %ah, 1(%edi) 
-        jne        L1145_false__hla_
+        jne        L774_false__hla_
         movb       $13, (%ebx) 
         movl       $int8_ste, (%ecx) 
-L1145_false__hla_:
-L1144_false__hla_:
-L1143_false__hla_:
-L1141_false__hla_:
-        jmp        _0441__switch_endcase___$1115
-
-_case5_16__$1149:
+L774_false__hla_:
+L773_false__hla_:
+L772_false__hla_:
+L770_false__hla_:
+        jmp        L$748_endswitch
+L$775_case:
         cmpl       $0, (%esi) 
-        jne        L1150_false__hla_
+        jne        L776_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $7992 
+        pushl      $7990 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movl       $1065353216, (%esi) 
-L1150_false__hla_:
+L776_false__hla_:
         flds       (%esi) 
         flds       (%edi) 
         fdivrp     %st(0), %st(1) 
         fstpt      (%edi) 
         movb       $22, (%ebx) 
         movl       $real80_ste, (%ecx) 
-        jmp        _0441__switch_endcase___$1115
-
-_case5_17__$1154:
+        jmp        L$748_endswitch
+L$777_case:
         cmpl       $0, (%esi) 
-        jne        L1155_false__hla_
+        jne        L778_false__hla_
         cmpl       $0, 4(%esi) 
-        jne        L1155_false__hla_
+        jne        L778_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8010 
+        pushl      $8008 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movl       $1072693248, 4(%esi) 
         movl       $0, (%esi) 
-L1155_false__hla_:
+L778_false__hla_:
         fldl       (%esi) 
         fldl       (%edi) 
         fdivrp     %st(0), %st(1) 
         fstpt      (%edi) 
         movb       $22, (%ebx) 
         movl       $real80_ste, (%ecx) 
-        jmp        _0441__switch_endcase___$1115
-
-_case5_18__$1160:
+        jmp        L$748_endswitch
+L$780_case:
         cmpl       $0, (%esi) 
-        jne        L1161_false__hla_
+        jne        L781_false__hla_
         cmpl       $0, 4(%esi) 
-        jne        L1161_false__hla_
+        jne        L781_false__hla_
         cmpw       $0, 8(%esi) 
-        jne        L1161_false__hla_
+        jne        L781_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8035 
+        pushl      $8033 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
@@ -6558,23 +6377,13 @@ _case5_18__$1160:
         movl       $1073709056, 6(%esi) 
         movw       $0, 4(%esi) 
         movl       $0, (%esi) 
-L1161_false__hla_:
+L781_false__hla_:
         fldt       (%esi) 
         fldt       (%edi) 
         fdivrp     %st(0), %st(1) 
         fstpt      (%edi) 
-        jmp        _0441__switch_endcase___$1115
-
-_0445__switch_doCase___$1096:
-        cmpl       $2, %eax 
-        jb         _0440__switch_otherwise___$1168
-        cmpl       $22, %eax 
-        ja         _0440__switch_otherwise___$1168
-        jmp *      _0442__switch_jmptbl___$1169-8(,%eax,4) 
-
-_0440__switch_otherwise___$1168:
-
-_0441__switch_endcase___$1115:
+L$748_endswitch:
+L$748_default:
         popl       %edi 
         popl       %esi 
         popl       %ecx 
@@ -6599,36 +6408,31 @@ modval:
         mov        20(%ebp), %ecx 
         mov        16(%ebp), %ebx 
         movzx      (%ebx), %eax 
-        jmp        _049a__switch_doCase___$1181
-
-_case6_0__$1185:
-
-_case6_1__$1186:
-
-_case6_2__$1187:
-
-_case6_3__$1188:
-
-_case6_4__$1189:
+        cmpl       $2, %eax 
+        jl         L$785_default
+        cmpl       $17, %eax 
+        jg         L$785_default
+        jmp *      L$785_jmpTbl-8(,%eax,4) 
+L$786_case:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1190_false__hla_
+        jnz        L787_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8109 
+        pushl      $8107 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1190_false__hla_:
+L787_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6640,63 +6444,52 @@ L1190_false__hla_:
         pushl      %ebp 
         addl       $-16, (%esp) 
         pushl      %edi 
-        call       div128_$1082
+        call       div128_$744
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%ecx) 
         cmpl       $0, 8(%edi) 
-        jne        L1191_false__hla_
+        jne        L788_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1191_false__hla_
+        jne        L788_false__hla_
         movb       $5, (%ebx) 
         movl       $uns64_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1193_false__hla_
+        jne        L790_false__hla_
         movb       $4, (%ebx) 
         movl       $uns32_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1194_false__hla_
+        jne        L791_false__hla_
         movb       $3, (%ebx) 
         movl       $uns16_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1195_false__hla_
+        jne        L792_false__hla_
         movb       $2, (%ebx) 
         movl       $uns8_ste, (%ecx) 
-L1195_false__hla_:
-L1194_false__hla_:
-L1193_false__hla_:
-L1191_false__hla_:
-        jmp        _0496__switch_endcase___$1199
-
-_case6_5__$1200:
-
-_case6_6__$1201:
-
-_case6_7__$1202:
-
-_case6_8__$1203:
-
-_case6_9__$1204:
-
-_case6_10__$1205:
+L792_false__hla_:
+L791_false__hla_:
+L790_false__hla_:
+L788_false__hla_:
+        jmp        L$785_endswitch
+L$793_case:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1206_false__hla_
+        jnz        L794_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8171 
+        pushl      $8169 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1206_false__hla_:
+L794_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6708,52 +6501,43 @@ L1206_false__hla_:
         pushl      %ebp 
         addl       $-16, (%esp) 
         pushl      %edi 
-        call       div128_$1082
+        call       div128_$744
         movb       $12, (%ebx) 
         movl       $lword_ste, (%ecx) 
         cmpw       $0, 10(%edi) 
-        jne        L1207_false__hla_
+        jne        L795_false__hla_
         cmpl       $0, 12(%edi) 
-        jne        L1207_false__hla_
+        jne        L795_false__hla_
         movb       $11, (%ebx) 
         movl       $tbyte_ste, (%ecx) 
         cmpw       $0, 8(%edi) 
-        jne        L1209_false__hla_
+        jne        L797_false__hla_
         movb       $10, (%ebx) 
         movl       $qword_ste, (%ecx) 
         cmpl       $0, 4(%edi) 
-        jne        L1210_false__hla_
+        jne        L798_false__hla_
         movb       $9, (%ebx) 
         movl       $dword_ste, (%ecx) 
         cmpw       $0, 2(%edi) 
-        jne        L1211_false__hla_
+        jne        L799_false__hla_
         movb       $8, (%ebx) 
         movl       $word_ste, (%ecx) 
         cmpb       $0, 1(%edi) 
-        jne        L1212_false__hla_
+        jne        L800_false__hla_
         movb       $7, (%ebx) 
         movl       $byte_ste, (%ecx) 
-L1212_false__hla_:
-L1211_false__hla_:
-L1210_false__hla_:
-L1209_false__hla_:
-L1207_false__hla_:
-        jmp        _0496__switch_endcase___$1199
-
-_case6_11__$1216:
-
-_case6_12__$1217:
-
-_case6_13__$1218:
-
-_case6_14__$1219:
-
-_case6_15__$1220:
+L800_false__hla_:
+L799_false__hla_:
+L798_false__hla_:
+L797_false__hla_:
+L795_false__hla_:
+        jmp        L$785_endswitch
+L$801_case:
         mov        15(%edi), %al 
         xorb       15(%esi), %al 
         pushfl
         cmpb       $0, 15(%edi) 
-        jnl        L1221_false__hla_
+        jnl        L802_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6766,9 +6550,9 @@ _case6_15__$1220:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1221_false__hla_:
+L802_false__hla_:
         cmpb       $0, 15(%esi) 
-        jnl        L1222_false__hla_
+        jnl        L803_false__hla_
         xorl       %eax, %eax 
         subl       (%esi), %eax 
         mov        %eax, (%esi) 
@@ -6781,26 +6565,26 @@ L1221_false__hla_:
         mov        $0, %eax 
         sbbl       12(%esi), %eax 
         mov        %eax, 12(%esi) 
-L1222_false__hla_:
+L803_false__hla_:
         mov        (%esi), %eax 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jnz        L1223_false__hla_
+        jnz        L804_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8288 
+        pushl      $8286 
 
-        pushl      $L1106_str__hla_ 
+        pushl      $L751_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         movb       $1, (%esi) 
-L1223_false__hla_:
+L804_false__hla_:
         pushl      12(%edi) 
         pushl      8(%edi) 
         pushl      4(%edi) 
@@ -6812,9 +6596,9 @@ L1223_false__hla_:
         pushl      %ebp 
         addl       $-16, (%esp) 
         pushl      %edi 
-        call       div128_$1082
+        call       div128_$744
         popfl
-        jns        L1224_false__hla_
+        jns        L805_false__hla_
         xorl       %eax, %eax 
         subl       (%edi), %eax 
         mov        %eax, (%edi) 
@@ -6827,50 +6611,40 @@ L1223_false__hla_:
         mov        $0, %eax 
         sbbl       12(%edi), %eax 
         mov        %eax, 12(%edi) 
-L1224_false__hla_:
+L805_false__hla_:
         movb       $17, (%ebx) 
         movl       $int128_ste, (%ecx) 
         movsx      7(%edi), %eax 
         movb       %ah, %al 
         cmpl       8(%edi), %eax 
-        jne        L1225_false__hla_
+        jne        L806_false__hla_
         cmpl       12(%edi), %eax 
-        jne        L1225_false__hla_
+        jne        L806_false__hla_
         movb       $16, (%ebx) 
         movl       $int64_ste, (%ecx) 
         movsx      3(%edi), %eax 
         movb       %ah, %al 
         cmpl       4(%edi), %eax 
-        jne        L1227_false__hla_
+        jne        L808_false__hla_
         movb       $15, (%ebx) 
         movl       $int32_ste, (%ecx) 
         movsx      1(%edi), %eax 
         movb       %ah, %al 
         cmpw       %ax, 2(%edi) 
-        jne        L1228_false__hla_
+        jne        L809_false__hla_
         movb       $14, (%ebx) 
         movl       $int16_ste, (%ecx) 
         movsx      (%edi), %ax 
         cmpb       %ah, 1(%edi) 
-        jne        L1229_false__hla_
+        jne        L810_false__hla_
         movb       $13, (%ebx) 
         movl       $int8_ste, (%ecx) 
-L1229_false__hla_:
-L1228_false__hla_:
-L1227_false__hla_:
-L1225_false__hla_:
-        jmp        _0496__switch_endcase___$1199
-
-_049a__switch_doCase___$1181:
-        cmpl       $2, %eax 
-        jb         _0495__switch_otherwise___$1234
-        cmpl       $17, %eax 
-        ja         _0495__switch_otherwise___$1234
-        jmp *      _0497__switch_jmptbl___$1235-8(,%eax,4) 
-
-_0495__switch_otherwise___$1234:
-
-_0496__switch_endcase___$1199:
+L810_false__hla_:
+L809_false__hla_:
+L808_false__hla_:
+L806_false__hla_:
+L$785_endswitch:
+L$785_default:
         popl       %edi 
         popl       %esi 
         popl       %ecx 
@@ -6891,16 +6665,16 @@ shlval:
         mov        12(%ebp), %ecx 
         mov        (%ecx), %ecx 
         testl      %ecx, %ecx 
-        jmp        L1237_continue__hla_
-L1237_while__hla_:
+        jmp        L812_continue__hla_
+L812_while__hla_:
         shll       $1, (%edi) 
         rcll       $1, 4(%edi) 
         rcll       $1, 8(%edi) 
         rcll       $1, 12(%edi) 
         decl       %ecx 
-L1237_continue__hla_:
-        jnz        L1237_while__hla_
-L1237_exitloop__hla_:
+L812_continue__hla_:
+        jnz        L812_while__hla_
+L812_exitloop__hla_:
 
         pushl      20(%ebp) 
         pushl      16(%ebp) 
@@ -6927,16 +6701,16 @@ shrval:
         mov        12(%ebp), %ecx 
         mov        (%ecx), %ecx 
         testl      %ecx, %ecx 
-        jmp        L1240_continue__hla_
-L1240_while__hla_:
+        jmp        L815_continue__hla_
+L815_while__hla_:
         shrl       $1, 12(%edi) 
         rcrl       $1, 8(%edi) 
         rcrl       $1, 4(%edi) 
         rcrl       $1, (%edi) 
         decl       %ecx 
-L1240_continue__hla_:
-        jnz        L1240_while__hla_
-L1240_exitloop__hla_:
+L815_continue__hla_:
+        jnz        L815_while__hla_
+L815_exitloop__hla_:
 
         pushl      20(%ebp) 
         pushl      16(%ebp) 
@@ -6963,21 +6737,21 @@ bigmaxUns:
         mov        16(%ebp), %edi 
         mov        12(%esi), %eax 
         cmpl       12(%edi), %eax 
-        jb         setRight_$1243
-        ja         setLeft_$1244
+        jb         setRight_$818
+        ja         setLeft_$819
         mov        8(%esi), %eax 
         cmpl       8(%edi), %eax 
-        jb         setRight_$1243
-        ja         setLeft_$1244
+        jb         setRight_$818
+        ja         setLeft_$819
         mov        4(%esi), %eax 
         cmpl       4(%edi), %eax 
-        jb         setRight_$1243
-        ja         setLeft_$1244
+        jb         setRight_$818
+        ja         setLeft_$819
         mov        (%esi), %eax 
         cmpl       (%edi), %eax 
-        jb         setRight_$1243
+        jb         setRight_$818
 
-setLeft_$1244:
+setLeft_$819:
         mov        8(%ebp), %edi 
         mov        %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -6986,9 +6760,9 @@ setLeft_$1244:
         mov        %eax, 8(%edi) 
         mov        12(%esi), %eax 
         mov        %eax, 12(%edi) 
-        jmp        bmux_$1245
+        jmp        bmux_$820
 
-setRight_$1243:
+setRight_$818:
         mov        8(%ebp), %esi 
         mov        (%edi), %eax 
         mov        %eax, (%esi) 
@@ -6999,7 +6773,7 @@ setRight_$1243:
         mov        12(%edi), %eax 
         mov        %eax, 12(%esi) 
 
-bmux_$1245:
+bmux_$820:
         popl       %edi 
         popl       %esi 
 xbigmaxUns:
@@ -7018,21 +6792,21 @@ bigmaxInt:
         mov        16(%ebp), %edi 
         mov        12(%esi), %eax 
         cmpl       12(%edi), %eax 
-        jl         setRight_$1247
-        jg         setLeft_$1248
+        jl         setRight_$822
+        jg         setLeft_$823
         mov        8(%esi), %eax 
         cmpl       8(%edi), %eax 
-        jl         setRight_$1247
-        jg         setLeft_$1248
+        jl         setRight_$822
+        jg         setLeft_$823
         mov        4(%esi), %eax 
         cmpl       4(%edi), %eax 
-        jl         setRight_$1247
-        jg         setLeft_$1248
+        jl         setRight_$822
+        jg         setLeft_$823
         mov        (%esi), %eax 
         cmpl       (%edi), %eax 
-        jl         setRight_$1247
+        jl         setRight_$822
 
-setLeft_$1248:
+setLeft_$823:
         mov        8(%ebp), %edi 
         mov        %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -7041,9 +6815,9 @@ setLeft_$1248:
         mov        %eax, 8(%edi) 
         mov        12(%esi), %eax 
         mov        %eax, 12(%edi) 
-        jmp        bmux_$1249
+        jmp        bmux_$824
 
-setRight_$1247:
+setRight_$822:
         mov        8(%ebp), %esi 
         mov        (%edi), %eax 
         mov        %eax, (%esi) 
@@ -7054,7 +6828,7 @@ setRight_$1247:
         mov        12(%edi), %eax 
         mov        %eax, 12(%esi) 
 
-bmux_$1249:
+bmux_$824:
         popl       %edi 
         popl       %esi 
 xbigmaxInt:
@@ -7073,21 +6847,21 @@ bigminUns:
         mov        16(%ebp), %edi 
         mov        12(%esi), %eax 
         cmpl       12(%edi), %eax 
-        ja         setRight_$1251
-        jb         setLeft_$1252
+        ja         setRight_$826
+        jb         setLeft_$827
         mov        8(%esi), %eax 
         cmpl       8(%edi), %eax 
-        ja         setRight_$1251
-        jb         setLeft_$1252
+        ja         setRight_$826
+        jb         setLeft_$827
         mov        4(%esi), %eax 
         cmpl       4(%edi), %eax 
-        ja         setRight_$1251
-        jb         setLeft_$1252
+        ja         setRight_$826
+        jb         setLeft_$827
         mov        (%esi), %eax 
         cmpl       (%edi), %eax 
-        ja         setRight_$1251
+        ja         setRight_$826
 
-setLeft_$1252:
+setLeft_$827:
         mov        8(%ebp), %edi 
         mov        %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -7096,9 +6870,9 @@ setLeft_$1252:
         mov        %eax, 8(%edi) 
         mov        12(%esi), %eax 
         mov        %eax, 12(%edi) 
-        jmp        bmux_$1253
+        jmp        bmux_$828
 
-setRight_$1251:
+setRight_$826:
         mov        8(%ebp), %esi 
         mov        (%edi), %eax 
         mov        %eax, (%esi) 
@@ -7109,7 +6883,7 @@ setRight_$1251:
         mov        12(%edi), %eax 
         mov        %eax, 12(%esi) 
 
-bmux_$1253:
+bmux_$828:
         popl       %edi 
         popl       %esi 
 xbigminUns:
@@ -7128,21 +6902,21 @@ bigminInt:
         mov        16(%ebp), %edi 
         mov        12(%esi), %eax 
         cmpl       12(%edi), %eax 
-        jg         setRight_$1255
-        jl         setLeft_$1256
+        jg         setRight_$830
+        jl         setLeft_$831
         mov        8(%esi), %eax 
         cmpl       8(%edi), %eax 
-        jg         setRight_$1255
-        jl         setLeft_$1256
+        jg         setRight_$830
+        jl         setLeft_$831
         mov        4(%esi), %eax 
         cmpl       4(%edi), %eax 
-        jg         setRight_$1255
-        jl         setLeft_$1256
+        jg         setRight_$830
+        jl         setLeft_$831
         mov        (%esi), %eax 
         cmpl       (%edi), %eax 
-        jg         setRight_$1255
+        jg         setRight_$830
 
-setLeft_$1256:
+setLeft_$831:
         mov        8(%ebp), %edi 
         mov        %eax, (%edi) 
         mov        4(%esi), %eax 
@@ -7151,9 +6925,9 @@ setLeft_$1256:
         mov        %eax, 8(%edi) 
         mov        12(%esi), %eax 
         mov        %eax, 12(%edi) 
-        jmp        bmux_$1257
+        jmp        bmux_$832
 
-setRight_$1255:
+setRight_$830:
         mov        8(%ebp), %esi 
         mov        (%edi), %eax 
         mov        %eax, (%esi) 
@@ -7164,7 +6938,7 @@ setRight_$1255:
         mov        12(%edi), %eax 
         mov        %eax, 12(%esi) 
 
-bmux_$1257:
+bmux_$832:
         popl       %edi 
         popl       %esi 
 xbigminInt:
@@ -7172,36 +6946,36 @@ xbigminInt:
         popl       %ebp 
         ret
 
-/* procedure NumToStr_$1259 */
+/* procedure NumToStr_$834 */
 
-NumToStr_$1259:
+NumToStr_$834:
         mov        12(%esi), %eax 
         xorl       %edx, %edx 
-        divl       ten_$1260 
+        divl       ten_$835 
         mov        %eax, 12(%esi) 
         mov        8(%esi), %eax 
-        divl       ten_$1260 
+        divl       ten_$835 
         mov        %eax, 8(%esi) 
         mov        4(%esi), %eax 
-        divl       ten_$1260 
+        divl       ten_$835 
         mov        %eax, 4(%esi) 
         mov        (%esi), %eax 
-        divl       ten_$1260 
+        divl       ten_$835 
         mov        %eax, (%esi) 
         orl        4(%esi), %eax 
         orl        8(%esi), %eax 
         orl        12(%esi), %eax 
-        jz         L1261_false__hla_
+        jz         L836_false__hla_
         pushl      %edx 
-        call       NumToStr_$1259
+        call       NumToStr_$834
         popl       %edx 
-L1261_false__hla_:
+L836_false__hla_:
         orb        $48, %dl 
         mov        %dl, (%edi) 
         incl       %edi 
         movb       $0, (%edi) 
         ret
-xNumToStr_$1259:
+xNumToStr_$834:
 
 /* procedure UnsToStr */
 
@@ -7213,7 +6987,7 @@ UnsToStr:
         pushl      %esi 
         mov        8(%ebp), %edi 
         mov        12(%ebp), %esi 
-        call       NumToStr_$1259
+        call       NumToStr_$834
         popl       %esi 
         popl       %edi 
         popl       %edx 
@@ -7233,7 +7007,7 @@ IntToStr:
         mov        8(%ebp), %edi 
         mov        12(%ebp), %esi 
         cmpb       $0, 15(%esi) 
-        jnl        L1264_false__hla_
+        jnl        L839_false__hla_
         movb       $45, (%edi) 
         incl       %edi 
         xorl       %eax, %eax 
@@ -7248,8 +7022,8 @@ IntToStr:
         mov        $0, %eax 
         sbbl       12(%esi), %eax 
         mov        %eax, 12(%esi) 
-L1264_false__hla_:
-        call       NumToStr_$1259
+L839_false__hla_:
+        call       NumToStr_$834
         popl       %esi 
         popl       %edi 
         popl       %edx 
@@ -7258,16 +7032,16 @@ xIntToStr:
         popl       %ebp 
         ret
 
-/* procedure MulReslt10_$1266 */
+/* procedure MulReslt10_$841 */
 
-MulReslt10_$1266:
+MulReslt10_$841:
         pushl      %eax 
         pushl      %ebx 
         shll       $1, -16(%ebp) 
         rcll       $1, -12(%ebp) 
         rcll       $1, -8(%ebp) 
         rcll       $1, -4(%ebp) 
-        jc         Overflow_$1267
+        jc         Overflow_$842
         mov        -16(%ebp), %eax 
         mov        -12(%ebp), %ebx 
         mov        -8(%ebp), %ecx 
@@ -7276,17 +7050,17 @@ MulReslt10_$1266:
         rcll       $1, %ebx 
         rcll       $1, %ecx 
         rcll       $1, %edx 
-        jc         Overflow_$1267
+        jc         Overflow_$842
         shll       $1, %eax 
         rcll       $1, %ebx 
         rcll       $1, %ecx 
         rcll       $1, %edx 
-        jc         Overflow_$1267
+        jc         Overflow_$842
         addl       %eax, -16(%ebp) 
         adcl       %ebx, -12(%ebp) 
         adcl       %ecx, -8(%ebp) 
         adcl       %edx, -4(%ebp) 
-        jc         Overflow_$1267
+        jc         Overflow_$842
         popl       %ebx 
         popl       %eax 
         andl       $15, %eax 
@@ -7294,14 +7068,14 @@ MulReslt10_$1266:
         adcl       $0, -12(%ebp) 
         adcl       $0, -8(%ebp) 
         adcl       $0, -4(%ebp) 
-        jc         Overflow2_$1268
+        jc         Overflow2_$843
         ret
 
-Overflow2_$1268:
+Overflow2_$843:
         pushl      %eax 
         pushl      %ebx 
 
-Overflow_$1267:
+Overflow_$842:
         popl       %ebx 
         popl       %eax 
         pushl      %ebx 
@@ -7309,15 +7083,15 @@ Overflow_$1267:
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8288 
+        pushl      $8286 
 
-        pushl      $L1269_str__hla_ 
+        pushl      $L844_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
         ret
-xMulReslt10_$1266:
+xMulReslt10_$841:
 
 /* procedure DecStrToInt */
 
@@ -7334,16 +7108,16 @@ DecStrToInt:
         mov        %eax, -8(%ebp) 
         mov        %eax, -4(%ebp) 
         mov        8(%ebp), %ebx 
-        jmp        start_$1271
+        jmp        start_$846
 
-ForEachDigit_$1272:
-        call       MulReslt10_$1266
+ForEachDigit_$847:
+        call       MulReslt10_$841
         incl       %ebx 
 
-start_$1271:
+start_$846:
         mov        (%ebx), %al 
         cmpb       $0, %al 
-        jne        ForEachDigit_$1272
+        jne        ForEachDigit_$847
         mov        12(%ebp), %ebx 
         mov        -16(%ebp), %eax 
         mov        %eax, (%ebx) 
@@ -7358,25 +7132,25 @@ start_$1271:
         movb       $6, (%ebx) 
         movl       $uns128_ste, (%eax) 
         cmpl       $0, -4(%ebp) 
-        jne        AllDone_$1273
+        jne        AllDone_$848
         cmpl       $0, -8(%ebp) 
-        jne        AllDone_$1273
+        jne        AllDone_$848
         movb       $5, (%ebx) 
         movl       $uns64_ste, (%eax) 
         cmpl       $0, -12(%ebp) 
-        jne        AllDone_$1273
+        jne        AllDone_$848
         movb       $4, (%ebx) 
         movl       $uns32_ste, (%eax) 
         cmpw       $0, -14(%ebp) 
-        jne        AllDone_$1273
+        jne        AllDone_$848
         movb       $3, (%ebx) 
         movl       $uns16_ste, (%eax) 
         cmpb       $0, -15(%ebp) 
-        jne        AllDone_$1273
+        jne        AllDone_$848
         movb       $2, (%ebx) 
         movl       $uns8_ste, (%eax) 
 
-AllDone_$1273:
+AllDone_$848:
         popl       %edx 
         popl       %ecx 
         popl       %ebx 
@@ -7398,33 +7172,33 @@ BinStrToInt:
         mov        %eax, -8(%ebp) 
         mov        %eax, -4(%ebp) 
         mov        8(%ebp), %ebx 
-        jmp        start_$1275
+        jmp        start_$850
 
-ForEachDigit_$1276:
+ForEachDigit_$851:
         shrb       $1, %al 
         rcll       $1, -16(%ebp) 
         rcll       $1, -12(%ebp) 
         rcll       $1, -8(%ebp) 
         rcll       $1, -4(%ebp) 
-        jnc        start_$1275
+        jnc        start_$850
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8288 
+        pushl      $8286 
 
-        pushl      $L1277_str__hla_ 
+        pushl      $L852_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
 
-start_$1275:
+start_$850:
         incl       %ebx 
         mov        (%ebx), %al 
         cmpb       $0, %al 
-        jne        ForEachDigit_$1276
+        jne        ForEachDigit_$851
         mov        12(%ebp), %ebx 
         mov        -16(%ebp), %eax 
         mov        %eax, (%ebx) 
@@ -7439,29 +7213,29 @@ start_$1275:
         movb       $12, (%ebx) 
         movl       $lword_ste, (%eax) 
         cmpl       $0, -4(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         cmpw       $0, -6(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         movb       $11, (%ebx) 
         movl       $tbyte_ste, (%eax) 
         cmpw       $0, -8(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         movb       $10, (%ebx) 
         movl       $qword_ste, (%eax) 
         cmpl       $0, -12(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         movb       $9, (%ebx) 
         movl       $dword_ste, (%eax) 
         cmpw       $0, -14(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         movb       $8, (%ebx) 
         movl       $word_ste, (%eax) 
         cmpb       $0, -15(%ebp) 
-        jne        AllDone_$1278
+        jne        AllDone_$853
         movb       $7, (%ebx) 
         movl       $byte_ste, (%eax) 
 
-AllDone_$1278:
+AllDone_$853:
         popl       %ebx 
 xBinStrToInt:
         movl       %ebp, %esp 
@@ -7482,47 +7256,47 @@ HexStrToInt:
         mov        %eax, -8(%ebp) 
         mov        %eax, -4(%ebp) 
         mov        8(%ebp), %ebx 
-        jmp        start_$1280
+        jmp        start_$855
 
-ForEachDigit_$1281:
+ForEachDigit_$856:
         cmpb       $57, %al 
-        jna        L1282_false__hla_
+        jna        L857_false__hla_
         addb       $9, %al 
-L1282_false__hla_:
+L857_false__hla_:
         shlb       $4, %al 
         mov        $4, %ecx 
-L1283_false__hla_:
-L1283_repeat__hla_:
+L858_false__hla_:
+L858_repeat__hla_:
         shlb       $1, %al 
         rcll       $1, -16(%ebp) 
         rcll       $1, -12(%ebp) 
         rcll       $1, -8(%ebp) 
         rcll       $1, -4(%ebp) 
-        jnc        L1284_false__hla_
+        jnc        L859_false__hla_
         pushl      %ebx 
         movl       %esp, %ebx 
         subl       $28, %esp 
         andl       $-16, %esp 
         pushl      $L522_str__hla_ 
-        pushl      $8288 
+        pushl      $8286 
 
-        pushl      $L1285_str__hla_ 
+        pushl      $L860_str__hla_ 
 
         call       HLAerror
         movl       %ebx, %esp 
         popl       %ebx 
-L1284_false__hla_:
+L859_false__hla_:
         decl       %ecx 
-L1283_continue__hla_:
-        jnz        L1283_repeat__hla_
-L1283_exitloop__hla_:
+L858_continue__hla_:
+        jnz        L858_repeat__hla_
+L858_exitloop__hla_:
 
 
-start_$1280:
+start_$855:
         incl       %ebx 
         mov        (%ebx), %al 
         cmpb       $0, %al 
-        jne        ForEachDigit_$1281
+        jne        ForEachDigit_$856
         mov        12(%ebp), %ebx 
         mov        -16(%ebp), %eax 
         mov        %eax, (%ebx) 
@@ -7537,29 +7311,29 @@ start_$1280:
         movb       $12, (%ebx) 
         movl       $lword_ste, (%eax) 
         cmpl       $0, -4(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         cmpw       $0, -6(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         movb       $11, (%ebx) 
         movl       $tbyte_ste, (%eax) 
         cmpw       $0, -8(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         movb       $10, (%ebx) 
         movl       $qword_ste, (%eax) 
         cmpl       $0, -12(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         movb       $9, (%ebx) 
         movl       $dword_ste, (%eax) 
         cmpw       $0, -14(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         movb       $8, (%ebx) 
         movl       $word_ste, (%eax) 
         cmpb       $0, -15(%ebp) 
-        jne        AllDone_$1286
+        jne        AllDone_$861
         movb       $7, (%ebx) 
         movl       $byte_ste, (%eax) 
 
-AllDone_$1286:
+AllDone_$861:
         popl       %ecx 
         popl       %ebx 
 xHexStrToInt:
@@ -7619,7 +7393,7 @@ f80int:
         movl       %esp, %ebp 
         subl       $4, %esp 
         fstcw      -4(%ebp) 
-        fldcw      fcw_$1291 
+        fldcw      fcw_$866 
         fldt       8(%ebp) 
         mov        20(%ebp), %eax 
         fistpl     (%eax) 
@@ -7722,14 +7496,14 @@ fmax80:
         fstsw      %ax 
         sahf
         mov        8(%ebp), %eax 
-        jb         L1299_false__hla_
+        jb         L874_false__hla_
         fstpt      24(%ebp) 
         fstpt      (%eax) 
-        jmp        L1299_endif__hla_
-L1299_false__hla_:
+        jmp        L874_endif__hla_
+L874_false__hla_:
         fstpt      (%eax) 
         fstpt      12(%ebp) 
-L1299_endif__hla_:
+L874_endif__hla_:
         popl       %ebp 
         ret
 xfmax80:
@@ -7745,14 +7519,14 @@ fmin80:
         fstsw      %ax 
         sahf
         mov        8(%ebp), %eax 
-        jnb        L1301_false__hla_
+        jnb        L876_false__hla_
         fstpt      24(%ebp) 
         fstpt      (%eax) 
-        jmp        L1301_endif__hla_
-L1301_false__hla_:
+        jmp        L876_endif__hla_
+L876_false__hla_:
         fstpt      (%eax) 
         fstpt      12(%ebp) 
-L1301_endif__hla_:
+L876_endif__hla_:
         popl       %ebp 
         ret
 xfmin80:
@@ -7858,53 +7632,53 @@ xfge80:
 ceil80:
         pushl      %ebp 
         movl       %esp, %ebp 
-        fstcw      fcwSave_$1309 
-        pushw      fcwSave_$1309 
-        popw       fcw_$1310 
-        movw       $3967, fcw_$1310 
-        fldcw      fcw_$1310 
+        fstcw      fcwSave_$884 
+        pushw      fcwSave_$884 
+        popw       fcw_$885 
+        movw       $3967, fcw_$885 
+        fldcw      fcw_$885 
         mov        20(%ebp), %ax 
         andw       $32767, %ax 
         cmpw       $16383, %ax 
-        jnb        L1311_false__hla_
+        jnb        L886_false__hla_
         testb      $128, 21(%ebp) 
-        jns        L1312_false__hla_
+        jns        L887_false__hla_
         fldz
-        jmp        L1312_endif__hla_
-L1312_false__hla_:
+        jmp        L887_endif__hla_
+L887_false__hla_:
         cmpl       $0, 12(%ebp) 
-        jnz        IsOne_$1313
+        jnz        IsOne_$888
         cmpl       $0, 16(%ebp) 
-        jnz        IsOne_$1313
+        jnz        IsOne_$888
         cmpw       $0, 20(%ebp) 
-        jnz        IsOne_$1313
+        jnz        IsOne_$888
         fldz
-        jmp        WasZero_$1314
+        jmp        WasZero_$889
 
-IsOne_$1313:
+IsOne_$888:
         fld1
 
-WasZero_$1314:
-L1312_endif__hla_:
-        jmp        L1311_endif__hla_
-L1311_false__hla_:
+WasZero_$889:
+L887_endif__hla_:
+        jmp        L886_endif__hla_
+L886_false__hla_:
         fldt       12(%ebp) 
         frndint
         fldt       12(%ebp) 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jz         L1315_false__hla_
+        jz         L890_false__hla_
         cmpb       $0, 21(%ebp) 
-        jnge       L1316_false__hla_
+        jnge       L891_false__hla_
         fld1
         faddp      %st(0), %st(1) 
-L1316_false__hla_:
-L1315_false__hla_:
-L1311_endif__hla_:
+L891_false__hla_:
+L890_false__hla_:
+L886_endif__hla_:
         mov        8(%ebp), %eax 
         fstpt      (%eax) 
-        fldcw      fcwSave_$1309 
+        fldcw      fcwSave_$884 
         popl       %ebp 
         ret
 xceil80:
@@ -7914,35 +7688,35 @@ xceil80:
 floor80:
         pushl      %ebp 
         movl       %esp, %ebp 
-        fstcw      fcwSave_$1318 
-        pushw      fcwSave_$1318 
-        popw       fcw_$1319 
-        orw        $3967, fcw_$1319 
-        fldcw      fcw_$1319 
+        fstcw      fcwSave_$893 
+        pushw      fcwSave_$893 
+        popw       fcw_$894 
+        orw        $3967, fcw_$894 
+        fldcw      fcw_$894 
         mov        20(%ebp), %ax 
         andw       $32767, %ax 
         cmpw       $16383, %ax 
-        jnb        L1320_false__hla_
+        jnb        L895_false__hla_
         fldz
-        jmp        L1320_endif__hla_
-L1320_false__hla_:
+        jmp        L895_endif__hla_
+L895_false__hla_:
         fldt       12(%ebp) 
         frndint
         fldt       12(%ebp) 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jz         L1321_false__hla_
+        jz         L896_false__hla_
         cmpb       $0, 21(%ebp) 
-        jnl        L1322_false__hla_
+        jnl        L897_false__hla_
         fld1
         fsubp      %st(0), %st(1) 
-L1322_false__hla_:
-L1321_false__hla_:
-L1320_endif__hla_:
+L897_false__hla_:
+L896_false__hla_:
+L895_endif__hla_:
         mov        8(%ebp), %eax 
         fstpt      (%eax) 
-        fldcw      fcwSave_$1318 
+        fldcw      fcwSave_$893 
         popl       %ebp 
         ret
 xfloor80:
@@ -8040,8 +7814,8 @@ exp80:
         fldt       12(%ebp) 
         fldl2e
         fmulp      %st(0), %st(1) 
-        fstcw      SaveCW_$1330 
-        movw       $3967, MaskedCW_$1331 
+        fstcw      SaveCW_$905 
+        movw       $3967, MaskedCW_$906 
         fld        %st(0) 
         frndint
         fxch
@@ -8054,40 +7828,40 @@ exp80:
         fscale
         fstp       %st(1) 
         fmulp      %st(0), %st(1) 
-        fldcw      SaveCW_$1330 
+        fldcw      SaveCW_$905 
         popl       %ebp 
         ret
 xexp80:
 
-/* procedure DigitsToRightOfDecPt_$1335 */
+/* procedure DigitsToRightOfDecPt_$910 */
 
-DigitsToRightOfDecPt_$1335:
+DigitsToRightOfDecPt_$910:
         decl       %esi 
 
-DigitLoop_$1336:
+DigitLoop_$911:
         xorl       %eax, %eax 
-L1337_false__hla_:
-L1337_repeat__hla_:
+L912_false__hla_:
+L912_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1337_continue__hla_:
+L912_continue__hla_:
         cmpb       $95, %al 
-        je         L1337_repeat__hla_
-L1337_exitloop__hla_:
+        je         L912_repeat__hla_
+L912_exitloop__hla_:
 
         subb       $48, %al 
         cmpb       $10, %al 
-        jae        EndDigits_$1338
+        jae        EndDigits_$913
         decl       %edx 
         testl      %ebx, %ebx 
-        jz         DigitLoop_$1336
+        jz         DigitLoop_$911
         mov        %al, -20(%ebp,%ebx,1) 
         decl       %ebx 
-        jmp        DigitLoop_$1336
+        jmp        DigitLoop_$911
 
-EndDigits_$1338:
+EndDigits_$913:
         ret
-xDigitsToRightOfDecPt_$1335:
+xDigitsToRightOfDecPt_$910:
 
 /* procedure atold */
 
@@ -8113,277 +7887,277 @@ atold:
         mov        %ax, -22(%ebp) 
         decl       %esi 
 
-whileDelimLoop_$1340:
+whileDelimLoop_$915:
         xorl       %eax, %eax 
-L1341_false__hla_:
-L1341_repeat__hla_:
+L916_false__hla_:
+L916_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1341_continue__hla_:
+L916_continue__hla_:
         cmpb       $95, %al 
-        je         L1341_repeat__hla_
-L1341_exitloop__hla_:
+        je         L916_repeat__hla_
+L916_exitloop__hla_:
 
         cmpl       $128, %eax 
-        jnae       L1342_false__hla_
+        jnae       L917_false__hla_
         clc
-        jmp        L1342_endif__hla_
-L1342_false__hla_:
-        btl        %eax, Delimiters_$1334 
-L1342_endif__hla_:
-        jc         whileDelimLoop_$1340
+        jmp        L917_endif__hla_
+L917_false__hla_:
+        btl        %eax, Delimiters_$909 
+L917_endif__hla_:
+        jc         whileDelimLoop_$915
         mov        $0, %cl 
         cmpb       $45, %al 
-        jne        L1343_false__hla_
+        jne        L918_false__hla_
         xorl       %eax, %eax 
-L1344_false__hla_:
-L1344_repeat__hla_:
+L919_false__hla_:
+L919_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1344_continue__hla_:
+L919_continue__hla_:
         cmpb       $95, %al 
-        je         L1344_repeat__hla_
-L1344_exitloop__hla_:
+        je         L919_repeat__hla_
+L919_exitloop__hla_:
 
         mov        $1, %cl 
-        jmp        L1343_endif__hla_
-L1343_false__hla_:
+        jmp        L918_endif__hla_
+L918_false__hla_:
         cmpb       $43, %al 
-        jne        L1345_false__hla_
+        jne        L920_false__hla_
         xorl       %eax, %eax 
-L1346_false__hla_:
-L1346_repeat__hla_:
+L921_false__hla_:
+L921_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1346_continue__hla_:
+L921_continue__hla_:
         cmpb       $95, %al 
-        je         L1346_repeat__hla_
-L1346_exitloop__hla_:
+        je         L921_repeat__hla_
+L921_exitloop__hla_:
 
-L1345_false__hla_:
-L1343_endif__hla_:
+L920_false__hla_:
+L918_endif__hla_:
         mov        $-18, %edx 
         mov        $18, %ebx 
         pushl      %esi 
         cmpb       $46, %al 
-        jne        L1347_false__hla_
+        jne        L922_false__hla_
         xorl       %eax, %eax 
-L1348_false__hla_:
-L1348_repeat__hla_:
+L923_false__hla_:
+L923_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1348_continue__hla_:
+L923_continue__hla_:
         cmpb       $95, %al 
-        je         L1348_repeat__hla_
-L1348_exitloop__hla_:
+        je         L923_repeat__hla_
+L923_exitloop__hla_:
 
-L1347_false__hla_:
+L922_false__hla_:
         cmpb       $48, %al 
-        jb         Failed_$1349
+        jb         Failed_$924
         cmpb       $57, %al 
-        ja         Failed_$1349
+        ja         Failed_$924
         popl       %esi 
         decl       %esi 
         xorl       %eax, %eax 
-L1350_false__hla_:
-L1350_repeat__hla_:
+L925_false__hla_:
+L925_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1350_continue__hla_:
+L925_continue__hla_:
         cmpb       $95, %al 
-        je         L1350_repeat__hla_
-L1350_exitloop__hla_:
+        je         L925_repeat__hla_
+L925_exitloop__hla_:
 
-        jmp        L1351_continue__hla_
-L1351_while__hla_:
+        jmp        L926_continue__hla_
+L926_while__hla_:
         xorl       %eax, %eax 
-L1353_false__hla_:
-L1353_repeat__hla_:
+L928_false__hla_:
+L928_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1353_continue__hla_:
+L928_continue__hla_:
         cmpb       $95, %al 
-        je         L1353_repeat__hla_
-L1353_exitloop__hla_:
+        je         L928_repeat__hla_
+L928_exitloop__hla_:
 
-L1351_continue__hla_:
+L926_continue__hla_:
         cmpb       $48, %al 
-        je         L1351_while__hla_
-L1351_exitloop__hla_:
+        je         L926_while__hla_
+L926_exitloop__hla_:
 
         cmpb       $46, %al 
-        jne        L1354_false__hla_
+        jne        L929_false__hla_
         incl       %edx 
-L1355_false__hla_:
-L1355_repeat__hla_:
+L930_false__hla_:
+L930_repeat__hla_:
         decl       %edx 
         xorl       %eax, %eax 
-L1356_false__hla_:
-L1356_repeat__hla_:
+L931_false__hla_:
+L931_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1356_continue__hla_:
+L931_continue__hla_:
         cmpb       $95, %al 
-        je         L1356_repeat__hla_
-L1356_exitloop__hla_:
+        je         L931_repeat__hla_
+L931_exitloop__hla_:
 
-L1355_continue__hla_:
+L930_continue__hla_:
         cmpb       $48, %al 
-        je         L1355_repeat__hla_
-L1355_exitloop__hla_:
+        je         L930_repeat__hla_
+L930_exitloop__hla_:
 
-        jmp        L1354_endif__hla_
-L1354_false__hla_:
+        jmp        L929_endif__hla_
+L929_false__hla_:
 
-L1357_while__hla_:
-L1358_continue__hla_:
+L932_while__hla_:
+L933_continue__hla_:
         subb       $48, %al 
         cmpb       $10, %al 
-        jae        L1357_false__hla_
-L1357_true__hla_:
+        jae        L932_false__hla_
+L932_true__hla_:
         incl       %edx 
         testl      %ebx, %ebx 
-        je         L1359_false__hla_
+        je         L934_false__hla_
         mov        %al, -20(%ebp,%ebx,1) 
         decl       %ebx 
-L1359_false__hla_:
+L934_false__hla_:
         xorl       %eax, %eax 
-L1360_false__hla_:
-L1360_repeat__hla_:
+L935_false__hla_:
+L935_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1360_continue__hla_:
+L935_continue__hla_:
         cmpb       $95, %al 
-        je         L1360_repeat__hla_
-L1360_exitloop__hla_:
+        je         L935_repeat__hla_
+L935_exitloop__hla_:
 
-        jmp        L1357_while__hla_
-L1357_exitloop__hla_:
-L1358_exitloop__hla_:
-L1357_false__hla_:
+        jmp        L932_while__hla_
+L932_exitloop__hla_:
+L933_exitloop__hla_:
+L932_false__hla_:
 
         cmpb       $-2, %al 
-        jne        L1361_false__hla_
+        jne        L936_false__hla_
         xorl       %eax, %eax 
-L1362_false__hla_:
-L1362_repeat__hla_:
+L937_false__hla_:
+L937_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1362_continue__hla_:
+L937_continue__hla_:
         cmpb       $95, %al 
-        je         L1362_repeat__hla_
-L1362_exitloop__hla_:
+        je         L937_repeat__hla_
+L937_exitloop__hla_:
 
-L1361_false__hla_:
-L1354_endif__hla_:
+L936_false__hla_:
+L929_endif__hla_:
         decl       %esi 
         xorl       %eax, %eax 
-L1363_false__hla_:
-L1363_repeat__hla_:
+L938_false__hla_:
+L938_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1363_continue__hla_:
+L938_continue__hla_:
         cmpb       $95, %al 
-        je         L1363_repeat__hla_
-L1363_exitloop__hla_:
+        je         L938_repeat__hla_
+L938_exitloop__hla_:
 
 
-L1364_while__hla_:
-L1365_continue__hla_:
+L939_while__hla_:
+L940_continue__hla_:
         subb       $48, %al 
         cmpb       $10, %al 
-        jae        L1364_false__hla_
-L1364_true__hla_:
+        jae        L939_false__hla_
+L939_true__hla_:
         testl      %ebx, %ebx 
-        je         L1366_false__hla_
+        je         L941_false__hla_
         mov        %al, -20(%ebp,%ebx,1) 
         decl       %ebx 
-L1366_false__hla_:
+L941_false__hla_:
         xorl       %eax, %eax 
-L1367_false__hla_:
-L1367_repeat__hla_:
+L942_false__hla_:
+L942_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1367_continue__hla_:
+L942_continue__hla_:
         cmpb       $95, %al 
-        je         L1367_repeat__hla_
-L1367_exitloop__hla_:
+        je         L942_repeat__hla_
+L942_exitloop__hla_:
 
-        jmp        L1364_while__hla_
-L1364_exitloop__hla_:
-L1365_exitloop__hla_:
-L1364_false__hla_:
+        jmp        L939_while__hla_
+L939_exitloop__hla_:
+L940_exitloop__hla_:
+L939_false__hla_:
 
         decl       %esi 
         xorl       %eax, %eax 
-L1368_false__hla_:
-L1368_repeat__hla_:
+L943_false__hla_:
+L943_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1368_continue__hla_:
+L943_continue__hla_:
         cmpb       $95, %al 
-        je         L1368_repeat__hla_
-L1368_exitloop__hla_:
+        je         L943_repeat__hla_
+L943_exitloop__hla_:
 
         cmpb       $101, %al 
-        je         L1369_true__hla_
+        je         L944_true__hla_
         cmpb       $69, %al 
-        jne        L1369_false__hla_
-L1369_true__hla_:
+        jne        L944_false__hla_
+L944_true__hla_:
         xorl       %eax, %eax 
-L1370_false__hla_:
-L1370_repeat__hla_:
+L945_false__hla_:
+L945_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1370_continue__hla_:
+L945_continue__hla_:
         cmpb       $95, %al 
-        je         L1370_repeat__hla_
-L1370_exitloop__hla_:
+        je         L945_repeat__hla_
+L945_exitloop__hla_:
 
         cmpb       $45, %al 
         setz       %ch 
         cmpb       $43, %al 
-        je         L1371_true__hla_
+        je         L946_true__hla_
         cmpb       $45, %al 
-        jne        L1371_false__hla_
-L1371_true__hla_:
+        jne        L946_false__hla_
+L946_true__hla_:
         xorl       %eax, %eax 
-L1372_false__hla_:
-L1372_repeat__hla_:
+L947_false__hla_:
+L947_repeat__hla_:
         incl       %esi 
         mov        (%esi), %al 
-L1372_continue__hla_:
+L947_continue__hla_:
         cmpb       $95, %al 
-        je         L1372_repeat__hla_
-L1372_exitloop__hla_:
+        je         L947_repeat__hla_
+L947_exitloop__hla_:
 
-L1371_false__hla_:
+L946_false__hla_:
         subb       $48, %al 
         cmpb       $10, %al 
-        jae        Failed_$1349
+        jae        Failed_$924
         xorl       %ebx, %ebx 
 
-ExpLoop_$1373:
+ExpLoop_$948:
         movzx      (%esi), %eax 
         subb       $48, %al 
         cmpb       $10, %al 
-        jae        ExpDone_$1374
+        jae        ExpDone_$949
         imul       $10, %ebx, %ebx 
         addl       %eax, %ebx 
         incl       %esi 
-        jmp        ExpLoop_$1373
+        jmp        ExpLoop_$948
 
-ExpDone_$1374:
+ExpDone_$949:
         cmpb       $1, %ch 
-        jne        L1375_false__hla_
+        jne        L950_false__hla_
         negl       %ebx 
-L1375_false__hla_:
+L950_false__hla_:
         addl       %ebx, %edx 
-L1369_false__hla_:
+L944_false__hla_:
         cmpl       $4930, %edx 
-        jg         Failed_$1349
+        jg         Failed_$924
         cmpl       $-4930, %edx 
-        jl         Failed_$1349
+        jl         Failed_$924
         mov        -2(%ebp), %al 
         shlb       $4, %al 
         orb        -3(%ebp), %al 
@@ -8423,54 +8197,54 @@ L1369_false__hla_:
         fbld       -30(%ebp) 
         mov        $-10, %ebx 
         cmpl       $0, %edx 
-        jnl        L1376_false__hla_
+        jnl        L951_false__hla_
         negl       %edx 
         shll       $19, %edx 
-        jmp        L1377_continue__hla_
-L1377_while__hla_:
+        jmp        L952_continue__hla_
+L952_while__hla_:
         addl       $10, %ebx 
         shll       $1, %edx 
-        jnc        L1379_false__hla_
-        fldt       PotTbl_$1333(%ebx) 
+        jnc        L954_false__hla_
+        fldt       PotTbl_$908(%ebx) 
         fdivp      %st(0), %st(1) 
-L1379_false__hla_:
-L1377_continue__hla_:
+L954_false__hla_:
+L952_continue__hla_:
         testl      %edx, %edx 
-        jne        L1377_while__hla_
-L1377_exitloop__hla_:
+        jne        L952_while__hla_
+L952_exitloop__hla_:
 
-        jmp        L1376_endif__hla_
-L1376_false__hla_:
+        jmp        L951_endif__hla_
+L951_false__hla_:
         shll       $19, %edx 
-        jmp        L1380_continue__hla_
-L1380_while__hla_:
+        jmp        L955_continue__hla_
+L955_while__hla_:
         addl       $10, %ebx 
         shll       $1, %edx 
-        jnc        L1382_false__hla_
-L1382_true__hla_:
-        fldt       PotTbl_$1333(%ebx) 
+        jnc        L957_false__hla_
+L957_true__hla_:
+        fldt       PotTbl_$908(%ebx) 
         fmulp      %st(0), %st(1) 
-L1382_false__hla_:
-L1380_continue__hla_:
+L957_false__hla_:
+L955_continue__hla_:
         testl      %edx, %edx 
-        jne        L1380_while__hla_
-L1380_exitloop__hla_:
+        jne        L955_while__hla_
+L955_exitloop__hla_:
 
-L1376_endif__hla_:
+L951_endif__hla_:
         cmpb       $1, %cl 
-        jne        L1383_false__hla_
+        jne        L958_false__hla_
         fchs
-L1383_false__hla_:
-        jmp        GoodEndOfFP_$1384
+L958_false__hla_:
+        jmp        GoodEndOfFP_$959
 
-Failed_$1349:
+Failed_$924:
         fldz
 
-GoodEndOfFP_$1384:
+GoodEndOfFP_$959:
         mov        8(%ebp), %eax 
         fstpt      (%eax) 
 
-ExitAtold_$1385:
+ExitAtold_$960:
         popl       %esi 
         popl       %edx 
         popl       %ecx 
@@ -8481,9 +8255,9 @@ ExitAtold_$1385:
         ret
 xatold:
 
-/* procedure htoa_$1387 */
+/* procedure htoa_$962 */
 
-htoa_$1387:
+htoa_$962:
         pushl      %eax 
         movb       %al, %ah 
         shrb       $4, %al 
@@ -8495,16 +8269,16 @@ htoa_$1387:
         stosb
         popl       %eax 
         ret
-xhtoa_$1387:
+xhtoa_$962:
 
-/* procedure FPDigits_$1389 */
+/* procedure FPDigits_$964 */
 
-FPDigits_$1389:
+FPDigits_$964:
         fldz
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jnz        L1397_false__hla_
+        jnz        L972_false__hla_
         mov        $808464432, %eax 
         stosl
         stosl
@@ -8514,116 +8288,116 @@ FPDigits_$1389:
         stosl
         xorl       %edx, %edx 
         mov        $32, %bl 
-        jmp        L1397_endif__hla_
-L1397_false__hla_:
+        jmp        L972_endif__hla_
+L972_false__hla_:
         mov        $32, %bl 
-        jna        L1398_false__hla_
+        jna        L973_false__hla_
         fabs
         mov        $45, %bl 
-L1398_false__hla_:
+L973_false__hla_:
         xorl       %edx, %edx 
         fld1
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jnae       L1399_false__hla_
-L1401_forever__hla_:
-L1400_continue__hla_:
-        fldt       OneEm10_$1393 
+        jnae       L974_false__hla_
+L976_forever__hla_:
+L975_continue__hla_:
+        fldt       OneEm10_$968 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jbe        L1400_exitloop__hla_
+        jbe        L975_exitloop__hla_
         subl       $10, %edx 
-        fldt       OneE10_$1392 
+        fldt       OneE10_$967 
         fmulp      %st(0), %st(1) 
-        jmp        L1401_forever__hla_
-L1400_exitloop__hla_:
+        jmp        L976_forever__hla_
+L975_exitloop__hla_:
 
-L1404_forever__hla_:
-L1403_continue__hla_:
+L979_forever__hla_:
+L978_continue__hla_:
         fld1
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jbe        L1403_exitloop__hla_
+        jbe        L978_exitloop__hla_
         decl       %edx 
-        fldt       Ten_$1394 
+        fldt       Ten_$969 
         fmulp      %st(0), %st(1) 
-        jmp        L1404_forever__hla_
-L1403_exitloop__hla_:
+        jmp        L979_forever__hla_
+L978_exitloop__hla_:
 
-        fldt       FiveEm18_$1395 
+        fldt       FiveEm18_$970 
         faddp      %st(0), %st(1) 
-        fldt       Ten_$1394 
+        fldt       Ten_$969 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        jnbe       L1406_false__hla_
-        fldt       Ten_$1394 
+        jnbe       L981_false__hla_
+        fldt       Ten_$969 
         fdivp      %st(0), %st(1) 
         incl       %edx 
-L1406_false__hla_:
-        jmp        L1399_endif__hla_
-L1399_false__hla_:
-L1408_forever__hla_:
-L1407_continue__hla_:
-        fldt       OneE10_$1392 
+L981_false__hla_:
+        jmp        L974_endif__hla_
+L974_false__hla_:
+L983_forever__hla_:
+L982_continue__hla_:
+        fldt       OneE10_$967 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        ja         L1407_exitloop__hla_
+        ja         L982_exitloop__hla_
         addl       $10, %edx 
-        fldt       OneE10_$1392 
+        fldt       OneE10_$967 
         fdivp      %st(0), %st(1) 
-        jmp        L1408_forever__hla_
-L1407_exitloop__hla_:
+        jmp        L983_forever__hla_
+L982_exitloop__hla_:
 
-L1411_forever__hla_:
-L1410_continue__hla_:
-        fldt       Ten_$1394 
+L986_forever__hla_:
+L985_continue__hla_:
+        fldt       Ten_$969 
         fcomp      %st(1) 
         fstsw      %ax 
         sahf
-        ja         L1410_exitloop__hla_
+        ja         L985_exitloop__hla_
         incl       %edx 
-        fldt       Ten_$1394 
+        fldt       Ten_$969 
         fdivp      %st(0), %st(1) 
-        jmp        L1411_forever__hla_
-L1410_exitloop__hla_:
+        jmp        L986_forever__hla_
+L985_exitloop__hla_:
 
-L1399_endif__hla_:
+L974_endif__hla_:
         fld        %st(0) 
         subl       $20, %esp 
-        fldt       TenTo17_$1390 
+        fldt       TenTo17_$965 
         fmulp      %st(0), %st(1) 
         fbstp      (%esp) 
         cmpb       $153, 9(%esp) 
-        jna        L1413_false__hla_
-        fldt       TenTo16_$1391 
+        jna        L988_false__hla_
+        fldt       TenTo16_$966 
         fmulp      %st(0), %st(1) 
         fbstp      (%esp) 
         incl       %edx 
-        jmp        L1413_endif__hla_
-L1413_false__hla_:
+        jmp        L988_endif__hla_
+L988_false__hla_:
         fstp       %st(0) 
-L1413_endif__hla_:
+L988_endif__hla_:
         mov        $8, %ecx 
-L1414_false__hla_:
-L1414_repeat__hla_:
+L989_false__hla_:
+L989_repeat__hla_:
         mov        (%esp,%ecx,1), %al 
-        call       htoa_$1387
+        call       htoa_$962
         decl       %ecx 
-L1414_continue__hla_:
+L989_continue__hla_:
         cmpl       $0, %ecx 
-        jnl        L1414_repeat__hla_
-L1414_exitloop__hla_:
+        jnl        L989_repeat__hla_
+L989_exitloop__hla_:
 
         addl       $20, %esp 
-L1397_endif__hla_:
+L972_endif__hla_:
         movl       %edx, %eax 
         ret
-xFPDigits_$1389:
+xFPDigits_$964:
 
 /* procedure e80Str */
 
@@ -8635,50 +8409,50 @@ e80Str:
         cld
         finit
         cmpl       $0, 18(%ebp) 
-        jne        L1419_false__hla_
+        jne        L994_false__hla_
         cmpl       $0, 14(%ebp) 
-        jne        L1419_false__hla_
+        jne        L994_false__hla_
         mov        12(%ebp), %ax 
         andw       $65520, %ax 
-        jne        L1419_false__hla_
-L1419_true__hla_:
+        jne        L994_false__hla_
+L994_true__hla_:
         mov        8(%ebp), %ebx 
         movb       $48, (%ebx) 
         movb       $46, 1(%ebx) 
         movb       $48, 2(%ebx) 
         movb       $0, 3(%ebx) 
-        jmp        L1420_endif__hla_
-L1419_false__hla_:
+        jmp        L995_endif__hla_
+L994_false__hla_:
         fldt       12(%ebp) 
-        lea        Digits_$1416, %edi 
-        call       FPDigits_$1389
-        mov        %eax, Exponent_$1417 
-        mov        %bl, Sign_$1418 
+        lea        Digits_$991, %edi 
+        call       FPDigits_$964
+        mov        %eax, Exponent_$992 
+        mov        %bl, Sign_$993 
         mov        8(%ebp), %edi 
         xorl       %edx, %edx 
-        mov        Sign_$1418, %al 
+        mov        Sign_$993, %al 
         cmpb       $45, %al 
-        je         L1421_false__hla_
+        je         L996_false__hla_
         mov        $32, %al 
-L1421_false__hla_:
+L996_false__hla_:
         stosb
-        mov        Digits_$1416, %al 
+        mov        Digits_$991, %al 
         stosb
         mov        $46, %al 
         stosb
         mov        $17, %ecx 
-        lea        Digits_$1416+1, %esi 
+        lea        Digits_$991+1, %esi 
         rep movsb
         mov        $101, %al 
         stosb
         mov        $43, %al 
-        cmpl       $0, Exponent_$1417 
-        jnl        L1422_false__hla_
+        cmpl       $0, Exponent_$992 
+        jnl        L997_false__hla_
         mov        $45, %al 
-        negl       Exponent_$1417 
-L1422_false__hla_:
+        negl       Exponent_$992 
+L997_false__hla_:
         stosb
-        mov        Exponent_$1417, %eax 
+        mov        Exponent_$992, %eax 
         xorl       %edx, %edx 
         mov        $1000, %ebx 
         divl       %ebx 
@@ -8701,7 +8475,7 @@ L1422_false__hla_:
         stosb
         mov        $0, %al 
         stosb
-L1420_endif__hla_:
+L995_endif__hla_:
         popal
         popfl
         popl       %ebp 

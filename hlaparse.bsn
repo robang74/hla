@@ -83121,6 +83121,7 @@ OptionalDefault:
 //	Generates a unique label constant for this particular switch stmt.
 
 SwitchLabel:
+		optionalSemicolon
 		{
 			$<u>$ = LblCntr++;
 		}

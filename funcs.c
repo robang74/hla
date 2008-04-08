@@ -3711,7 +3711,7 @@ _begin( SystemFunc )
 		totalBytes = 0;			
 		mallocSize = 256;
 		readSize = 256;
-		outputData = malloc2( mallocSize );
+		outputData = malloc( mallocSize );
 		_while
 		( 
 				GetExitCodeProcess( pi.hProcess, &tstat ) 
@@ -3737,7 +3737,7 @@ _begin( SystemFunc )
 				yyerror( "@system call failed (Couldn't peek at data)" );
 				Result->v.u.strval = strdup( "" );
 				free2( vss cmdline->v.u.strval );
-				free( outputData );
+				free( outputData );		// Must be free!
 				_return;
 			
 			_endif
@@ -3774,7 +3774,7 @@ _begin( SystemFunc )
 					yyerror( "@system call failed (Couldn't read data)" );
 					Result->v.u.strval = strdup( "" );
 					free2( vss cmdline->v.u.strval );
-					free( outputData );
+					free( outputData );		// Must be free!
 					_return;
 				
 				_endif
@@ -3804,7 +3804,7 @@ _begin( SystemFunc )
 			yyerror( "@system call failed (Couldn't peek at data)" );
 			Result->v.u.strval = strdup( "" );
 			free2( vss cmdline->v.u.strval );
-			free( outputData );
+			free( outputData );		// Must be free!
 			_return;
 		
 		_endif
@@ -3841,7 +3841,7 @@ _begin( SystemFunc )
 				yyerror( "@system call failed (Couldn't read data)" );
 				Result->v.u.strval = strdup( "" );
 				free2( vss cmdline->v.u.strval );
-				free( outputData );
+				free( outputData );		// Must be free!
 				_return;
 			
 			_endif
@@ -3883,14 +3883,13 @@ _begin( SystemFunc )
 			yyerror( "@system call failed (Couldn't open pipe)" );
 			Result->v.u.strval = strdup( "" );
 			free2( vss cmdline->v.u.strval );
-			free( outputData );
 			_return;
 			
 		_endif
 		totalBytes = 0;			
 		mallocSize = 256;
 		readSize   = 256;
-		outputData = malloc2( mallocSize );
+		outputData = malloc( mallocSize );	// Must be malloc
 		_while( !feof( pipe ))
 		
 			_if( totalBytes+readSize > mallocSize )
@@ -11368,7 +11367,7 @@ _begin( matchStrConstFunc )
 	assert( String != NULL );
 	
 	resultStrSize = 4092;
-	resultStr = malloc( resultStrSize );
+	resultStr = malloc2( resultStrSize );
 	
 	ClrConst			// Sets result false in case of error.
 	( 
@@ -12921,7 +12920,7 @@ _begin( subExpr)
 			// Begin by allocating storage for the result stack.
 
 			resultStkSize = min( min( rx->minCnt+1, rx->maxCnt )*2, 16 );
-			resultStk = malloc( resultStkSize * sizeof( char *));
+			resultStk = malloc2( resultStkSize * sizeof( char *));
 			resultSP = 1;
 			resultStk[0] = result;
 
@@ -13319,7 +13318,7 @@ _begin( matchStrConst )
 
 	s= cursor; 
 	resultStrSize = 4092;
-	resultStr = malloc( resultStrSize );
+	resultStr = malloc2( resultStrSize );
 
 	
 	// If this is a string constant, it must begin and

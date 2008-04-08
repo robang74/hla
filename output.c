@@ -21224,7 +21224,7 @@ _begin( OutValue )
 			// strLbls array will hold the numeric labels for the
 			// strings we emit:
 			
-			strLbls = malloc( Value->v.NumElements * sizeof( int ) );
+			strLbls = malloc2( Value->v.NumElements * sizeof( int ) );
 			
 			// If it is a string array, we've got to use special
 			// code because we've got to emit pointers and the

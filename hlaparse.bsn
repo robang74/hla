@@ -82994,6 +82994,7 @@ SingleStmt:
 				// Okay, emit the jmp table:
 				
 				startStrSeg();	// Put the jump table in the constants section.
+				sprintf( jmpTbl, "L$%d_jmpTbl", $<u>5 );
 				EmitTypedLabel( jmpTbl, tDWord );
 				maxCase = $<cases.cases>6[ $<cases.cnt>6 - 1 ];
 				curCase = $<cases.cases>6[0];
@@ -83044,7 +83045,6 @@ SingleStmt:
 					
 				// Okay, emit the indirect jump statement:
 				
-				sprintf( jmpTbl, "L$%d_jmpTbl", $<u>5 );
 				initAdrs2
 				( 
 					&adrs,
@@ -83062,8 +83062,7 @@ SingleStmt:
 			// (or sequence of cmp/Jcc instrs if we bailed on the
 			// conditional jump).
 			
-			asmPuts( codeForCases );
-			free2( vss codeForCases );
+			asmPuts( codeForCases  );
 			
 			// Emit the end of switch label:
 			
@@ -83077,8 +83076,13 @@ SingleStmt:
 				EmitStmtLblNum( "L$%d_default", $<u>5 );
 				
 			_endif
+			
+			// Clean up:
 				 
-				
+			free2( vss codeForCases );
+			free2( vss $<cases.cases>6 );
+			free2( vss $<cases.caseLbls>6 );
+			$<returns>$ = NULL;
 		}
 	;
 	
@@ -83153,9 +83157,9 @@ OneOrMoreCases:
 			// the end of the switch before this guy.
 			
 			// Allocate storage for, and copy all the case values to the 
-			// caseVals.cases array.
+			// cases.cases array.
 			
-			$<cases.cnt>0 += $<caseVals.cnt>3;
+			$<cases.cnt>0 = $<caseVals.cnt>3;
 			$<cases.cases>0 = malloc2( sizeof( int ) * $<caseVals.cnt>3 );
 			memcpy
 			( 
@@ -83196,42 +83200,61 @@ OneOrMoreCases:
 		Stmts				// $8
 		{
 			int		startCase;
+			int		*newCases;
+			int		*newLbls;
+			int		newCnt;
 			
 			(void) $<u>3;	// To shut up bison.
 
 			// Okay, handle the current case.
 
 			startCase = $<cases.cnt>0;
-			$<cases.cnt>0 += $<caseVals.cnt>5;
-			
+			newCnt = $<cases.cnt>0 + $<caseVals.cnt>5;
+
 			// Allocate storage for, and copy all the case values to the 
 			// caseVals.cases array.
 			
-			$<cases.cases>0 = 
-				realloc( $<cases.cases>0, sizeof( int ) * $<cases.cnt>0 );
+			newCases = 
+				malloc2( sizeof( int ) * newCnt );
 				
-			assert( $<cases.cases>0 != NULL );
-			
+			memcpy
+			(
+				newCases,
+				$<cases.cases>0,
+				$<cases.cnt>0 * sizeof( int )
+			);
 			memcpy
 			( 
-				&$<cases.cases>0[ startCase ], 
+				&newCases[ startCase ], 
 				$<caseVals.cases>5,
 				$<caseVals.cnt>5 * sizeof( int )
 			);
+			free2( vss $<cases.cases>0 );
+			$<cases.cases>0 = newCases;
 			
 			// Allocate storage for, and copy the case label to the
 			// caseVals.caseLbls array:
 			
-			$<cases.caseLbls>0 = 
-				realloc( $<cases.caseLbls>0, sizeof( int ) * $<cases.cnt>0 );
+			newLbls = 
+				malloc2( sizeof( int ) * newCnt );
 				
-			assert( $<cases.caseLbls>0 != NULL );
+			memcpy
+			(
+				newLbls,
+				$<cases.caseLbls>0,
+				$<cases.cnt>0 * sizeof( int )
+			);
 			_for( int i=0, i < $<caseVals.cnt>5, ++i )
 			
-				$<cases.caseLbls>0[ startCase + i ] = $<u>6;
+				newLbls[ startCase + i ] = $<u>6;
 				
-			_endfor			 
-			free2( vss $<caseVals.cases>5 );			 
+			_endfor
+			free2( vss $<cases.caseLbls>0 );
+			$<cases.caseLbls>0 = newLbls;
+			$<cases.cnt>0 = newCnt;
+
+			free2( vss $<caseVals.cases>5 );
+			_here;			 
 		}
 	;
 
@@ -83274,7 +83297,8 @@ OneOrMoreCaseVals:
 
 				// Store away this single value:
 				
-				*$<caseVals.cases>$ = $<v.u.unsval>1;
+				*$<caseVals.cases>$ = CheckOrdinalSize( YYS &$<v>1, 32 );
+				
 				_here;
 			}
 
@@ -83288,7 +83312,7 @@ OneOrMoreCaseVals:
 				// thing encountered thus far, and then store away
 				// the current value at the end of the list.
 				
-				++$<caseVals.cnt>$;
+				$<caseVals.cnt>$ = $<caseVals.cnt>1 + 1;
 				$<caseVals.cases>$ =
 					malloc2
 					( 
@@ -83299,9 +83323,11 @@ OneOrMoreCaseVals:
 				( 
 					$<caseVals.cases>$, 
 					$<caseVals.cases>1,
-					sizeof( int ) * ($<caseVals.cnt>$ - 1 )
+					sizeof( int ) * ($<caseVals.cnt>1 )
 				);
-				$<caseVals.cases>$[$<caseVals.cnt>$-1] = $<v.u.intval>3;
+				$<caseVals.cases>$[$<caseVals.cnt>1] = 
+					CheckOrdinalSize( YYS &$<v>3, 32 );
+					
 				free2( vss $<caseVals.cases>1 );
 				_here; 
 
@@ -90606,11 +90632,11 @@ _begin( main )
 		len = strlen( outPath );
 		_if( len > 0 && outPath[len-1] != DIR_SEP_CHAR )
 		
-			newPath = malloc( len + 2 );
+			newPath = malloc2( len + 2 );
 			strcpy( newPath, outPath );
 			newPath[len] = DIR_SEP_CHAR;
 			newPath[len+1] = '\0';
-			free( outPath );
+			free2( vss outPath );
 			outPath = newPath;
 			
 		_endif

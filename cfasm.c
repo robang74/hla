@@ -412,7 +412,7 @@ _begin( fasm_readFileIntoMemory )
 		handle = open( filename, O_RDONLY | O_BINARY, S_IREAD );
 		_returnif( handle < 0 ) (void *) -1;
 		
-		result = malloc( statbuf.st_size + 16 );
+		result = malloc2( statbuf.st_size + 16 );
 		_if( result == NULL )
 
 			close( handle );
@@ -461,14 +461,14 @@ _begin( fasm_getenv )
 	envVal = getenv( envname );
 	_if( envVal != NULL )
 
-		rtnVal = malloc( strlen( envVal ) + 2 );
+		rtnVal = malloc2( strlen( envVal ) + 2 );
 		assert( rtnVal != NULL );
 		strcpy( rtnVal, envVal );
 		_return rtnVal;
 	
 	_endif
 	
-	rtnVal = malloc( 2 );
+	rtnVal = malloc2( 2 );
 	*rtnVal = '\0';
 	_return rtnVal;
 
@@ -530,7 +530,7 @@ _begin( cfasmMain )
 	g_fileBuf = fileBuf;
 	g_fileSize = fileSize;
 		
-	mem = malloc( 64*1024*1024 );
+	mem = malloc2( 64*1024*1024 );
 	fasmMain
 	( 
 		fName,			// char	*fName,
@@ -540,6 +540,6 @@ _begin( cfasmMain )
 		1000,			// passes
 		verbose
 	);
-	free( mem ); 
+	free2( vss mem ); 
 
 _end( cfasmMain )

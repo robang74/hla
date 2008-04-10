@@ -83,6 +83,31 @@
 
 
 
+// e80Valid-
+//
+//	Returns true if the 80-bit FP value passed to it is valid.
+
+int
+e80Valid( struct flt80 theConst )
+_begin( e80Valid )
+
+	_if
+	( 
+			(theConst.f.x[9] & 0x7f) == 0x7f
+		&&	theConst.f.x[8] == 0xff
+		&&	(theConst.f.x[7] & 0x80) == 0x80
+	)
+	
+		yyerror( "Invalid floating-point constant in program" );
+		_return 0;
+		
+	_endif
+	_return 1;
+	
+_end( e80Valid )
+
+
+
 /*********************************************************/
 /*                                                       */
 /* DupDims-                                              */
@@ -3401,8 +3426,12 @@ _begin( PrintList2 )
 
 	_elseif( v1->v.pType == tReal80 )
 
-		e80Str( valstr, v1->v.u.fltval );
-		fprintf( PrintOut, "%s", valstr );
+		_if( e80Valid( v1->v.u.fltval ))
+		
+			e80Str( valstr, v1->v.u.fltval );
+			fprintf( PrintOut, "%s", valstr );
+			
+		_endif
 
 	_elseif( v1->v.pType == tBoolean )
 

@@ -150,6 +150,13 @@ _begin( initSymbolTable )
 	union 	YYSTYPE 	one;
 	struct	SymNode	 	*Real128Fields;
 	
+	static struct SymNode	*dummy;
+	
+	// We need to create a dummy "u.proc.Locals" variable to use
+	// until the main program's ID is entered into the symbol table:
+	
+	MainLocals = &dummy;
+	
 	zero.v.u.lwordval[0] = 0;
 	zero.v.u.lwordval[1] = 0;
 	zero.v.u.lwordval[2] = 0;
@@ -1459,6 +1466,15 @@ _begin( InsertSym )
 	NewEntry->CurField		= NULL;			// Caller has to fill this in!
 	NewEntry->CurIndex		= 0;			// Caller has to fill this in!
 	NewEntry->regnum		= -1;			// Caller has to fill this in!
+	
+	// If a symbol is being inserted at lex level zero, then update
+	// the MainLocals value:
+	
+	_if( CurLexLevel == 0 )
+	
+		*MainLocals = NewEntry;
+		
+	_endif
 
 	_if( TheValue != NULL )
 	
@@ -1811,7 +1827,15 @@ _begin( ClrNewSym )
 
 	ClrObject( NewEntry );
 		
+	// If a symbol is being inserted at lex level zero, then update
+	// the MainLocals value:
 	
+	_if( CurLexLevel == 0 )
+	
+		*MainLocals = NewEntry;
+		
+	_endif
+
 		
 	SymbolTable = NewEntry;
  
@@ -1994,7 +2018,15 @@ _begin( InsertProc )
 
 	memset( &NewEntry->u.StartOfValues, 0, sizeof( union ValuesSize ));
 
+	// If a symbol is being inserted at lex level zero, then update
+	// the MainLocals value:
 	
+	_if( CurLexLevel == 0 )
+	
+		*MainLocals = NewEntry;
+		
+	_endif
+
 	
 	SymbolTable = NewEntry;
  

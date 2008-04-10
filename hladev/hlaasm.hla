@@ -10070,7 +10070,6 @@ static
 
 
 
-	
 begin atold;
 
 	push( ebp );
@@ -10342,6 +10341,7 @@ begin atold;
 	fbld( BCDValue );
 	
 	
+	
 	// Okay, we've got the mantissa into the FPU.  Now multiply the
 	// Mantissa by 10 raise the the value of the computed exponent
 	// (currently in edx).
@@ -10419,6 +10419,7 @@ begin atold;
 
 	mov( dest, eax );
 	fstp( (type real80 [eax])  );
+
 
 ExitAtold:	
 	pop( esi );			
@@ -10732,9 +10733,8 @@ begin e80Str;
 	pushfd();
 	pushad();
 	cld();
-	
-	finit();
 
+	finit();
 	if
 	(#{
 		cmp( (type dword r80[6]), 0 );

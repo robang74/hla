@@ -75,17 +75,19 @@ FILE *MsgOut;
 	#undef  windows_c 
 	#define unixOS
 	enum	OSChoice		targetOS 	= linux_os;
+	enum	OSChoice		hostOS	 	= linux_os;
 	enum	AsmChoice		SourceFmt 	= gas;
 	enum	gasChoice		gasSyntax	= stdGas;
 	enum	ObjFormat		ObjFmt 		= elf;
 	enum	LinkerChoice	linker 		= ld;
-			int				Internal 	= 1;
+			int				Internal 	= 0;
 
 #elif defined( freeBSD_c )
 
 	#undef  windows_c 
 	#define unixOS
 	enum	OSChoice		targetOS 	= freeBSD_os;
+	enum	OSChoice		hostOS	 	= freeBSD_os;
 	enum	AsmChoice		SourceFmt 	= gas;
 	enum	gasChoice		gasSyntax	= stdGas;
 	enum	ObjFormat		ObjFmt 		= elf;
@@ -97,6 +99,7 @@ FILE *MsgOut;
 	#undef  windows_c 
 	#define unixOS
 	enum	OSChoice		targetOS 	= macOS_os;
+	enum	OSChoice		hostOS	 	= macOS_os;
 	enum	AsmChoice		SourceFmt 	= gas;
 	enum	gasChoice		gasSyntax	= macGas;
 	enum	ObjFormat		ObjFmt 		= macho;
@@ -111,6 +114,7 @@ FILE *MsgOut;
 	#define windows_c
 	#undef  unixOS
 	enum	OSChoice		targetOS 	= windows_os;
+	enum	OSChoice		hostOS	 	= windows_os;
 	enum	AsmChoice		SourceFmt	= fasm;
 	enum	gasChoice		gasSyntax	= stdGas;
 	enum	ObjFormat		ObjFmt 		= coff;
@@ -405,6 +409,11 @@ _begin( Help )
 		"  -sx         Compile to GAS source files for Mac OSX only.\n"
 		"  -code1st    Emit machine instructions before data in code segment.\n"
 		"\n"
+	);
+	PressReturnToContinue();	
+	fprintf
+	(
+		MsgOut,	
 		"HLAPARSE Compiler/Back-end Assembler Output Control:\n"
 		"\n"
 		"  -c        Compile and assemble to object file only.\n"
@@ -437,14 +446,24 @@ _begin( Help )
 		"  -xx       Compile/assemble/link to object using GAS (Mac only).\n"
 		"  -xo       Compile/assemble/link to object internal FASM back-end.\n"
 		"\n"
+		"  -win32    Generate code for Win32 OS.\n"
+		"  -linux    Generate code for Linux OS.\n"
+		"  -freebsd  Generate code for FreeBSD OS.\n"
+		"  -macos    Generate code for Mac OSX.\n"
+		"\n"
+	);
+	PressReturnToContinue();	
+	fprintf
+	(
+		MsgOut,
+		"Linker Control:\n"
+		"\n"
+		"  -lxxxxx   Pass xxxxx as command line parameter to linker.\n"
 		"  -e:name   Executable output filename "
 							"(appends \".exe\" under Windows).\n"
 		"  -x:name   "
 			"Executable output filename (does not append \".exe\").\n"
 		"\n"
-		"Linker Control:\n"
-		"\n"
-		"  -lxxxxx   Pass xxxxx as command line parameter to linker.\n"
 		#ifdef windows_c
 			"  -m        Create a map file during link\n"
 			"  -w        Compile as windows app (default is console app).\n"
@@ -879,7 +898,60 @@ _begin( doCmdLine)
 	char	*hlaName;
 	char	*linkerName;
 	
-	// First, check the HLA environment variable. Default it to "HLA" if
+	
+	// Before doing anything else, scan the command line and see if there
+	// is a "win32", "linux", "freebsd", or "macos" argument.
+	
+	_for( CurArg = 1, CurArg < argc, ++CurArg )
+	
+		_if( argv[ CurArg ][ 0 ] == '-' )
+
+			strcpy( ucArg, &argv[ CurArg ][1] );
+			strupr( ucArg );
+
+			_if( _streq( ucArg, "WIN32" ))
+			
+				targetOS = windows_os;
+				SourceFmt	= fasm;
+				gasSyntax	= stdGas;
+				ObjFmt 		= coff;
+				linker 		= polink;
+				Internal 	= 0;
+				
+			_elseif( _streq( ucArg, "LINUX" ))
+			
+				targetOS 	= linux_os;
+				SourceFmt	= gas;
+				gasSyntax	= stdGas;
+				ObjFmt 		= elf;
+				linker 		= ld;
+				Internal 	= 0;
+				
+			_elseif( _streq( ucArg, "FREEBSD" ))
+			
+				targetOS 	= freeBSD_os;
+				SourceFmt	= gas;
+				gasSyntax	= stdGas;
+				ObjFmt 		= elf;
+				linker 		= ld;
+				Internal 	= 0;
+				
+			_elseif( _streq( ucArg, "MACOS" ))
+			
+				targetOS 	= macOS_os;
+				SourceFmt	= gas;
+				gasSyntax	= macGas;
+				ObjFmt 		= macho;
+				linker 		= ld;
+				Internal 	= 0;
+				
+			_endif
+			
+		_endif
+								
+	_endfor
+	
+	// Second, check the HLA environment variable. Default it to "HLA" if
 	// it doesn't exist or if it is assigned an unknown value.
 	
 	hlaName = getenv( "hla" );
@@ -1945,6 +2017,17 @@ _begin( doCmdLine)
 
 				Help();
 				_return 1;
+				
+			_elseif
+			(
+					_streq( ucArg, "WIN32" )
+				||	_streq( ucArg, "LINUX" )
+				||	_streq( ucArg, "FREEBSD" )
+				||	_streq( ucArg, "MACOS" )
+			)
+			
+				// Already processed these guys, so ignore them.
+				
 			
 			_else
 			
@@ -2918,7 +3001,14 @@ _begin( main )
 			sprintf
 			(
 				hlaCmdLn,
-				"hlaparse %s %s %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\"%s\"",
+				"hlaparse -%s %s %s %s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s\"%s\"",
+				_ifx( targetOS == windows_os, "WIN32",
+					_ifx( targetOS == linux_os, "LINUX",
+						_ifx( targetOS == freeBSD_os, "FREEBSD",
+							_ifx( targetOS == macOS_os, "MACOS", "WIN32" )
+						)
+					)
+				),
 				levelStrs[level],
 				Defines,
 				_ifx( tempPath != NULL && *tempPath != '\0', "-p\"", ""),
@@ -3074,6 +3164,12 @@ _begin( main )
 
 	_returnif( TotalErrors != 0 ) !IgnoreErrors;
 	_returnif( SourceOnly ) 0;
+	
+	// If the targetOS is not equal to the host OS, then stop
+	// at this point because it doesn't make sense to try and
+	// compile the .asm files on the host OS.
+	
+	_returnif( hostOS != targetOS ) 0;
 
 
 	// For each of the ".asm" files, produce an object file.
@@ -3211,7 +3307,7 @@ _begin( main )
 						(
 							CmdLine,
 							"cpp --traditional-cpp \"%s\" \"%s.s\"; " 
-							"as -o %s %s %s \"%s.s\"",
+							"as -arch i386 -o %s %s %s \"%s.s\"",
 							AsmName,
 							AsmName,
 							ObjName,
@@ -3225,7 +3321,7 @@ _begin( main )
 						sprintf
 						(
 							CmdLine, 
-							"as -o %s %s %s \"%s\"",
+							"as -arch i386 -o %s %s %s \"%s\"",
 							ObjName,
 							AsmOpts,
 							backEndAsmOptions,
@@ -3504,7 +3600,7 @@ _begin( main )
 		sprintf
 		( 
 			CmdLine, 
-			"ld %s %s  -o \"%s\" \0",
+			"ld -arch i386 %s %s  -o \"%s\" \0",
 			linkerOptions,
 			LinkOpts,
 			ExeName

@@ -790,7 +790,11 @@ _begin( StrFunc )
 	_elseif( Value->v.pType == tReal80)                    
                                                      
 		Result->v.u.strval = s = malloc2( 26 );
-		e80Str( s, Value->v.u.fltval );
+		_if( e80Valid( Value->v.u.fltval ))
+		
+			e80Str( s, Value->v.u.fltval );
+			
+		_endif
 
 
 	/*

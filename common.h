@@ -51,7 +51,6 @@
 */
 
 #define sympost "__hla_"
-#define symsep "_$"
 
 
 #define CommentPrefixStr _ifx( assembler == gas, "//", ";")
@@ -593,6 +592,7 @@ extern int  fastNamespace;
 extern int  fastLookup;
 extern int  parmLookup;
 
+extern int	e80Valid( struct flt80 theConst );
 extern char *lowercase( char *str );
 extern void CheckLegalOptions( int options, int allowed );
 extern int FieldsAreCompatible( struct SymNode *Type, union YYSTYPE *Field );

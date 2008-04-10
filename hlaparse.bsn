@@ -327,6 +327,7 @@ struct	PatchListType	*PatchBaseList	= NULL;
 struct	SymNode			*ClassPtr 		= NULL;
 struct	SymNode			*ThisPtr		= NULL;
 struct	FwdRefLabelType	*FwdLabelsList	= NULL;
+struct	SymNode			**MainLocals	= NULL;
 
 
 
@@ -5064,7 +5065,7 @@ unit:
 		
 
 			/*
-			** Enter the program into the symbol table.
+			** Enter the unit name into the symbol table.
 			*/
 
 			CurLexLevel = 0;
@@ -5087,6 +5088,8 @@ unit:
 			);
 			$<s>$ = SymbolTable;
 			CurrentContext = SymbolTable;
+			CurrentContext->u.proc.Locals =  SymbolTable->Next;
+			MainLocals = &CurrentContext->u.proc.Locals;
 			CurOffset = -4;		/* Make room for display */
 			CurOffsetDir = -1;
 			_here;
@@ -5108,6 +5111,12 @@ unit:
 				yyerror( "Identifier must match unit name" );
 
 			_endif
+			
+			// Reset the MainLocals (unit->u.proc.locals) to point
+			// at the current local symbol table before we start
+			// checking forward and static lists.
+			
+			*MainLocals = SymbolTable;
 
 			/*
 			** Check to ensure that all forward declared procedures
@@ -5439,6 +5448,8 @@ pgm:
 		);
 		$<s>$ = SymbolTable;
 		CurrentContext = SymbolTable;
+		CurrentContext->u.proc.Locals =  SymbolTable->Next;
+		MainLocals = &CurrentContext->u.proc.Locals;
 		CurOffset = -4;		/* Make room for display */
 		CurOffsetDir = -1;
 
@@ -5509,6 +5520,12 @@ pgm:
 		_initialize_ = $<s>4->Next;
 		_finalize_ = $<s>4;
 
+			
+		// Reset the MainLocals (unit->u.proc.locals) to point
+		// at the current local symbol table before we start
+		// checking forward and static lists.
+		
+		*MainLocals = SymbolTable;
 
 		/*
 		** Check to ensure that all forward declared procedures
@@ -12914,7 +12931,7 @@ InsertProcSym:
 			_here;
 			assert( $<idStr>-4 != NULL );
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>-4, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>-4, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -12992,7 +13009,7 @@ InsertEnum:
 				_here;
 				assert( $<idStr>-2 != NULL );
 
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>-2, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>-2, LblCntr++ );
 				sn = hlastrdup2( StaticName );
 				InsertSym
 				( 
@@ -18203,6 +18220,7 @@ procs:
 					PushBackStr( $<s>15->u.strval );
 
 				_endif
+				_here;
 
 			}
 			Stmts		/* $21 */
@@ -18214,7 +18232,8 @@ procs:
 				struct SymNode			*s;
 				struct SymNode			*d;
 
-
+				_here;
+				
 				/*
 				** If we've got any pass by value/result or
 				** pass by result parameters, we've got to
@@ -24462,7 +24481,7 @@ FwdMethod:
 
 			sym = lookupin( $<s>1->TrueName, $<s>1->u.proc.parms );
 			
-			sprintf( StaticName, "%s" symsep "%d", $<s>1->TrueName, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<s>1->TrueName, LblCntr++ );
 			free2( vss $<s>1->StaticName );
 			$<s>1->StaticName = hlastrdup2( StaticName );
 			_if( sym != NULL )
@@ -25683,7 +25702,7 @@ ClassProc:
 			** Change the symbol's static ID at this point.
 			*/
 
-			sprintf( StaticName, "%s" symsep "%d", $<s>3->TrueName, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<s>3->TrueName, LblCntr++ );
 			$<s>3->StaticName = hlastrdup2( StaticName );
 
 			/*
@@ -28498,7 +28517,7 @@ EnterName:
 
 				_here;
 				assert( $<idStr>-3 != NULL );
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>-3, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>-3, LblCntr++ );
 				sn = hlastrdup2( StaticName ); 
 				InsertProc
 				(
@@ -28604,7 +28623,7 @@ EnterName4:
 
 				_here;
 				assert( $<idStr>-4 != NULL );
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>-4, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>-4, LblCntr++ );
 				sn = hlastrdup2( StaticName ); 
 				InsertProc
 				(
@@ -28714,7 +28733,7 @@ EnterIterName:
 
 				_here;
 				assert( $<idStr>-3 != NULL );
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>-3, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>-3, LblCntr++ );
 				sn = hlastrdup2( StaticName ); 
 				InsertProc
 				(
@@ -28824,7 +28843,7 @@ EnterIterName4:
 
 				_here;
 				assert( $<idStr>-4 != NULL );
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>-4, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>-4, LblCntr++ );
 				sn = hlastrdup2( StaticName ); 
 				InsertProc
 				(
@@ -30859,7 +30878,7 @@ FwdLabels:
 				temp->Next = FwdLabelsList;
 				temp->label = hlastrdup2( $<idStr>2 );
 				temp->lexLevel = CurLexLevel;
-				sprintf( sn, "%s" symsep "%d", $<idStr>2, LblCntr++ );
+				sprintf( sn, "%s" sympost "%d", $<idStr>2, LblCntr++ );
 				temp->StaticName = hlastrdup2( sn );
 				temp->isExternal = 0;
 				FwdLabelsList = temp;
@@ -30887,7 +30906,7 @@ FwdLabels:
 					// The symbol has been previously referenced but
 					// is not yet defined.  Create a static name for it.
 					
-					sprintf( sn, "%s" symsep "%d", $<idStr>2, LblCntr++ );
+					sprintf( sn, "%s" sympost "%d", $<idStr>2, LblCntr++ );
 				
 				_endif
 			
@@ -39931,7 +39950,7 @@ StaticPtrToProcUninit:
 			_here;
 			assert( $<idStr>1 != NULL );
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			CreatePtrToProc( $<idStr>1, $<s>6, sn, cStatic );
@@ -40419,7 +40438,7 @@ StaticPtrToProcInit:
 			_here;
 			assert( $<idStr>1 != NULL );
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			CreatePtrToProc( $<idStr>1, $<s>6, sn, cStatic );
@@ -40782,7 +40801,7 @@ StaticPtrToUser:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -40977,7 +40996,7 @@ StaticPtrToBuiltIn:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -41158,7 +41177,7 @@ StaticSingleTypeInit:
 
 			_else
 			
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 				sn = hlastrdup2( StaticName );
 
 				InsertSym
@@ -41575,7 +41594,7 @@ StaticArrayInit:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			/*
@@ -41765,7 +41784,7 @@ StaticArrayInit:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			/*
@@ -42128,7 +42147,7 @@ StaticPtrToUserNoInit:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -42310,7 +42329,7 @@ StaticPtrBuiltInNoInit:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -42416,7 +42435,7 @@ StaticSingleType:
 
 			_else
 			
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 				sn = hlastrdup2( StaticName );
 				InsertSym
 				( 
@@ -42670,7 +42689,7 @@ StaticArray:
 			_endif
 
 			bt = GetBaseType( $<s>3 );
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 
 			/*
 			** Make sure this is a legal variable type
@@ -43302,7 +43321,7 @@ StaticRecord:
 					CurOffsetDir = $<ru.SaveDir>3;	
 					AddOffset1st = $<ru.SaveAdd1st>3;	
 
-					sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+					sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 					InsertSym
 					(
 						$<idStr>1,
@@ -43447,7 +43466,7 @@ StaticUnion:
 					CurOffsetDir = $<v.u.intval>4;
 					AddOffset1st = $<v.u.unsval>5;
 
-					sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+					sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 					InsertSym
 					(
 						$<idStr>1,
@@ -44470,7 +44489,7 @@ ReadOnlyDef:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			CreatePtrToProc( $<idStr>1, $<s>6, sn, cStatic );
@@ -44557,7 +44576,7 @@ ReadOnlyDef:
 			_here;
 			assert( $<idStr>1 != NULL );
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 
 			CreatePtrToProc( $<idStr>1, $<s>6, sn, cStatic );
@@ -44771,7 +44790,7 @@ ReadOnlyDef:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -44850,7 +44869,7 @@ ReadOnlyDef:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -45054,7 +45073,7 @@ ReadOnlyDef:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -45121,7 +45140,7 @@ ReadOnlyDef:
 
 			_endif
 
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 			sn = hlastrdup2( StaticName );
 			InsertSym
 			( 
@@ -45245,7 +45264,7 @@ ReadOnlyDef:
 
 			_else
 			
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 				sn = hlastrdup2( StaticName );
 				InsertSym
 				( 
@@ -45354,7 +45373,7 @@ ReadOnlyDef:
 
 			_else
 			
-				sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+				sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 				sn = hlastrdup2( StaticName );
 				InsertSym
 				( 
@@ -45571,7 +45590,7 @@ ReadOnlyDef:
 			_endif
 
 			//bt = GetBaseType( $<s>3 );
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 
 			/*
 			** Make sure this is a legal variable type
@@ -45793,7 +45812,7 @@ ReadOnlyDef:
 			_endif
 
 			bt = GetBaseType( $<s>3 );
-			sprintf( StaticName, "%s" symsep "%d", $<idStr>1, LblCntr++ );
+			sprintf( StaticName, "%s" sympost "%d", $<idStr>1, LblCntr++ );
 
 			/*
 			** Make sure this is a legal variable type
@@ -46576,7 +46595,7 @@ StaticExpr:
 					sprintf
 					( 
 						StaticName, 
-						"%s" symsep "%d", 
+						"%s" sympost "%d", 
 						$<idStr>2, 
 						LblCntr++ 
 					);
@@ -46663,7 +46682,7 @@ StaticExpr:
 				sList = searchStatic( $<idStr>2 );
 				_if( sList == NULL )
 				
-					sprintf( StaticName, "%s" symsep "%d", $<idStr>2, LblCntr );
+					sprintf( StaticName, "%s" sympost "%d", $<idStr>2, LblCntr );
 
 					/*
 					** Add a node to the StaticList so we can check
@@ -46685,7 +46704,7 @@ StaticExpr:
 					sprintf
 					( 
 						StaticName, 
-						"(%s" symsep "%d+%lu)", 
+						"(%s" sympost "%d+%lu)", 
 						$<idStr>2, 
 						LblCntr++, 
 						$<v.u.unsval>4 
@@ -62959,7 +62978,7 @@ OneStmt:
 					// so create a new StaticName for it.
 					
 					StaticName = malloc2( strlen( $<idStr>2 ) + 16);
-					sprintf( StaticName, "%s" symsep "%d", $<idStr>2, LblCntr++ );
+					sprintf( StaticName, "%s" sympost "%d", $<idStr>2, LblCntr++ );
 					sn = hlastrdup2( StaticName );
 
 				_endif
@@ -63082,7 +63101,7 @@ OneStmt:
 					// so create a new StaticName for it.
 					
 					StaticName = malloc2( strlen( $<idStr>2 ) + 16);
-					sprintf( StaticName, "%s" symsep "%d", $<idStr>2, LblCntr++ );
+					sprintf( StaticName, "%s" sympost "%d", $<idStr>2, LblCntr++ );
 					sn = hlastrdup2( StaticName );
 					
 				_endif
@@ -66797,7 +66816,7 @@ SingleStmt:
 			char label[64];
 			
 			_here;
-			sprintf( label, "L%d_here" sympost, LblCntr++ );
+			sprintf( label, "here" sympost "%d", LblCntr++ );
 			EmitStmtLbl( label );
 			EmitCallLabel( label );
 			PushBackStr( ";" );
@@ -66818,12 +66837,12 @@ SingleStmt:
 			
 			_here;
 			disp = CheckOrdinalSize( YYS &$<v>4, 32 );
-			sprintf( label, "L%d_here" sympost, LblCntr );
+			sprintf( label, "here" sympost "%d", LblCntr );
 			EmitStmtLbl( label );
 			sprintf
 			( 
 				label, 
-				"(L%d_here" sympost "%s%d)" , 
+				"(here" sympost "%d%s%d)" , 
 				LblCntr++, 
 				_ifx( disp < 0, "", "+"),
 				disp 
@@ -68246,7 +68265,7 @@ SingleStmt:
 				
 				IsCompatible( &real80_ste, YYS &$<v>3 );
 
-				sprintf( name, "L%d_fpconst" sympost, LblCntr++ );
+				sprintf( name, "fpconst" sympost "%d", LblCntr++ );
 				startStrSeg();
 				OutValue( name, &real64_ste, YYS &$<v>3 );
 				endStrSeg();
@@ -68934,7 +68953,7 @@ SingleStmt:
 				
 				IsCompatible( &real80_ste, YYS &$<v>3 );
 
-				sprintf( name, "L%d_fpconst" sympost, LblCntr++ );
+				sprintf( name, "fpconst" sympost "%d", LblCntr++ );
 				startStrSeg();
 				OutValue( name, &real80_ste, YYS &$<v>3 );
 				endStrSeg();
@@ -72363,7 +72382,7 @@ SingleStmt:
 			
 			// Create the character set constant in memory:
 			
-			sprintf( sn, "cset_%d" sympost, LblCntr++ );
+			sprintf( sn, "cset" sympost "%d", LblCntr++ );
 			startStrSeg();
 			OutValue( sn, &cset_ste, YYS &$<v>5 );
 			endStrSeg();
@@ -72788,7 +72807,7 @@ SingleStmt:
 					temp->label = hlastrdup2( $<idStr>5 );
 					temp->lexLevel = CurLexLevel;
 					temp->isExternal = 0;
-					sprintf( sn, "%s" symsep "%d", $<idStr>5, LblCntr++ );
+					sprintf( sn, "%s" sympost "%d", $<idStr>5, LblCntr++ );
 					temp->StaticName = hlastrdup2( sn );
 					FwdLabelsList = temp;
 					initAdrs2( &adrs, sn, -1, -1, 0, 0 );
@@ -72876,7 +72895,7 @@ SingleStmt:
 					temp->label = hlastrdup2( $<idStr>3 );
 					temp->lexLevel = CurLexLevel;
 					temp->isExternal = 0;
-					sprintf( sn, "%s" symsep "%d", $<idStr>3, LblCntr++ );
+					sprintf( sn, "%s" sympost "%d", $<idStr>3, LblCntr++ );
 					temp->StaticName = hlastrdup2( sn );
 					FwdLabelsList = temp;
 					initAdrs2( &adrs, sn, -1, -1, 0, 0 );
@@ -72909,7 +72928,7 @@ SingleStmt:
 			char 			label[256];
 
 			lbl = EmitString( $<v.u.strval>5 );
-			sprintf( label, "L%d_str" sympost, lbl );
+			sprintf( label, "str" sympost "%d", lbl );
 			initAdrs2( &adrs, label, -1, -1, 0, 0 );
 			EmitLea_m_r( &adrs, $<reg.encoding>3 );
 				
@@ -72939,7 +72958,7 @@ SingleStmt:
 			char 			label[256];
 
 			lbl = EmitString( $<v.u.strval>3 );
-			sprintf( label, "L%d_str" sympost, lbl );
+			sprintf( label, "str" sympost "%d", lbl );
 			initAdrs2( &adrs, label, -1, -1, 0, 0 );
 			EmitLea_m_r( &adrs, $<reg.encoding>5 );
 				
@@ -72970,7 +72989,7 @@ SingleStmt:
 			char			label[256];
 
 			lbl = EmitString( $<v.u.strval>4 );
-			sprintf( label, "L%d_str" sympost, lbl );
+			sprintf( label, "str" sympost "%d", lbl );
 			initAdrs2( &adrs, label, -1, -1, 0, 0 );
 			EmitLea_m_r( &adrs, $<reg.encoding>6 );
 				
@@ -73001,7 +73020,7 @@ SingleStmt:
 			char 			label[256];
 
 			lbl = EmitString( $<v.u.strval>6 );
-			sprintf( label, "L%d_str" sympost, lbl );
+			sprintf( label, "str" sympost "%d", lbl );
 			initAdrs2( &adrs, label, -1, -1, 0, 0 );
 			EmitLea_m_r( &adrs, $<reg.encoding>3 );
 				
@@ -73041,7 +73060,7 @@ SingleStmt:
 			sprintf
 			( 
 				label, 
-				"L%d_leaData" sympost, 
+				"leaData" sympost "%d", 
 				lbl
 			);
 			
@@ -73091,7 +73110,7 @@ SingleStmt:
 			sprintf
 			( 
 				label, 
-				"L%d_leaData" sympost, 
+				"leaData" sympost "%d", 
 				lbl
 			);
 			
@@ -75675,7 +75694,7 @@ SingleStmt:
 				divisor = CheckUnsigned( YYS &$<v>3, size );
 
 			_endif
-			sprintf( label, "L%d_divisor" sympost, LblCntr++ );
+			sprintf( label, "divisor" sympost "%d", LblCntr++ );
 			startStrSeg();
 			instrSize =
 				_ifx
@@ -75948,7 +75967,7 @@ SingleStmt:
 				mplier = CheckUnsigned( YYS &$<v>3, size );
 
 			_endif
-			sprintf( label, "L%d_mplier" sympost, LblCntr++ );
+			sprintf( label, "mplier" sympost "%d", LblCntr++ );
 			startStrSeg();
 			
 			instrSize =
@@ -76433,7 +76452,7 @@ SingleStmt:
 			char label[64];
 			
 			_here;
-			sprintf( label, "L%d_here" sympost, LblCntr++ );
+			sprintf( label, "here" sympost "%d", LblCntr++ );
 			EmitStmtLbl( label );
 			EmitCondJump( $<u>1, label );
 			PushBackStr( ";" );
@@ -76454,12 +76473,12 @@ SingleStmt:
 			
 			_here;
 			disp = CheckOrdinalSize( YYS &$<v>4, 32 );
-			sprintf( label, "L%d_here" sympost, LblCntr );
+			sprintf( label, "here" sympost "%d", LblCntr );
 			EmitStmtLbl( label );
 			sprintf
 			( 
 				label, 
-				"(L%d_here" sympost "%s%d)" , 
+				"(here" sympost "%d%s%d)" , 
 				LblCntr++, 
 				_ifx( disp < 0, "", "+"),
 				disp 
@@ -78136,7 +78155,7 @@ SingleStmt:
 			char label[64];
 			
 			_here;
-			sprintf( label, "L%d_here" sympost, LblCntr++ );
+			sprintf( label, "here" sympost "%d", LblCntr++ );
 			EmitStmtLbl( label );
 			EmitJmpLabel( label );
 			PushBackStr( ";" );
@@ -78157,12 +78176,12 @@ SingleStmt:
 			
 			_here;
 			disp = CheckOrdinalSize( YYS &$<v>4, 32 );
-			sprintf( label, "L%d_here" sympost, LblCntr );
+			sprintf( label, "here" sympost "%d", LblCntr );
 			EmitStmtLbl( label );
 			sprintf
 			( 
 				label, 
-				"(L%d_here" sympost "%s%d)" , 
+				"(here" sympost "%d%s%d)" , 
 				LblCntr++, 
 				_ifx( disp < 0, "", "+"),
 				disp 
@@ -78589,7 +78608,7 @@ SingleStmt:
 			);
 			EmitBackPatchds
 			( 
-				"L%d_exception" sympost, 
+				"exception" sympost "%d", 
 				EndTryLabel + 1, 
 				"Raise" sympost 
 			);
@@ -78617,7 +78636,12 @@ SingleStmt:
 				"try..unprotected..endtry block without exception handler", 
 				"endtry" 
 			);
-			EmitBackPatchds( "L%d_exception" sympost, EndTryLabel+1, "Raise" sympost ); 
+			EmitBackPatchds
+			( 
+				"exception" sympost "%d", 
+				EndTryLabel+1, 
+				"Raise" sympost 
+			); 
 			EndTryLabel = $<v.u.intval>2;
 			$<returns>$ = NULL;
 		}
@@ -78639,16 +78663,16 @@ SingleStmt:
 
 			char label[ 256 ];
 
-			sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+			sprintf( label, "endtry" sympost "%d", EndTryLabel );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exception" sympost, EndTryLabel + 1 );
+			EmitStmtLblNum( "exception" sympost "%d", EndTryLabel + 1 );
 		}
 
 		Stmts				/* $7 */
 		endtryTkn			/* $8 */
 		{					/* $9 */
 
-			EmitStmtLblNum( "L%d_endtry" sympost, EndTryLabel ); 
+			EmitStmtLblNum( "endtry" sympost "%d", EndTryLabel ); 
 			EndTryLabel = $<v.u.intval>2;
 			$<returns>$ = NULL;
 		}
@@ -78675,9 +78699,9 @@ SingleStmt:
 
 			char label[ 256 ];
 
-			sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+			sprintf( label, "endtry" sympost "%d", EndTryLabel );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exception" sympost, EndTryLabel + 1 );
+			EmitStmtLblNum( "exception" sympost "%d", EndTryLabel + 1 );
 
 		}
 
@@ -78685,7 +78709,7 @@ SingleStmt:
 		endtryTkn			/* $10 */
 		{					/* $11 */
 
-			EmitStmtLblNum( "L%d_endtry" sympost, EndTryLabel );
+			EmitStmtLblNum( "endtry" sympost "%d", EndTryLabel );
 			EndTryLabel = $<v.u.intval>2;
 			$<returns>$ = NULL;
 		}
@@ -78727,11 +78751,11 @@ SingleStmt:
 				char label[ 256 ];
 				char constant[ 256 ];
 
-				sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+				sprintf( label, "endtry" sympost "%d", EndTryLabel );
 				EmitJmpLabel( label );
-				EmitStmtLblNum( "L%d_exception" sympost, EndTryLabel+1 );
+				EmitStmtLblNum( "exception" sympost "%d", EndTryLabel+1 );
 				EmitGeneric_i_r( cmp_instr, YYS &$<v>6, reg_eax );
-				sprintf( label, "L%lu_exception" sympost, $<v.u.unsval>$ );
+				sprintf( label, "exception" sympost "%lu", $<v.u.unsval>$ );
 				EmitCondJump( jne_instr, label );
 				//processCondJump( jne_instr, label, 0,0 );
 
@@ -78750,8 +78774,13 @@ SingleStmt:
 		endtryTkn				/* $13 */
 		{						/* $14 */
 
-			EmitBackPatchds( "L%lu_exception" sympost, $<v.u.unsval>12, "Raise" sympost );
-			EmitStmtLblNum( "L%d_endtry" sympost, EndTryLabel );
+			EmitBackPatchds
+			( 
+				"exception" sympost "%lu", 
+				$<v.u.unsval>12, 
+				"Raise" sympost 
+			);
+			EmitStmtLblNum( "endtry" sympost "%d", EndTryLabel );
 			EndTryLabel = $<v.u.intval>2;
 			(void) $<v.u.intval>11;	// shut up bison
 			$<returns>$ = NULL;
@@ -78798,11 +78827,11 @@ SingleStmt:
 				char label[ 256 ];
 				char constant[16];
 			 
-				sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+				sprintf( label, "endtry" sympost "%d", EndTryLabel );
 				EmitJmpLabel( label );
-				EmitStmtLblNum( "L%d_exception" sympost, EndTryLabel+1 );
+				EmitStmtLblNum( "exception" sympost "%d", EndTryLabel+1 );
 				EmitGeneric_i_r( cmp_instr, YYS &$<v>9, reg_eax );
-				sprintf( label, "L%lu_exception" sympost, $<v.u.unsval>$ );
+				sprintf( label, "exception" sympost "%lu", $<v.u.unsval>$ );
 				EmitCondJump( jne_instr, label );
 
 
@@ -78820,8 +78849,13 @@ SingleStmt:
 		endtryTkn				/* $15 */
 		{						/* $16 */
 
-			EmitBackPatchds( "L%d_exception" sympost, $<v.u.intval>14, "Raise" sympost );
-			EmitStmtLblNum( "L%d_endtry" sympost, EndTryLabel );
+			EmitBackPatchds
+			( 
+				"exception" sympost "%d", 
+				$<v.u.intval>14, 
+				"Raise" sympost 
+			);
+			EmitStmtLblNum( "endtry" sympost "%d", EndTryLabel );
 			EndTryLabel = $<v.u.intval>2;
 			$<returns>$ = NULL;
 			(void) $<v.u.intval>13;	// shut up bison
@@ -78881,9 +78915,9 @@ LastException:
 		{
 			char label[ 256 ];
 
-			sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+			sprintf( label, "endtry" sympost "%d", EndTryLabel );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exception" sympost, $<v.u.intval>0 );
+			EmitStmtLblNum( "exception" sympost "%d", $<v.u.intval>0 );
 		}
 		Stmts
 		{
@@ -78916,11 +78950,11 @@ OneException:
 			_endif
 			$<v.u.intval>$ = LblCntr++;
 
-			sprintf( label, "L%d_endtry" sympost, EndTryLabel );
+			sprintf( label, "endtry" sympost "%d", EndTryLabel );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exception" sympost, $<v.u.intval>0 );
+			EmitStmtLblNum( "exception" sympost "%d", $<v.u.intval>0 );
 			EmitGeneric_i_r( cmp_instr, YYS &$<v>3, reg_eax );
-			sprintf( label, "L%lu_exception" sympost, $<v.u.unsval>$ );
+			sprintf( label, "exception" sympost "%lu", $<v.u.unsval>$ );
 			EmitCondJump( jne_instr, label );
 		}
 		Stmts				/* $6 */
@@ -78950,7 +78984,7 @@ StartTry:
 			EndTryLabel = LblCntr++;	/* Label for the endtry		*/
 			++LblCntr;					/* Label for the 1st excptn	*/
 
-			sprintf( symbol, "L%d_exception" sympost, EndTryLabel+1 );
+			sprintf( symbol, "exception" sympost "%d", EndTryLabel+1 );
 			PushStaticAdrs( symbol );
 			push_r( reg_ebp );
 
@@ -79108,18 +79142,18 @@ SingleStmt:
 			char tmpLabel[256];
 
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, $<labels.l1.label1>5 );
+			EmitStmtLblNum( "continue" sympost "%d", $<labels.l1.label1>5 );
 			asmPuts( $<v.u.strval>11 );
 			asmPutc( '\n' );
-			EmitStmtLblNum( "L%d_StartFor" sympost, $<labels.l1.label1>5 );
-			sprintf( tmpLabel, "L%d_for" sympost, $<labels.l1.label1>5 );
+			EmitStmtLblNum( "StartFor" sympost "%d", $<labels.l1.label1>5 );
+			sprintf( tmpLabel, "for" sympost "%d", $<labels.l1.label1>5 );
 			EmitBooleanExpr
 			( 
 				$<opnode>6, 
 				tmpLabel,
 				1 
 			);
-			EmitStmtLblNum( "L%d_exitloop" sympost,	$<labels.l1.label1>5 );
+			EmitStmtLblNum( "exitloop" sympost "%d",	$<labels.l1.label1>5 );
 			NewLn();
 
 			/*
@@ -79171,11 +79205,11 @@ SingleStmt:
 			char tmpLabel[32];
 			
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, $<labels.l1.label1>5 );
+			EmitStmtLblNum( "continue" sympost "%d", $<labels.l1.label1>5 );
 			asmPuts( $<v.u.strval>11 );
 			asmPutc( '\n' );
-			EmitStmtLblNum( "L%d_StartFor" sympost, $<labels.l1.label1>5 );
-			sprintf( tmpLabel, "L%d_for" sympost, $<labels.l1.label1>5 );
+			EmitStmtLblNum( "StartFor" sympost "%d", $<labels.l1.label1>5 );
+			sprintf( tmpLabel, "for" sympost "%d", $<labels.l1.label1>5 );
 			EmitBooleanExpr
 			( 
 				$<opnode>6, 
@@ -79189,7 +79223,7 @@ SingleStmt:
 		{				/* $19 */
 		
 			_here;
-			EmitStmtLblNum( "L%d_exitloop" sympost,	$<labels.l1.label1>5 );
+			EmitStmtLblNum( "exitloop" sympost "%d",	$<labels.l1.label1>5 );
 			NewLn();
 
 			/*
@@ -79264,9 +79298,9 @@ EmitForLabel:
 
 			$<labels.l1.label1>$ = LblCntr++;
 			NewLn();
-			sprintf( label, "L%d_StartFor" sympost, $<labels.l1.label1>$ );
+			sprintf( label, "StartFor" sympost "%d", $<labels.l1.label1>$ );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_for" sympost, $<labels.l1.label1>$ );
+			EmitStmtLblNum( "for" sympost "%d", $<labels.l1.label1>$ );
 			StartOfStmt = asmBuf->offset; 
 			_here;
 		}
@@ -79306,15 +79340,15 @@ SingleStmt:
 			/*
 			** Emit the loop termination test.
 			*/
-			EmitStmtLblNum( "L%d_continue" sympost, $<labels.l1.label1>3 );
-			sprintf( tmpLabel, "L%d_while" sympost, $<labels.l1.label1>3 );
+			EmitStmtLblNum( "continue" sympost "%d", $<labels.l1.label1>3 );
+			sprintf( tmpLabel, "while" sympost "%d", $<labels.l1.label1>3 );
 			EmitBooleanExpr
 			( 
 				$<opnode>4, 
 				tmpLabel,
 				1 
 			);
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.l1.label1>3 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.l1.label1>3 );
 			NewLn();
 
 			/*
@@ -79367,8 +79401,8 @@ SingleStmt:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, $<labels.l1.label1>3 );
-			sprintf( label, "L%d_while" sympost, $<labels.l1.label1>3 );
+			EmitStmtLblNum( "continue" sympost "%d", $<labels.l1.label1>3 );
+			sprintf( label, "while" sympost "%d", $<labels.l1.label1>3 );
 			EmitBooleanExpr
 			( 
 				$<opnode>4, 
@@ -79388,7 +79422,7 @@ SingleStmt:
 			** Emit the target for a break statement:
 			*/
 						
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.l1.label1>3 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.l1.label1>3 );
 			NewLn();
 
 			/*
@@ -79418,9 +79452,9 @@ EmitWhileLabel:
 
 			$<labels.l1.label1>$ = LblCntr++;
 			$<labels.l2.label2>$ = LblCntr++;
-			sprintf( label, "L%d_continue" sympost, $<labels.l1.label1>$ );
+			sprintf( label, "continue" sympost "%d", $<labels.l1.label1>$ );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_while" sympost, $<labels.l1.label1>$ );
+			EmitStmtLblNum( "while" sympost "%d", $<labels.l1.label1>$ );
 			StartOfStmt = asmBuf->offset;
 			_here;
 		}
@@ -79485,11 +79519,11 @@ SingleStmt:
 			*/
 
 			_here;
-			sprintf( label, "L%d_while" sympost, $<labels.l1.label1>4 );
+			sprintf( label, "while" sympost "%d", $<labels.l1.label1>4 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.l1.label1>4 );
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.label4>4 );
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l1.label1>4 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.l1.label1>4 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.label4>4 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l1.label1>4 );
 			NewLn();
 
 			/*
@@ -79546,10 +79580,10 @@ SingleStmt:
 			*/
 			
 			_here;
-			sprintf( label, "L%d_while" sympost, $<labels.l1.label1>4 );
+			sprintf( label, "while" sympost "%d", $<labels.l1.label1>4 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.l1.label1>4 );
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l1.label1>4 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.l1.label1>4 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l1.label1>4 );
 			_here;
 		}
 		Stmts			/* $14 */
@@ -79561,7 +79595,7 @@ SingleStmt:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<labels.label4>4 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<labels.label4>4 );
 			NewLn();
 
 			/*
@@ -79586,8 +79620,8 @@ EmitWhileCode:
 			TrueLabel = $<labels.l1.label1>$;
 			FalseLabel = $<labels.l1.label1>$;
 			NewLn();
-			EmitStmtLblNum( "L%d_while" sympost, $<labels.l1.label1>$ ); 
-			EmitStmtLblNum( "L%d_continue" sympost, $<labels.label4>$ );
+			EmitStmtLblNum( "while" sympost "%d", $<labels.l1.label1>$ ); 
+			EmitStmtLblNum( "continue" sympost "%d", $<labels.label4>$ );
 			_here; 
 		}
 	;
@@ -79661,14 +79695,14 @@ SingleStmt:
 			** Emit the loop termination test.
 			*/
 
-			sprintf( tmpLabel, "L%d_repeat" sympost, $<v.u.intval>4 );
+			sprintf( tmpLabel, "repeat" sympost "%d", $<v.u.intval>4 );
 			EmitBooleanExpr
 			( 
 				$<opnode>10, 
 				tmpLabel,
 				0 
 			);
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<v.u.intval>4 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<v.u.intval>4 );
 			NewLn();
 
 			/*
@@ -79711,8 +79745,8 @@ EmitRepeatLabel:
 			$<v.u.intval>$ = LblCntr;
 			FalseLabel = LblCntr++;
 			TrueLabel = $<v.u.intval>$;
-			EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
-			EmitStmtLblNum( "L%d_repeat" sympost, FalseLabel );
+			EmitStmtLblNum( "false" sympost "%d", FalseLabel );
+			EmitStmtLblNum( "repeat" sympost "%d", FalseLabel );
 			_here;
 		}
 	;
@@ -79748,8 +79782,8 @@ SingleStmt:
 		{				/* $14 */
 
 			_here;
-			EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
-			EmitStmtLblNum( "L%d_exitloop" sympost, TrueLabel );
+			EmitStmtLblNum( "true" sympost "%d", TrueLabel );
+			EmitStmtLblNum( "exitloop" sympost "%d", TrueLabel );
 			NewLn();
 
 			/*
@@ -79790,7 +79824,7 @@ PutContinueLbl:
 		{
 		
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, abs( BreakLbl ) );
+			EmitStmtLblNum( "continue" sympost "%d", abs( BreakLbl ) );
 			_here;
 		}
 	;
@@ -79824,7 +79858,7 @@ SingleStmt:
 			_here;
 			$<v.u.intval>$ = -( LblCntr++ );
 
-			sprintf( symbol, "L%ld_exitfor" sympost, -$<v.u.intval>$ );
+			sprintf( symbol, "exitfor" sympost "%ld", -$<v.u.intval>$ );
 			PushStaticAdrs( symbol );
 			EmitCallLabel( $<s>2->StaticName );
 			push_r( reg_ebp );
@@ -79838,10 +79872,10 @@ SingleStmt:
 		endforTkn			/* $8 */
 		{					/* $9 */
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, abs( BreakLbl ) );
+			EmitStmtLblNum( "continue" sympost "%d", abs( BreakLbl ) );
 			pop_r( reg_ebp );
 			ret_instr( 4 );
-			EmitStmtLblNum( "L%d_exitfor" sympost, -$<v.u.intval>4 );
+			EmitStmtLblNum( "exitfor" sympost "%d", -$<v.u.intval>4 );
 			NewLn();
 
 			/*
@@ -80061,7 +80095,7 @@ SingleStmt:
 
 					initAdrs( &yysAdrs, reg_esi, -1, 0, 0 );
 					EmitMov_m_r( &yysAdrs, reg_edi, 4 );
-					sprintf( symbol, "L%ld_exitfor" sympost, -$<v.u.intval>$ );
+					sprintf( symbol, "exitfor" sympost "%ld", -$<v.u.intval>$ );
 					PushStaticAdrs( symbol );
 					initAdrs1( &yysAdrs, reg_edi, $<adrs.Sym>3->Offset );
 					EmitCall_m( &yysAdrs );
@@ -80098,10 +80132,10 @@ SingleStmt:
 		endforTkn			/* $10 */
 		{					/* $11 */
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, abs( BreakLbl ) );
+			EmitStmtLblNum( "continue" sympost "%d", abs( BreakLbl ) );
 			pop_r( reg_ebp );
 			ret_instr( 4 );
-			EmitStmtLblNum( "L%d_exitfor" sympost, -$<v.u.intval>6 );
+			EmitStmtLblNum( "exitfor" sympost "%d", -$<v.u.intval>6 );
 			NewLn();
 
 			/*
@@ -80338,7 +80372,7 @@ SingleStmt:
 					sprintf
 					( 
 						label, 
-						"L%ld_exitfor" sympost, 
+						"exitfor" sympost "%ld", 
 						-$<v.u.intval>$
 					);
 					PushStaticAdrs( label );
@@ -80384,10 +80418,10 @@ SingleStmt:
 		endforTkn			/* $10 */
 		{					/* $11 */
 			_here;
-			EmitStmtLblNum( "L%d_continue" sympost, abs( BreakLbl ) );
+			EmitStmtLblNum( "continue" sympost "%d", abs( BreakLbl ) );
 			pop_r( reg_ebp );
 			ret_instr( 4 );
-			EmitStmtLblNum( "L%d_exitfor" sympost, -$<v.u.intval>7 );
+			EmitStmtLblNum( "exitfor" sympost "%d", -$<v.u.intval>7 );
 			NewLn();
 
 			/*
@@ -80454,8 +80488,8 @@ SingleStmt:
 
 			$<v.u.intval>$ = LblCntr++;
 			++LblCntr;
-			EmitStmtLblNum( "L%d_forever" sympost, $<v.u.intval>$ + 1 );
-			EmitStmtLblNum( "L%d_continue" sympost, $<v.u.intval>$ );
+			EmitStmtLblNum( "forever" sympost "%d", $<v.u.intval>$ + 1 );
+			EmitStmtLblNum( "continue" sympost "%d", $<v.u.intval>$ );
 			_here;
 		}
 		SaveBreakLbl	/* $3 */
@@ -80466,9 +80500,9 @@ SingleStmt:
 			char label[ 256 ];
 
 			_here;
-			sprintf( label, "L%ld_forever" sympost, $<v.u.intval>2 + 1 );
+			sprintf( label, "forever" sympost "%ld", $<v.u.intval>2 + 1 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_exitloop" sympost, $<v.u.intval>2 );
+			EmitStmtLblNum( "exitloop" sympost "%d", $<v.u.intval>2 );
 			NewLn();
 
 			/*
@@ -80534,7 +80568,7 @@ SingleStmt:
 			sprintf
 			(
 				msg,
-				"L%d_exit" sympost,
+				"exit" sympost "%d",
 				LblCntr++,
 				$<idStr>2
 			);
@@ -80819,7 +80853,7 @@ SingleStmt:
 					** the display and use that for this purpose.
 					*/
 
-					sprintf( tmpLabel, "L%d_exitif" sympost, LblCntr );
+					sprintf( tmpLabel, "exitif" sympost "%d", LblCntr );
 					EmitBooleanExpr
 					( 
 						$<opnode>4, 
@@ -80832,7 +80866,7 @@ SingleStmt:
 					EmitMov_m_r( &yysAdrs, reg_esp, 4 );
 					pop_r( reg_ebp );
 					ret_instr( _ifx( cNode->SizeParms > 0, cNode->SizeParms, -1 ));
-					EmitStmtLblNum( "L%d_exitif" sympost, LblCntr++ );
+					EmitStmtLblNum( "exitif" sympost "%d", LblCntr++ );
 
 
 				_elseif( cNode->IsProc == 2 )
@@ -80941,9 +80975,9 @@ SingleStmt:
 						)
 				)
 
-					EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
+					EmitStmtLblNum( "true" sympost "%d", TrueLabel );
 					EmitJmpLabel( cNode->StaticName );
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 				_elseif( cNode->IsProc == 1 )
 
@@ -80956,12 +80990,12 @@ SingleStmt:
 					** the display and use that for this purpose.
 					*/
 
-					EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
+					EmitStmtLblNum( "true" sympost "%d", TrueLabel );
 					initAdrs( &yysAdrs, reg_ebp, -1, 0, -( cNode->LexLevel + 1 ) * 4 );
 					EmitMov_m_r( &yysAdrs, reg_esp, 4);
 					pop_r( reg_ebp );
 					ret_instr( _ifx( cNode->SizeParms > 0, cNode->SizeParms, -1 ));
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 
 				_elseif( cNode->IsProc == 2 )
@@ -80970,9 +81004,9 @@ SingleStmt:
 					** Handle the main program here.
 					*/
 
-					EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
+					EmitStmtLblNum( "true" sympost "%d", TrueLabel );
 					EmitExit();
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 
 				_else
@@ -81036,7 +81070,7 @@ SingleStmt:
 			_if( BreakLbl > 0 )
 
 
-				sprintf( label, "L%d_exitloop" sympost, abs( BreakLbl ) );
+				sprintf( label, "exitloop" sympost "%d", abs( BreakLbl ) );
 				EmitJmpLabel( label );
 
 			_elseif( BreakLbl < 0 )
@@ -81054,7 +81088,7 @@ SingleStmt:
 					"on the stack",
 					"break"
 				);
-				sprintf( label, "L%d_exitfor" sympost, abs( BreakLbl ) );
+				sprintf( label, "exitfor" sympost "%d", abs( BreakLbl ) );
 				EmitJmpLabel( label );
 
 			_else
@@ -81085,7 +81119,7 @@ SingleStmt:
 			_here;
 			_if( BreakLbl > 0 )
 
-				sprintf( tmpLabel, "L%d_exitloop" sympost, BreakLbl );
+				sprintf( tmpLabel, "exitloop" sympost "%d", BreakLbl );
 				EmitBooleanExpr
 				(
 					$<opnode>4,
@@ -81108,7 +81142,7 @@ SingleStmt:
 					"on the stack",
 					"breakif"
 				);
-				sprintf( tmpLabel, "L%d_exitfor" sympost, abs( BreakLbl ));
+				sprintf( tmpLabel, "exitfor" sympost "%d", abs( BreakLbl ));
 				EmitBooleanExpr
 				(
 					$<opnode>4,
@@ -81150,13 +81184,13 @@ SingleStmt:
 
 				EmitBackPatchddc
 				(
-					"L%d_true" sympost,
+					"true" sympost "%d",
 					TrueLabel,
-					"L%d_exitloop" sympost,
+					"exitloop" sympost "%d",
 					BreakLbl,
 					"breakif"
 				);
-				EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+				EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 			_elseif( BreakLbl < 0 )
 
@@ -81175,13 +81209,13 @@ SingleStmt:
 				);
 				EmitBackPatchddc
 				(
-					"L%d_true" sympost,
+					"true" sympost "%d",
 					TrueLabel,
-					"L%d_exitloop" sympost,
+					"exitloop" sympost "%d",
 					abs( BreakLbl ),
 					"breakif"
 				);
-				EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+				EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 
 			_else
@@ -81219,7 +81253,7 @@ SingleStmt:
 			_here;
 			_if( BreakLbl != 0 )
 
-				sprintf( label, "L%d_continue" sympost, abs( BreakLbl ) );
+				sprintf( label, "continue" sympost "%d", abs( BreakLbl ) );
 				EmitJmpLabel( label );
 
 			_else
@@ -81245,7 +81279,7 @@ SingleStmt:
 			_here;
 			_if( BreakLbl != 0 )
 
-				sprintf( tmpLabel, "L%d_continue" sympost, abs( BreakLbl ));
+				sprintf( tmpLabel, "continue" sympost "%d", abs( BreakLbl ));
 				EmitBooleanExpr
 				(
 					$<opnode>4,
@@ -81278,13 +81312,13 @@ SingleStmt:
 
 				EmitBackPatchddc
 				(
-					"L%d_true" sympost,
+					"true" sympost "%d",
 					TrueLabel,
-					"L%d_continue" sympost,
+					"continue" sympost "%d",
 					abs( BreakLbl ),
 					"continueif"
 				);
-				EmitStmtLblNum( "L%d_false" sympost, FalseLabel );
+				EmitStmtLblNum( "false" sympost "%d", FalseLabel );
 
 			_else
 
@@ -81401,13 +81435,13 @@ SingleStmt:
 
 					EmitBackPatchddc
 					(
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						TrueLabel,
-						"L%d_true"  sympost,
+						"true"  sympost "%d",
 						$<labels.l1.trueTarget>4,
 						"JT"
 					);
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel ); 
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel ); 
 					
 				_else
 
@@ -81429,13 +81463,13 @@ SingleStmt:
 
 					EmitBackPatchddc
 					(
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						TrueLabel,
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						$<labels.l2.falseTarget>4,
 						"JT"
 					);
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel ); 
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel ); 
 
 
 				_else
@@ -81476,11 +81510,11 @@ SingleStmt:
 
 					EmitBackPatchds
 					(
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						TrueLabel,
 						sym->StaticName
 					);
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel ); 
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel ); 
 
 			_else
 
@@ -81518,11 +81552,11 @@ SingleStmt:
 
 					EmitBackPatchds
 					(
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						TrueLabel,
 						flist->StaticName
 					);
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel ); 
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel ); 
 
 				_else
 
@@ -81536,17 +81570,17 @@ SingleStmt:
 					temp->Next = FwdLabelsList;
 					temp->label = hlastrdup2( $<idStr>8 );
 					temp->lexLevel = CurLexLevel;
-					sprintf( target, "%s" symsep "%d", $<idStr>8, LblCntr++ );
+					sprintf( target, "%s" sympost "%d", $<idStr>8, LblCntr++ );
 					temp->StaticName = hlastrdup2( target );
 					temp->isExternal = 0;
 					FwdLabelsList = temp;
 					EmitBackPatchds
 					(
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						TrueLabel,
 						temp->StaticName
 					);
-					EmitStmtLblNum( "L%d_false" sympost, FalseLabel ); 
+					EmitStmtLblNum( "false" sympost "%d", FalseLabel ); 
 
 				_endif
 
@@ -81595,13 +81629,13 @@ SingleStmt:
 
 					EmitBackPatchddc
 					(
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						TrueLabel,
-						"L%d_true" sympost,
+						"true" sympost "%d",
 						$<labels.l1.trueTarget>4,
 						"JF"
 					);
-					EmitStmtLblNum( "L%d_true" sympost, FalseLabel ); 
+					EmitStmtLblNum( "true" sympost "%d", FalseLabel ); 
 
 				_else
 
@@ -81623,13 +81657,13 @@ SingleStmt:
 
 					EmitBackPatchddc
 					(
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						TrueLabel,
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						$<labels.l2.falseTarget>4,
 						"JF"
 					);
-					EmitStmtLblNum( "L%d_true" sympost, FalseLabel ); 
+					EmitStmtLblNum( "true" sympost "%d", FalseLabel ); 
 
 
 				_else
@@ -81670,11 +81704,11 @@ SingleStmt:
 
 					EmitBackPatchds
 					(
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						TrueLabel,
 						sym->StaticName
 					);
-					EmitStmtLblNum( "L%d_true" sympost, FalseLabel ); 
+					EmitStmtLblNum( "true" sympost "%d", FalseLabel ); 
 
 			_else
 
@@ -81713,11 +81747,11 @@ SingleStmt:
 
 					EmitBackPatchds
 					(
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						TrueLabel,
 						flist->StaticName
 					);
-					EmitStmtLblNum( "L%d_true" sympost, FalseLabel ); 
+					EmitStmtLblNum( "true" sympost "%d", FalseLabel ); 
 
 				_else
 				
@@ -81735,16 +81769,16 @@ SingleStmt:
 					temp->label = hlastrdup2( $<idStr>8 );
 					temp->lexLevel = CurLexLevel;
 					temp->isExternal = 0;
-					sprintf( target, "%s" symsep "%d", $<idStr>8, LblCntr++ );
+					sprintf( target, "%s" sympost "%d", $<idStr>8, LblCntr++ );
 					temp->StaticName = hlastrdup2( target );
 					FwdLabelsList = temp;
 					EmitBackPatchds
 					(
-						"L%d_false" sympost,
+						"false" sympost "%d",
 						TrueLabel,
 						temp->StaticName
 					);
-					EmitStmtLblNum( "L%d_true" sympost, FalseLabel ); 
+					EmitStmtLblNum( "true" sympost "%d", FalseLabel ); 
 
 
 
@@ -81820,7 +81854,7 @@ EmitJmp:
 					sprintf
 					(
 						target,
-						"L%d_true\n" sympost,
+						"true" sympost "%d",
 						TrueLabel
 					);
 
@@ -81841,7 +81875,7 @@ EmitJmp:
 					sprintf
 					(
 						target,
-						"L%d_false" sympost "\n",
+						"false" sympost  "%d",
 						FalseLabel
 					);
 
@@ -81939,7 +81973,7 @@ EmitJmp:
 						temp->label = hlastrdup2( $<idStr>-1 );
 						temp->lexLevel = CurLexLevel;
 						temp->isExternal = 0;
-						sprintf( target, "%s" symsep "%d", $<idStr>-1, LblCntr++ );
+						sprintf( target, "%s" sympost "%d", $<idStr>-1, LblCntr++ );
 						temp->StaticName = hlastrdup2( target );
 						FwdLabelsList = temp;
 						
@@ -82018,7 +82052,7 @@ SingleStmt:
 			** output by "EmitSkipThen" above.
 			*/
 
-			EmitStmtLblNum( "L%d_false" sympost, $<v.u.unsval>7 );
+			EmitStmtLblNum( "false" sympost "%d", $<v.u.unsval>7 );
 			$<returns>$ = NULL;
 		}
 	;
@@ -82040,7 +82074,7 @@ EmitSkipThen:
 			
 			_here;
 			$<v.u.unsval>$ = $<labels.l2.falseTarget>-3;
-			sprintf( tmpLabel, "L%d_false" sympost, $<v.u.unsval>$);
+			sprintf( tmpLabel, "false" sympost "%d", $<v.u.unsval>$);
 			EmitBooleanExpr
 			(
 				$<opnode>-2,
@@ -82085,9 +82119,9 @@ SingleStmt:
 
 			char label[ 256 ];
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>3 );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>3 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_false" sympost, $<v.u.unsval>7 );
+			EmitStmtLblNum( "false" sympost "%d", $<v.u.unsval>7 );
 		}
 		Stmts			/* $13 */
 		endifTkn		/* $14 */
@@ -82097,7 +82131,7 @@ SingleStmt:
 			** output by semantic action $10, above.
 			*/
 
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>3 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>3 );
 			$<returns>$ = NULL;
 		}
 	;
@@ -82143,7 +82177,7 @@ SingleStmt:
 			** output by "ExitIfLabel" and used by "ElseIfs" above.
 			*/
 
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>3 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>3 );
 			$<returns>$ = NULL;
 		}
 	;
@@ -82157,7 +82191,7 @@ ExitIfLabel7:
 			$<labels.l2.falseTarget>$ = $<labels.l2.falseTarget>-5;	// false label
 			$<labels.l3.exitTarget>$ = $<labels.l3.exitTarget>-5;		// exit label
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>$ );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>$ );
 			EmitJmpLabel( label );
 		}
 	;
@@ -82220,7 +82254,7 @@ SingleStmt:
 			** output by "ExitIfLabel" and used by "ElseIfs" above.
 			*/
 
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>3 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>3 );
 			$<returns>$ = NULL;
 		}
 	;
@@ -82276,7 +82310,7 @@ SingleStmt:
 			** Emit the target label for SetFalseLabel.
 			*/
 
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>9 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>9 );
 			$<returns>$ = NULL;
 		}
 	;
@@ -82285,7 +82319,7 @@ SingleStmt:
 EmitTrueLabel4:
 		{
 			_here;
-			EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
+			EmitStmtLblNum( "true" sympost "%d", TrueLabel );
 
 
 			/*
@@ -82349,7 +82383,7 @@ SingleStmt:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>13 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>13 );
 			$<returns>$ = NULL;
 			(void) $<labels.l2.falseTarget>12;	// shut up bison
 			_here;
@@ -82400,7 +82434,7 @@ SingleStmt:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>4 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>4 );
 			$<returns>$ = NULL;
 			_here;
 		}
@@ -82416,7 +82450,7 @@ ExitIfLabel6:
 			$<labels.l2.falseTarget>$ = $<labels.l3.exitTarget>-6;
 			$<labels.l3.exitTarget>$ = $<labels.l3.exitTarget>-6;
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>$ );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>$ );
 			EmitJmpLabel( label );
 			_here;
 		}
@@ -82470,7 +82504,7 @@ ExitIfLabel6:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_endif" sympost, $<labels.l3.exitTarget>4 );
+			EmitStmtLblNum( "endif" sympost "%d", $<labels.l3.exitTarget>4 );
 			$<returns>$ = NULL;
 			_here;
 		}
@@ -82519,7 +82553,7 @@ ExitIfLabel5_9:
 
 			$<labels.l2.falseTarget>$ = $<labels.l2.falseTarget>-5;
 			$<labels.l3.exitTarget>$ = $<labels.l3.exitTarget>-9;
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>$ );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>$ );
 			EmitJmpLabel( label );
 		}
 	;
@@ -82548,7 +82582,7 @@ ElseIFs:
 			*/
 			
 			_here;
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>4 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>4 );
 			_here;
 		}
 	;
@@ -82586,7 +82620,7 @@ elseifCode4:
 			$<labels.l3.exitTarget>$ = $<labels.l3.exitTarget>-3;
 			TrueLabel = LblCntr++;
 			FalseLabel = TrueLabel;
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>-3 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>-3 );
 			_here;
 		}
 	;
@@ -82600,7 +82634,7 @@ ExitIfLabel6_10:
 			$<labels.l2.falseTarget>$ = $<labels.l2.falseTarget>-6;
 			$<labels.l3.exitTarget>$ = $<labels.l3.exitTarget>-10;
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>$ );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>$ );
 			EmitJmpLabel( label );
 			_here;
 		}
@@ -82637,7 +82671,7 @@ ElseIFs:
 			*/
 
 			_here;
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>9 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>9 );
 			_here;
 		}
 	;
@@ -82703,9 +82737,9 @@ ElseIFs2:
 			** output by "EmitSkipThen" above.
 			*/
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>0 );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>0 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>4 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>4 );
 			_here;
 		}
 	;
@@ -82760,9 +82794,9 @@ ElseIFs2:
 			** Emit the false label.
 			*/
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>0 );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>0 );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>9 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>9 );
 		}
 	;
 
@@ -82777,7 +82811,7 @@ ElseIFs2:
 EmitTrueLabel:
 		{
 			_here;
-			EmitStmtLblNum( "L%d_true" sympost, TrueLabel );
+			EmitStmtLblNum( "true" sympost "%d", TrueLabel );
 
 			/*
 			** Do not allow further use of "true" or "false"
@@ -82804,9 +82838,9 @@ EmitFalseLabel:
 			_here;
 			$<labels.l3.exitTarget>$ = LblCntr++;
 
-			sprintf( label, "L%d_endif" sympost, $<labels.l3.exitTarget>$ );
+			sprintf( label, "endif" sympost "%d", $<labels.l3.exitTarget>$ );
 			EmitJmpLabel( label );
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>0 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>0 );
 			_here;
 		}
 	;
@@ -82821,7 +82855,7 @@ EmitFalseLabel:
 PutElseIfSTL:
 		{
 			_here;
-			EmitStmtLblNum( "L%d_false" sympost, $<labels.l2.falseTarget>-2 );
+			EmitStmtLblNum( "false" sympost "%d", $<labels.l2.falseTarget>-2 );
 			_here;
 		}
 	;
@@ -82955,7 +82989,7 @@ SingleStmt:
 						$<cases.cases>6[i], 
 						$<reg.encoding>3 
 					);
-					sprintf( label, "L$%d_case", $<cases.caseLbls>6[i] );
+					sprintf( label, "case" sympost "%d", $<cases.caseLbls>6[i] );
 					EmitCondJump( je_instr, label );
 					
 				_endfor
@@ -82963,7 +82997,7 @@ SingleStmt:
 				// At the end of the cmp/JE sequence, emit a jump to the
 				// default case:
 				
-				sprintf( label, "L$%d_default", $<u>5 );
+				sprintf( label, "default" sympost "%d", $<u>5 );
 				EmitJmpLabel( label );
 			
 			_elseif( spread > 16384 )
@@ -82994,7 +83028,7 @@ SingleStmt:
 				// Okay, emit the jmp table:
 				
 				startStrSeg();	// Put the jump table in the constants section.
-				sprintf( jmpTbl, "L$%d_jmpTbl", $<u>5 );
+				sprintf( jmpTbl, "jmpTbl" sympost "%d", $<u>5 );
 				EmitTypedLabel( jmpTbl, tDWord );
 				maxCase = $<cases.cases>6[ $<cases.cnt>6 - 1 ];
 				curCase = $<cases.cases>6[0];
@@ -83003,12 +83037,17 @@ SingleStmt:
 
 					_if( curCase == $<cases.cases>6[index] )
 					
-						sprintf( label, "L$%d_case", $<cases.caseLbls>6[index] );
+						sprintf
+						( 
+							label, 
+							"case" sympost "%d", 
+							$<cases.caseLbls>6[index] 
+						);
 						++index;
 					
 					_else	// Fill in default address
 					
-						sprintf( label, "L$%d_default", $<u>5 );
+						sprintf( label, "default" sympost "%d", $<u>5 );
 						 
 					_endif
 					EmitOffset( label, 0 );
@@ -83030,7 +83069,7 @@ SingleStmt:
 						$<cases.cases>6[0], 
 						$<reg.encoding>3 
 					);
-					sprintf( label, "L$%d_default", $<u>5 );
+					sprintf( label, "default" sympost "%d", $<u>5 );
 					EmitCondJump( jl_instr, label );
 					
 				_endif
@@ -83040,7 +83079,7 @@ SingleStmt:
 					$<cases.cases>6[ $<cases.cnt>6 - 1 ], 
 					$<reg.encoding>3 
 				);
-				sprintf( label, "L$%d_default", $<u>5 );
+				sprintf( label, "default" sympost "%d", $<u>5 );
 				EmitCondJump( jg_instr, label );
 					
 				// Okay, emit the indirect jump statement:
@@ -83066,14 +83105,14 @@ SingleStmt:
 			
 			// Emit the end of switch label:
 			
-			EmitStmtLblNum( "L$%d_endswitch", $<u>5 );
+			EmitStmtLblNum( "endswitch" sympost "%d", $<u>5 );
 			
 			// If there was no default clause, we need to emit
 			// a default label as well:
 			
 			_if( $<u>8 )
 			
-				EmitStmtLblNum( "L$%d_default", $<u>5 );
+				EmitStmtLblNum( "default" sympost "%d", $<u>5 );
 				
 			_endif
 			
@@ -83101,12 +83140,12 @@ OptionalDefault:
 			// Emit a jmp from the previous case to the
 			// end of the switch statement:
 			
-			sprintf( jmpToEnd, "L$%d_endswitch", $<u>-2 );
+			sprintf( jmpToEnd, "endswitch" sympost "%d", $<u>-2 );
 			EmitJmpLabel( jmpToEnd );
 			
 			// Emit the label for the default case:
 			
-			sprintf( jmpToEnd, "L$%d_default", $<u>-2 );
+			sprintf( jmpToEnd, "default" sympost "%d", $<u>-2 );
 			EmitGlobalStmtLbl( jmpToEnd );
 		}
 		Stmts
@@ -83190,7 +83229,7 @@ OneOrMoreCases:
 			// Emit a jmp from the previous case to the
 			// end of the switch statement:
 			
-			sprintf( jmpToEnd, "L$%d_endswitch", $<cases.exitLbl>0 );
+			sprintf( jmpToEnd, "endswitch" sympost "%d", $<cases.exitLbl>0 );
 			EmitJmpLabel( jmpToEnd );
 
 		}
@@ -83270,7 +83309,7 @@ EmitCaseLbl:
 			char globLbl[64];
 			
 			$<u>$ = LblCntr++;
-			sprintf( globLbl, "L$%d_case", $<u>$ );
+			sprintf( globLbl, "case" sympost "%d", $<u>$ );
 			EmitGlobalStmtLbl( globLbl );
 		}
 	;
@@ -83758,7 +83797,7 @@ BoolExpr:
 			_endif
 
 			startStrSeg();
-			sprintf( sn, "L%d_cset" sympost, LblCntr++ );
+			sprintf( sn, "cset" sympost "%d", LblCntr++ );
 			OutValue( sn, $<v.Type>3, YYS &$<v>3 );
 			endStrSeg();
 
@@ -89838,6 +89877,10 @@ _begin( Usage )
 		"  -ccoff   Produce COFF OBJ file using internal version of FASM.\n"
 		"  -celf    Produce ELF OBJ file using internal version of FASM.\n"
 		"  -obj:XX  Output path for coff/elf object files.\n"
+		"  -win32   Generate code for Win32 OS.\n"
+		"  -linux   Generate code for Linux OS.\n"
+		"  -freebsd Generate code for freeBSD OS.\n"
+		"  -macos   Generate code for Mac OSX.\n"
 		"  -sym     Dump symbol table after compile.\n"
 		"  -code1st Emit code before readonly data in output file\n"
 		"  -test    Send diagnostic info to stdout rather than stderr (This\n"
@@ -90163,6 +90206,7 @@ _begin( main )
 	FILE			*linkOut;			// ".link" output file pointer.
 	struct segmentList_t *s;			// Used when creating the ".link" file.
 	struct	timeb	CompileTimeStart;	// Measure the compile time.
+	char 			option[256];		// Hold a command-line argument string.
 
 	MsgOut = stderr;
 	RecordValues = malloc2( sizeofSymNode );
@@ -90226,6 +90270,10 @@ _begin( main )
 	**  -sn				Source output in NASM format.
 	**	-sg				Source output in GAS format.
 	**	-sx				Source output in Mac OSX GAS format.
+	**	-win32			Generate code for Win32 OS.
+	**	-linux			Generate code for Linux OS.
+	**	-freebsd		Generate code for freeBSD OS.
+	**	-macos			Generate code for Mac OSX.
 	**	-ccoff			Object output in COFF form (using internal FASM).
 	**	-celf           Object output in ELF form (using internal FASM).
 	**	-d<sym>			Define a symbol.
@@ -90243,6 +90291,42 @@ _begin( main )
 	**	-test			Send output to stdout rather than stderr.
 	**	-?				Help
 	*/
+	
+	// First, scan through the arguments for a targetOS specification
+	// because that has to be processed before handling any other
+	// command-line options.
+	
+	_for( CurArg = 1, CurArg < argc, ++CurArg )
+	
+		_if( argv[ CurArg ][0] == '-' )
+		
+			strcpy( option, argv[ CurArg ] );
+			strupr( option );
+			_if( _streq( option, "-WIN32" ))
+			
+				targetOS = windows_os;
+				_break;
+				
+			_elseif( _streq( option, "-LINUX" ))
+			
+				targetOS = linux_os;
+				_break;
+				
+			_elseif( _streq( option, "-FREEBSD" ))
+			
+				targetOS = freeBSD_os;
+				_break;
+				
+			_elseif( _streq( option, "-MACOS" ))
+			
+				targetOS = macOS_os;
+				_break;
+				
+			_endif
+			
+		_endif
+		
+	_endfor
 
 	CurArg = 1;
 	langLevel = high_level;
@@ -90250,7 +90334,6 @@ _begin( main )
 
 		_if( argv[ CurArg ][ 0 ] == '-' )
 
-			char option[256];
 			char *s = argv[ CurArg ];
 
 			// Copy the argument and convert it to upper case
@@ -90551,6 +90634,16 @@ _begin( main )
 				Usage();
 				_return 1;
 			
+			_elseif
+			(
+					_streq( option, "-WIN32" )
+				||	_streq( option, "-LINUX" )
+				||	_streq( option, "-FREEBSD" )
+				||	_streq( option, "-MACOS" )
+			)
+			
+				// Already handled these options, ignore them.
+				
 			_else
 			
 				fprintf

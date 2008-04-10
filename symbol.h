@@ -451,6 +451,7 @@ struct opnodeYYS
 
 extern struct  SymNode	*SymbolTable;
 extern struct  SymNode	*CurrentContext;
+extern struct  SymNode	**MainLocals;
 
 extern struct  SymNode boolean_ste;
 

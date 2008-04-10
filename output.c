@@ -737,7 +737,7 @@ _begin( hla2asmDrctv )
 				   _return ".long";
 				
 				_case( tQWord )
-					_return ".quad";
+					_return ".byte";
 				
 				_case( tTByte )
 					_return NULL;
@@ -749,13 +749,13 @@ _begin( hla2asmDrctv )
 					_return "";
 					
 				_case( tReal32 )
-					_return ".float";
+					_return _ifx( gasSyntax == macGas, ".single", ".float" );
 					
 				_case( tReal64 )
 					_return ".double";
 					
 				_case( tReal80 )
-					_return ".tfloat";
+					_return ".byte";
 					
 			_endswitch
 			_return NULL;
@@ -4674,6 +4674,19 @@ char *fp_strs[ num_fp_instrs ] =
 };
 
 
+char *gas_fp_strs[ num_fp_instrs ] =
+{
+	"fadd",
+	"fmul",
+	"fcom",
+	"fcomp",
+	"fsubr",	// Gas reverses the fsub/fsubr
+	"fsub",		// and fdiv/fdivr instructions!
+	"fdivr",
+	"fdiv",
+};
+
+
 // fpp_strs must be kept in sync with (enum fpp_instrs) in output.h!
 
 char *fpp_strs[ num_fpp_instrs ] =
@@ -4686,6 +4699,18 @@ char *fpp_strs[ num_fpp_instrs ] =
 	"fsubrp",
 	"fdivp",
 	"fdivrp",
+};
+
+char *gas_fpp_strs[ num_fpp_instrs ] =
+{
+	"faddp",
+	"fmulp",
+	"fcomp",
+	"fcompp",
+	"fsubrp",
+	"fsubp",
+	"fdivrp",
+	"fdivp",
 };
 
 
@@ -4712,7 +4737,7 @@ _begin( fp_arith_noOp_instr )
 	};
 
 	assert( instr < num_fp_instrs );
-	instr_str = fp_strs[instr]; 
+	instr_str = _ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]); 
 	
 	_if( instr == fcom_instr || instr == fcomp_instr )
 	
@@ -4787,7 +4812,7 @@ _begin( fpp_arith_noOp_instr )
 	
 		asm2oprr
 		(
-			fpp_strs[ instr ],
+			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
 			fpregmap[reg_st0][assembler],
 			fpregmap[reg_st1][assembler],
 			0,
@@ -4798,7 +4823,12 @@ _begin( fpp_arith_noOp_instr )
 	_endif	 
 	_if( !sourceOutput )
 		
-		asmTestMode( fpp_strs[ instr ], testMode );
+			 
+		asmTestMode
+		( 
+			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
+			testMode 
+		);
 		EmitWordConst( fpp_noOpp_opcodes[ instr ] );
 		
 	_endif	
@@ -4851,7 +4881,7 @@ _begin( fp_arith_sti_st0_instr )
 	
 	asm2oprr
 	( 
-		fp_strs[ instr ], 
+		_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 		fpregmap[fpreg][assembler],
 		fpregmap[0][assembler],
 		0,
@@ -4883,7 +4913,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm1opr
 		( 
-			fp_strs[ instr ], 
+			_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[fpreg][assembler],
 			0,
 			testMode,
@@ -4894,7 +4924,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm2oprr
 		( 
-			fp_strs[ instr ], 
+			_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler],
 			0,
@@ -4955,7 +4985,7 @@ _begin( fpp_arith_st0_sti_instr )
 	
 		asm2oprr
 		(
-			fpp_strs[ instr ],
+			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]),
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler], 
 			0,
@@ -4999,7 +5029,7 @@ _begin( fp_arith_mem_instr );
 	_endif	
 	asm1opm
 	(
-		fp_strs[ instr ], 
+		_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 		adrs, 
 		size,
 		testMode,
@@ -10414,6 +10444,42 @@ static char *movxx_instrs[ num_movXx_instrs ] =
 		"movzx",
 };
 
+static char *gas_movxx_instrs[ num_movXx_instrs ] =
+{
+		"movs",
+		"movz",
+};
+
+static char *gas_suffixes[5] =
+{
+	"",		//0
+	"b",	//1:byte
+	"w",	//2:word
+	"",		//3
+	"l",	//4:dword
+};
+
+
+static char *
+movxx_instr_str( int instr, int srcSize, int destSize )
+_begin( movxx_instr_str )
+
+	static char gasResult[8];
+	
+	assert( srcSize <= 4 && destSize <= 4 );
+	_if( assembler == gas )
+	
+		strcpy( gasResult, gas_movxx_instrs[ instr ] );
+		strcat( gasResult, gas_suffixes[ srcSize ] );
+		strcat( gasResult, gas_suffixes[ destSize ] );
+		_return gasResult;
+	
+	_endif
+	_return movxx_instrs[ instr ];
+	
+_end( movxx_instr_str )
+
+
 void EmitMovxx_r_r( int instr, int srcReg, int destReg )
 _begin( EmitMovxx_r_r )
 
@@ -10426,7 +10492,7 @@ _begin( EmitMovxx_r_r )
 	opcode = _ifx( instr == movsx_instr, 0xbe, 0xb6 );
 	asm2oprr
 	(
-		movxx_instrs[ instr ],
+		movxx_instr_str( instr, regSize( srcReg ), regSize( destReg )),
 		gpregmap[srcReg][assembler],
 		gpregmap[destReg][assembler],
 		0,
@@ -10467,7 +10533,7 @@ _begin( EmitMovxx_m_r )
 	_endif
 	asm2opmr
 	(
-		movxx_instrs[ instr ],
+		movxx_instr_str( instr, adrs->Size, regSize( reg )),
 		adrs,
 		gpregmap[reg][assembler],
 		0,
@@ -13600,8 +13666,8 @@ _begin( EmitBound_r_c_c )
 
 	sprintf( cLBound, "%u", lower );
 	sprintf( cUBound, "%u", upper );
-	sprintf( lbound, "L%d_LBound" sympost, LblCntr );
-	sprintf( ubound, "L%d_UBound" sympost, LblCntr );
+	sprintf( lbound, "_%d_LBound" sympost, LblCntr );
+	sprintf( ubound, "_%d_UBound" sympost, LblCntr );
 	_if( lower < upper )
 
 		_if( size == 2 )
@@ -13821,7 +13887,7 @@ _begin( processCondJump )
 
 		_if( TrueLabel != -1 )
 
-			sprintf( label, "L%d_true" sympost, TrueLabel );
+			sprintf( label, "true" sympost "%d", TrueLabel );
 			EmitCondJump( instr, label );
 
 		_else
@@ -13838,7 +13904,7 @@ _begin( processCondJump )
 
 		_if( FalseLabel != -1 )
 
-			sprintf( label, "L%d_false" sympost, FalseLabel );
+			sprintf( label, "false" sympost "%d", FalseLabel );
 			EmitCondJump( instr, label );
 
 		_else
@@ -13935,7 +14001,7 @@ _begin( processCondJump )
 				temp->label = hlastrdup( target );
 				temp->lexLevel = CurLexLevel;
 				temp->isExternal = 0;
-				sprintf( sn, "%s" symsep "%d", target, LblCntr++ );
+				sprintf( sn, "%s" sympost "%d", target, LblCntr++ );
 				temp->StaticName = hlastrdup( sn );
 				assert( temp->StaticName != NULL );
 				EmitCondJump( instr, temp->StaticName );
@@ -15129,7 +15195,7 @@ _begin( callUndefSym )
 				temp->lexLevel = CurLexLevel;
 				temp->isExternal = 0;
 				assert( temp->label != NULL );
-				sprintf( sn, "%s" symsep "%d", undefSym, LblCntr++ );
+				sprintf( sn, "%s" sympost "%d", undefSym, LblCntr++ );
 				temp->StaticName = hlastrdup2( sn );
 				assert( temp->StaticName != NULL );
 				EmitCallLabel( temp->StaticName );
@@ -15355,7 +15421,7 @@ _begin( jmpTargetID )
 			sprintf
 			(
 				label,
-				"L%d_true" sympost,
+				"true" sympost "%d",
 				TrueLabel
 			);
 			EmitJmpLabel( label );
@@ -15377,7 +15443,7 @@ _begin( jmpTargetID )
 			sprintf
 			(
 				label,
-				"L%d_false" sympost,
+				"false" sympost "%d",
 				FalseLabel
 			);
 			EmitJmpLabel( label );
@@ -15469,7 +15535,7 @@ _begin( jmpTargetID )
 				temp->lexLevel = CurLexLevel;
 				temp->isExternal = 0;
 				assert( temp->label != NULL );
-				sprintf( sn, "%s" symsep "%d", jmpSym, LblCntr++ );
+				sprintf( sn, "%s" sympost "%d", jmpSym, LblCntr++ );
 				temp->StaticName = hlastrdup2( sn );
 				assert( temp->StaticName != NULL );
 		   		EmitJmpLabel( temp->StaticName );
@@ -16625,9 +16691,10 @@ _begin( EmitLabelledReal4Const )
 		
 			asmPrintf
 			(
-				"%-7s %s.float    %15.8e\n",
+				"%-7s %s%s    %15.8e\n",
 				label,
-				_ifx( *label != '\0', ":", "" ),  
+				_ifx( *label != '\0', ":", "" ),
+				_ifx( gasSyntax == macGas, ".single", ".float" ),  
 				theConst
 			);
 			
@@ -16759,7 +16826,11 @@ _begin( EmitLabelledReal10Const )
 
 	char realStr[32];
 
-	e80Str( realStr, theConst );
+	_if( e80Valid( theConst ))
+	
+		e80Str( realStr, theConst );
+		
+	_endif
 	_switch( assembler )
 	
 		_case( hla )
@@ -16778,11 +16849,25 @@ _begin( EmitLabelledReal10Const )
 		
 		_case( gas )
 		
+			// Some versions of GAS do not support large real80 constants.
+			// So output this data in hexadecimal form:
+			
 			asmPrintf
 			(
-				"%-7s %s.tfloat    %s\n",
+				"%-7s %s.byte    0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x,0x%x\n"
+				"        .byte    0x%x,0x%x /* %s */\n",
 				label,
-				_ifx( *label != '\0', ":", "" ),  
+				_ifx( *label != '\0', ":", " " ),  
+				(unsigned char) theConst.f.x[0],
+				(unsigned char) theConst.f.x[1],
+				(unsigned char) theConst.f.x[2],
+				(unsigned char) theConst.f.x[3],
+				(unsigned char) theConst.f.x[4],
+				(unsigned char) theConst.f.x[5],
+				(unsigned char) theConst.f.x[6],
+				(unsigned char) theConst.f.x[7],
+				(unsigned char) theConst.f.x[8],
+			    (unsigned char) theConst.f.x[9],
 				realStr
 			);
 			
@@ -17411,7 +17496,7 @@ _begin( EmitArrayConst )
 		_case( gas )
 		
 			gSize = ptype2type[ pType ]->ObjectSize;
-			_if( gSize != 2 && gSize != 4 && gSize != 8 )
+			_if( gSize != 2 && gSize != 4 )
 			
 				gSize = 1;
 				type = ".byte";
@@ -17985,10 +18070,10 @@ _begin( EmitString )
 
 		asmPrintf( "\n" );
 		EmitAlign( 4 );
-		sprintf( lbl, "L%d_len" sympost, labelID );
+		sprintf( lbl, "len" sympost "%d", labelID );
 		EmitLabelledDwordConst( lbl,length, "" );
 		EmitDwordConst( length, "" );
-		sprintf( lbl, "L%d_str" sympost, labelID );
+		sprintf( lbl, "str" sympost "%d", labelID );
 		EmitTypedLabel( lbl, tByte );
 		PrintString( (unsigned char *)theStr, 1 );
 
@@ -18053,10 +18138,10 @@ _begin( EmitWString )
 
 	asmPrintf( "\n" );
 	EmitAlign( 4 );
-	sprintf( lbl, "L%d_len" sympost, theLabel );
+	sprintf( lbl, "len" sympost "%d", theLabel );
 	EmitLabelledDwordConst( lbl, length, "" );
 	EmitDwordConst( length, "" );
-	sprintf( lbl, "L%d_str" sympost, theLabel );
+	sprintf( lbl, "str" sympost "%d", theLabel );
 	_if( length == 0 )
 	
 		EmitLabelledWordConst( lbl, 0 );
@@ -19545,7 +19630,7 @@ _begin( EmitBooleanExpr )
 					struct adrsYYS	tAdrs;
 
 					startStrSeg();
-					sprintf( sn, "L%d_cset" sympost, LblCntr++ );
+					sprintf( sn, "cset" sympost "%d", LblCntr++ );
 					initLbl( &tAdrs, sn, 0 );
 					OutValue
 					( 
@@ -19644,7 +19729,7 @@ _begin( EmitBooleanExpr )
 					struct adrsYYS	tAdrs;
 
 					startStrSeg();
-					sprintf( sn, "L%d_cset" sympost, LblCntr++ );
+					sprintf( sn, "cset" sympost "%d", LblCntr++ );
 					initLbl( &tAdrs, sn, 0 );
 					OutValue
 					( 
@@ -20180,6 +20265,7 @@ _begin( BeginMain )
 	
 		_if( assembler == gas )
 		 
+		 	startDseg();
 			asmPrintf
 			(
 				"\n"
@@ -20192,9 +20278,11 @@ _begin( BeginMain )
 				"_argv" sympost ": .long 0\n"
 				"_envp" sympost ": .long 0\n"
 			);
+			endDseg();
 			
 		_elseif( assembler == fasm && targetOS == linux_os )
 		
+		 	startDseg();
 			asmPrintf
 			(
 				"\n" 
@@ -20207,6 +20295,7 @@ _begin( BeginMain )
 				"_envp" sympost " dd 0\n"
 				"\n"
 			);
+			endDseg();
 			
 		_else
 		
@@ -20216,6 +20305,7 @@ _begin( BeginMain )
 	
 	_elseif ( assembler == gas && gasSyntax == macGas )
 		 
+		startDseg();
 		asmPrintf
 		(
 			"\n"
@@ -20228,6 +20318,7 @@ _begin( BeginMain )
 			"_argv" sympost ": .long 0\n"
 			"_envp" sympost ": .long 0\n"
 		);
+		endDseg();
 			
 	_endif
 	EmitPublic( "_HLAMain" );
@@ -20807,7 +20898,7 @@ _begin( OutStaticConst )
 	char			*BaseType;
 	enum PrimType	pType;
 	char			staticConst[ 256 ];
-	
+
 	needsOffset = StaticConstToStr( type, value, staticConst );
 	pType = RtnBaseType( type );
 	_if( StaticName == NULL )
@@ -21162,7 +21253,7 @@ _begin( OutValue )
 					int lbl;
 					
 					lbl = EmitString( Value->v.u.strval );
-					sprintf( label, "L%d_str" sympost, lbl );
+					sprintf( label, "str" sympost "%d", lbl );
 					EmitLabelledAdrs( Name, label );
 					
 				_endif
@@ -21185,7 +21276,7 @@ _begin( OutValue )
 				
 				_else
 					
-					sprintf( label, "L%d_str" sympost, LblCntr );
+					sprintf( label, "str" sympost "%d", LblCntr );
 					EmitLabelledAdrs( Name, label );
 					EmitWString( Value->v.u.strval, LblCntr++ );
 					
@@ -21293,7 +21384,7 @@ _begin( OutValue )
 					sprintf
 					( 
 						s, 
-						"L%d_str" sympost, 
+						"str" sympost "%d", 
 						strLbls[ CurElement ] 
 					);
 					EmitAdrs( s );
@@ -21336,7 +21427,7 @@ _begin( OutValue )
 					sprintf
 					( 
 						s, 
-						"L%d_str" sympost, 
+						"str" sympost "%d", 
 						LblCntr + CurElement 
 					);
 					EmitAdrs( s );
@@ -21661,7 +21752,7 @@ _begin( HexToStr64 )
 		_switch( assembler )
 		
 			_case( gas )
-			
+
 				_return 
 					sprintf
 					( 
@@ -21965,7 +22056,7 @@ _begin( StaticConstToStr )
 				sprintf
 				( 
 					dest, 
-					"L%d_str" sympost,
+					"str" sympost "%d",
 					lbl 
 				);
 								
@@ -22006,7 +22097,7 @@ _begin( StaticConstToStr )
 				sprintf
 				( 
 					dest, 
-					"L%d_str" sympost,
+					"str" sympost "%d",
 					LblCntr 
 				);
 				EmitWString( value->v.u.strval, LblCntr++ );
@@ -22037,7 +22128,39 @@ _begin( StaticConstToStr )
 				
 				_case( tReal80 ) 
 		
-					e80Str( dest, value->v.u.fltval );
+					_if( assembler == gas && gasSyntax == macGas )
+					
+						char fpOperand[64];
+						
+						_if( e80Valid( value->v.u.fltval ))
+					
+							e80Str( fpOperand, value->v.u.fltval );
+							sprintf
+							( 
+								dest, 
+								"0x%x,0x%x,0x%x,0x%x,0x%x,"
+								"0x%x,0x%x,0x%x,0x%x,0x%x   "
+								"/* %s */",
+								(unsigned char) value->v.u.fltval.f.x[0],
+								(unsigned char) value->v.u.fltval.f.x[1],
+								(unsigned char) value->v.u.fltval.f.x[2],
+								(unsigned char) value->v.u.fltval.f.x[3],
+								(unsigned char) value->v.u.fltval.f.x[4],
+								(unsigned char) value->v.u.fltval.f.x[5],
+								(unsigned char) value->v.u.fltval.f.x[6],
+								(unsigned char) value->v.u.fltval.f.x[7],
+								(unsigned char) value->v.u.fltval.f.x[8],
+								(unsigned char) value->v.u.fltval.f.x[9],
+								fpOperand
+							);
+						
+						_endif
+					
+					_elseif( e80Valid( value->v.u.fltval ))
+					
+						e80Str( dest, value->v.u.fltval  );
+						
+					_endif
 					
 				_endcase
 				
@@ -24226,8 +24349,12 @@ _begin( EmitValpConst )
 				
 					char realStr[32];
 				
-					e80Str( realStr, value->v.u.fltval );
-					asmPrintf( ";/* push real10=%s */\n", realStr );
+					_if( e80Valid( value->v.u.fltval ))
+					
+						e80Str( realStr, value->v.u.fltval );
+						asmPrintf( ";/* push real10=%s */\n", realStr );
+						
+					_endif
 					
 				_endif
 				Pushd( (int) *((short*)(&value->v.u.fltval.f.d)+4) );
@@ -24345,7 +24472,7 @@ _begin( EmitValpConst )
 			char adrs[128];
 
 			Lbl = EmitString( value->v.u.strval );
-			sprintf( adrs, "L%d_str" sympost, Lbl );
+			sprintf( adrs, "str" sympost "%d", Lbl );
 			PushStaticAdrs( adrs );
 
 		_else
@@ -24366,7 +24493,7 @@ _begin( EmitValpConst )
 			char adrs[128];
 
 			Lbl = EmitString( value->v.u.strval );
-			sprintf( adrs, "L%d_str" sympost, Lbl );
+			sprintf( adrs, "str" sympost "%d", Lbl );
 			PushStaticAdrs( adrs );
 
 		_else
@@ -24568,7 +24695,7 @@ _begin( EmitValpConst )
 				// a memory array with the data and then use a
 				// MOVSD instruction to actually push the data.
 
-				sprintf( name, "L%d_array" sympost, LblCntr++ );
+				sprintf( name, "array" sympost "%d", LblCntr++ );
 				OutPaddedValue( name, sym->Type, value );
 
 //				sprintf( val2, "[esp-%d]", Size*4 );
@@ -24611,7 +24738,7 @@ _begin( EmitValpConst )
 			int		i;
 
 
-			sprintf( name, "L%d_record" sympost, LblCntr++ );
+			sprintf( name, "record" sympost "%d", LblCntr++ );
 			OutPaddedValue( name, sym, value );
 
 			Size = ( sym->ObjectSize + 3 ) >> 2;
@@ -26864,7 +26991,7 @@ _begin( EmitRegInRange4 )
 			*/
 			
 			EmitGeneric_i_r( cmp_instr, YYS startConst, reg->reg.encoding );
-			sprintf( label, "L%d_true" sympost, LblCntr );
+			sprintf( label, "true" sympost "%d", LblCntr );
 			_if( IsSigned )
 			
 				EmitCondJump( jl_instr, label );
@@ -26877,7 +27004,7 @@ _begin( EmitRegInRange4 )
 			
 
 			EmitGeneric_i_r( cmp_instr, YYS endConst, reg->reg.encoding );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jng_instr, label );
@@ -26888,7 +27015,7 @@ _begin( EmitRegInRange4 )
 				
 			_endif
 
-			EmitStmtLblNum( "L%d_true" sympost, LblCntr ); 
+			EmitStmtLblNum( "true" sympost "%d", LblCntr ); 
 			
 		_else
 		
@@ -26903,7 +27030,7 @@ _begin( EmitRegInRange4 )
 //			sprintf( label, "L%d_false" sympost, target );
 //			Emit1L( _ifx( IsSigned, "jl", "jb" ), label );
 			EmitGeneric_i_r( cmp_instr, YYS startConst, reg->reg.encoding );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jl_instr, label );
@@ -26918,7 +27045,7 @@ _begin( EmitRegInRange4 )
 //			sprintf( label, "L%d_false" sympost, target );
 //			Emit1L( _ifx( IsSigned, "jg", "ja" ), label );
 			EmitGeneric_i_r( cmp_instr, YYS endConst, reg->reg.encoding );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jg_instr, label );
@@ -27007,7 +27134,7 @@ _begin( EmitMemInRange4 )
 //			sprintf( label, "L%d_true" sympost, LblCntr );
 //			Emit1L( _ifx( IsSigned, "jl", "jb" ), label );
 			EmitGeneric_i_m( cmp_instr, YYS startConst, adrs );
-			sprintf( label, "L%d_true" sympost, LblCntr );
+			sprintf( label, "true" sympost "%d", LblCntr );
 			_if( IsSigned )
 			
 				EmitCondJump( jl_instr, label );
@@ -27022,7 +27149,7 @@ _begin( EmitMemInRange4 )
 //			sprintf( label, "L%d_false" sympost, target );
 //			Emit1L( _ifx( IsSigned, "jng", "jna" ), label );
 			EmitGeneric_i_m( cmp_instr, YYS endConst, adrs );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jng_instr, label );
@@ -27033,7 +27160,7 @@ _begin( EmitMemInRange4 )
 				
 			_endif
 			
-			EmitStmtLblNum( "L%d_true" sympost, LblCntr ); 
+			EmitStmtLblNum( "true" sympost "%d", LblCntr ); 
 			
 		_else
 		
@@ -27048,7 +27175,7 @@ _begin( EmitMemInRange4 )
 //			sprintf( label, "L%d_false" sympost, target );
 //			Emit1L( _ifx( IsSigned, "jl", "jb" ), label );
 			EmitGeneric_i_m( cmp_instr, YYS startConst, adrs );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jl_instr, label );
@@ -27063,7 +27190,7 @@ _begin( EmitMemInRange4 )
 //			sprintf( label, "L%d_false" sympost, target );
 //			Emit1L( _ifx( IsSigned, "jg", "ja" ), label );
 			EmitGeneric_i_m( cmp_instr, YYS endConst, adrs );
-			sprintf( label, "L%d_false" sympost, target );
+			sprintf( label, "false" sympost "%d", target );
 			_if( IsSigned )
 			
 				EmitCondJump( jg_instr, label );
@@ -27138,7 +27265,7 @@ _begin( EmitRegInRange5 )
 
 		_endif
 		startStrSeg();
-		sprintf( sn, "L%d_cset" sympost, label );
+		sprintf( sn, "cset" sympost "%d", label );
 		OutValue( sn, v->v.Type, v );
 		endStrSeg();
 		push_r( regToUse );
@@ -27146,7 +27273,7 @@ _begin( EmitRegInRange5 )
 		initLbl( &adrs, sn, 0 );
 		Emit_bt_r_m( bt_instr, regToUse, &adrs );
 		pop_r( regToUse );
-		sprintf( sn, "L%d_false" sympost, label );
+		sprintf( sn, "false" sympost "%d", label );
 		_if( condition )
 		
 			EmitCondJump( jc_instr, sn );
@@ -27217,7 +27344,7 @@ _begin( EmitRegInRange6 )
 		Emit_bt_r_m( bt_instr, regToUse, adrs );
 		pop_r( regToUse );
 
-		sprintf( sn, "L%d_false" sympost, label );
+		sprintf( sn, "false" sympost "%d", label );
 		_if( condition )
 		
 			EmitCondJump( jc_instr, sn );

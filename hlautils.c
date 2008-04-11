@@ -93,9 +93,9 @@ _begin( e80Valid )
 
 	_if
 	( 
-			(theConst.f.x[9] & 0x7f) == 0x7f
-		&&	theConst.f.x[8] == 0xff
-		&&	(theConst.f.x[7] & 0x80) == 0x80
+			((unsigned char) theConst.f.x[9] & 0x7f) == 0x7f
+		&&	(unsigned char) theConst.f.x[8] == 0xff
+		&&	((unsigned char) theConst.f.x[7] & 0x80) == 0x80
 	)
 	
 		yyerror( "Invalid floating-point constant in program" );
@@ -2274,6 +2274,7 @@ _begin( numBits )
 							value->v.u.lwordval[3] == 0xffffffff
 						&&	value->v.u.lwordval[2] == 0xffffffff
 						&&	value->v.u.lwordval[1] == 0xffffffff
+						&&	(unsigned long) value->v.u.lwordval[0] >= 0x80000000
 					)
 				||	(
 							value->v.u.lwordval[3] == 0
@@ -2288,6 +2289,7 @@ _begin( numBits )
 					(
 							value->v.u.lwordval[3] == 0xffffffff
 						&&	value->v.u.lwordval[2] == 0xffffffff
+						&&	(unsigned long) value->v.u.lwordval[1] >= 0x80000000
 					)
 				||	(
 							value->v.u.lwordval[3] == 0

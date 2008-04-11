@@ -48107,8 +48107,12 @@ LiteralConst:
 		Rbrace		/* $4 */
 		{
 			_here;
-			$<v.Type>$ = &dword_ste;
-			$<v.pType>$ = tDWord;
+			ClrConst
+			(
+				YYS &$<v>$,
+				tDWord,
+				&dword_ste
+			);
 			$<v.u.unsval>$ = $<v.u.unsval>3;
 		}
 	;
@@ -49214,7 +49218,8 @@ ConstExpr:	ConstExpr '&' ConstExpr
 								&$<v.pType>$, 
 								&$<v.Type>$ 
 							);
-							 
+							$<v.ObjectSize>$ = $<v.Type>$->ObjectSize;
+
 
 						_endcase
 
@@ -49305,6 +49310,7 @@ ConstExpr:	ConstExpr '|' ConstExpr
 								&$<v.pType>$, 
 								&$<v.Type>$ 
 							);
+							$<v.ObjectSize>$ = $<v.Type>$->ObjectSize;
 
 						_endcase
 
@@ -49395,6 +49401,7 @@ ConstExpr:	ConstExpr '^' ConstExpr
 								&$<v.pType>$, 
 								&$<v.Type>$ 
 							);
+							$<v.ObjectSize>$ = $<v.Type>$->ObjectSize;
 
 						_endcase
 

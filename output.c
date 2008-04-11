@@ -4879,9 +4879,12 @@ _begin( fp_arith_sti_st0_instr )
 	assert( instr < num_fp_instrs );
 	assert( fpreg <= reg_st7 );
 	
+	// Note that Gas does not swap the XXX and XXXr instructions
+	// for this particular syntax.
+	
 	asm2oprr
 	( 
-		_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+		fp_strs[instr], 
 		fpregmap[fpreg][assembler],
 		fpregmap[0][assembler],
 		0,
@@ -5029,7 +5032,7 @@ _begin( fp_arith_mem_instr );
 	_endif	
 	asm1opm
 	(
-		_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+		fp_strs[instr], 
 		adrs, 
 		size,
 		testMode,
@@ -24325,7 +24328,7 @@ _begin( EmitValpConst )
 					asmPrintf( ";/* push real4=%15.8e */\n", value->v.u.fltval.f.f );
 					
 				_endif
-				Pushd( *(int*)&value->v.u.fltval.f.f );
+				Pushd( *(unsigned long*)&value->v.u.fltval.f.f );
 
 			_elseif( sym->pType == tReal64 )
 
@@ -24334,8 +24337,8 @@ _begin( EmitValpConst )
 					asmPrintf( ";/* push real8=%24.18e */\n", value->v.u.fltval.f.d );
 					
 				_endif
-				Pushd( *((int*)(&value->v.u.fltval.f.d)+1) );
-				Pushd( *(int*)&value->v.u.fltval.f.d );
+				Pushd( *((unsigned long*)(&value->v.u.fltval.f.d)+1) );
+				Pushd( *(unsigned long*)&value->v.u.fltval.f.d );
 
 
 			_elseif( sym->pType == tReal80 )
@@ -24357,9 +24360,9 @@ _begin( EmitValpConst )
 					_endif
 					
 				_endif
-				Pushd( (int) *((short*)(&value->v.u.fltval.f.d)+4) );
-				Pushd( *((int*)(&value->v.u.fltval.f.d)+1) );
-				Pushd( *(int*)&value->v.u.fltval.f.d );
+				Pushd( (unsigned long) *((unsigned short*)(&value->v.u.fltval.f.d)+4) );
+				Pushd( *((unsigned long*)(&value->v.u.fltval.f.d)+1) );
+				Pushd( *(unsigned long*)&value->v.u.fltval.f.d );
 				
 
 			_elseif( sym->ObjectSize == 16 )

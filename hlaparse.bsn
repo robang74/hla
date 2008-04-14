@@ -11752,7 +11752,7 @@ RecDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					NULL,			/* Type							*/
+					&proctype_ste,	/* Type							*/
 					tProcptr, 		/* pType						*/
 					cVar, 			/* SymClass						*/
 					0,				/* Arity						*/
@@ -12936,7 +12936,7 @@ InsertProcSym:
 			InsertSym
 			( 
 				$<idStr>-4,
-				NULL,
+				&proctype_ste,
 				tProcptr, 
 				cStatic, 
 				0,
@@ -29466,7 +29466,7 @@ TypeDef:
 			( 
 
 				$<idStr>1,
-				NULL,
+				&proctype_ste,
 				tProcptr, 
 				cType, 
 				0,
@@ -38386,7 +38386,7 @@ VariableDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					NULL,			/* Type							*/
+					&proctype_ste,	/* Type							*/
 					tProcptr, 		/* pType						*/
 					cVar, 			/* SymClass						*/
 					0,				/* Arity						*/
@@ -47619,6 +47619,7 @@ ConstExpr:
 			int				fieldIndex;
 			struct	SymNode	*field;
 			struct	SymNode	*theField;
+			struct	SymNode	*s;
 			char			lcName[256];
 			char			msg[ 256 ];
 				
@@ -47643,12 +47644,19 @@ ConstExpr:
 				// since I learned from the kludge that
 				// the record stuff became).
 				
+				s = $<s>1->Type;
+				_if( s == NULL )
+				
+					$<s>1->Type = $<s>1;
+					
+				_endif
 				ClrConst
 				(
 					YYS &$<v>$,
 					tUnion,
 					$<s>1
 				);
+				$<s>1->Type = s;
 				
 				// Allocate storage to hold all the fields:
 				
@@ -47724,6 +47732,9 @@ ConstExpr:
 					
 				_else
 					
+printf( "field index=%d\n", fieldIndex );
+printf( "The Field=%s\n", theField->TrueName );
+printf( "pType=%d\n", theField->pType );
 					assert( theField->Type != NULL );
 					_if( FieldsAreCompatible( theField, YYS &$<v>6 ))
 				

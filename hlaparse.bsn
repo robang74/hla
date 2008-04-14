@@ -47732,9 +47732,6 @@ ConstExpr:
 					
 				_else
 					
-printf( "field index=%d\n", fieldIndex );
-printf( "The Field=%s\n", theField->TrueName );
-printf( "pType=%d\n", theField->pType );
 					assert( theField->Type != NULL );
 					_if( FieldsAreCompatible( theField, YYS &$<v>6 ))
 				

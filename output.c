@@ -22131,7 +22131,7 @@ _begin( StaticConstToStr )
 				
 				_case( tReal80 ) 
 		
-					_if( assembler == gas && gasSyntax == macGas )
+					_if( assembler == gas )
 					
 						char fpOperand[64];
 						

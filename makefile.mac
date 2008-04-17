@@ -13,7 +13,7 @@ hla.o: hla.c ratc.h debug.h
 	gcc -DmacOS_c -O2 -c hla.c
 
 hlaparse: hlaparse.o lex.yy.o symbol.o hlautils.o output.o oututils.o coerce.o funcs.o  hlaasm.o
-	gcc -o hlaparse hlaparse.o lex.yy.o symbol.o hlautils.o output.o oututils.o coerce.o funcs.o hlaasm.o
+	gcc -Xlinker -stack_size -Xlinker 0x1000000 -o hlaparse hlaparse.o lex.yy.o symbol.o hlautils.o output.o oututils.o coerce.o funcs.o hlaasm.o
 
 hlaparse.o: hlaparse.c symbol.h ratc.h common.h enums.h debug.h output.h
 	 gcc -DmacOS_c -c -O2 -o hlaparse.o hlaparse.c

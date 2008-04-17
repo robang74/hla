@@ -12936,7 +12936,7 @@ InsertProcSym:
 			InsertSym
 			( 
 				$<idStr>-4,
-				&proctype_ste,
+				NULL,		// &proctype_ste,  -- NULL indicates pointer.
 				tProcptr, 
 				cStatic, 
 				0,
@@ -39913,7 +39913,7 @@ StaticAlign:
 			_if
 			( 
 					IsNumber( $<v.pType>3 ) 
-				&&	numBits( YYS &$<v>3 ) <= 32
+				&&	numBits32( YYS &$<v>3 ) <= 32
 				&&	$<v.u.intval>3 > 0 
 			)
 			
@@ -43545,7 +43545,7 @@ OptionalAlignment:
 			_if
 			( 
 					IsNumber( $<v.pType>2 )
-				&&	numBits( YYS &$<v>2 ) <= 32 
+				&&	numBits32( YYS &$<v>2 ) <= 32 
 				&&	(
 							$<v.u.unsval>2 == 1
 						||	$<v.u.unsval>2 == 2
@@ -44108,7 +44108,7 @@ OptionalROAlignment:
 				_if
 				( 
 						IsNumber( $<v.pType>2 )
-					&&	numBits( YYS &$<v>2 ) <= 32  
+					&&	numBits32( YYS &$<v>2 ) <= 32  
 					&&	(
 								$<v.u.unsval>2 == 1
 							||	$<v.u.unsval>2 == 2
@@ -46638,7 +46638,7 @@ StaticExpr:
 			struct StaticListType	*sList;
 			static char				StaticName[ 256 ];
 
-			_if( !IsOrdinal( $<v.pType>4 ) || numBits( YYS &$<v>4 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>4 ) || numBits32( YYS &$<v>4 ) > 32 )
 
 				yyerror( "Expected 32-bit ordinal type in index expression" );
 			
@@ -46750,7 +46750,7 @@ StaticExpr:
 			char	StaticName[256];
 			
 			_here;
-			_if( !IsOrdinal( $<v.pType>5 ) || numBits( YYS &$<v>5 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>5 ) || numBits32( YYS &$<v>5 ) > 32 )
 
 				yyerror( "Expected 32-bit ordinal type in index expression" );
 			
@@ -46856,7 +46856,7 @@ StaticExpr:
 			char msg[ 256 ];
 			char adrs[ 256 ];
 			
-			_if( !IsOrdinal( $<v.pType>6 ) || numBits( YYS &$<v>6 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>6 ) || numBits32( YYS &$<v>6 ) > 32 )
 
 				yyerror( "Expected 32-bit ordinal type in index expression" );
 			
@@ -48164,7 +48164,7 @@ intSetItem:
 			_if
 			( 
 					( !IsUns( $<v.pType>1 ) && !IsBytes( $<v.pType>1 ) )
-				||	numBits( YYS &$<v>1 ) > 32
+				||	numBits32( YYS &$<v>1 ) > 32
 				||	$<v.u.unsval>1 >= 32
 			)
 			
@@ -48465,7 +48465,7 @@ ConstExpr:
 				_if
 				( 
 						IsOrdinal( $<v.pType>3 )
-					&&	numBits( YYS &$<v>3 ) <= 32
+					&&	numBits32( YYS &$<v>3 ) <= 32
 				)
 
 					char temp[ 256 ];
@@ -66004,13 +66004,13 @@ OneCallParameter:
 					$<v.pType>2 == tPointer
 				||	(
 							IsNumber( $<v.pType>2 )
-						&&	numBits( YYS &$<v>2 ) <= 32
+						&&	numBits32( YYS &$<v>2 ) <= 32
 					)
 				||	( 
 							$<s>-1->pClass == valp_pc 
 						&&	$<s>-1->pType == tString 
 						&&	IsNumber( $<v.pType>2 )
-						&&	numBits( YYS &$<v>2 ) <= 32
+						&&	numBits32( YYS &$<v>2 ) <= 32
 					)
 			)
 
@@ -72211,7 +72211,7 @@ SingleStmt:
 				yyerror( "LOCK prefix requires a memory operand" );
 				
 			_endif
-			_if( IsOrdinal( $<v.pType>3 ) && numBits( YYS &$<v>3 ) <= 32 )
+			_if( IsOrdinal( $<v.pType>3 ) && numBits32( YYS &$<v>3 ) <= 32 )
 			
 				_if( $<u>5 >= reg_ax && $<u>5 <= reg_di )
 				
@@ -72266,7 +72266,7 @@ SingleStmt:
 		{
 			int size;
 			
-			_if( IsOrdinal( $<v.pType>3 ) && numBits( YYS &$<v>3 ) <= 32 )
+			_if( IsOrdinal( $<v.pType>3 ) && numBits32( YYS &$<v>3 ) <= 32 )
 			
 				_if( $<v.u.unsval>3 >= 256 )
 				
@@ -72434,7 +72434,7 @@ SingleStmt:
 		fReg16or32		/* $7 */
 		Rparen			/* $8 */
 		{
-			_if( IsOrdinal( $<v.pType>3 ) && numBits( YYS &$<v>3 ) <= 32 )
+			_if( IsOrdinal( $<v.pType>3 ) && numBits32( YYS &$<v>3 ) <= 32 )
 			
 				_if( isReg16( $<u>5 ))
 				
@@ -72511,7 +72511,7 @@ SingleStmt:
 				$<adrs.Size>7 = regSize;
 			
 			_endif
-			_if( IsOrdinal( $<v.pType>3 ) && numBits( YYS &$<v>3 ) <= 32 )
+			_if( IsOrdinal( $<v.pType>3 ) && numBits32( YYS &$<v>3 ) <= 32 )
 			
 				_if( regSize != $<adrs.Size>7 )
 				
@@ -75104,17 +75104,17 @@ SingleStmt:
 				
 					yyerror( "Expected an ordinal type for constant operand" );
 					
-				_elseif( $<reg.Size>5 == 1 && numBits( YYS &$<v>3 ) > 8 )
+				_elseif( $<reg.Size>5 == 1 && numBits32( YYS &$<v>3 ) > 8 )
 				
 					yyerror( "Expected an 8-bit ordinal type in constant expression" );
 				
-				_elseif( $<reg.Size>5 == 2 && numBits( YYS &$<v>3 ) > 16 )
+				_elseif( $<reg.Size>5 == 2 && numBits32( YYS &$<v>3 ) > 16 )
 				
 					yyerror( "Expected a 16-bit ordinal type in constant expression" );
 					
 				_elseif( $<reg.Size>5 == 4 )
 				
-					_if( $<v.pType>3 != tPointer && numBits( YYS &$<v>3 ) > 32 )
+					_if( $<v.pType>3 != tPointer && numBits32( YYS &$<v>3 ) > 32 )
 				
 						yyerror
 						( 
@@ -75148,15 +75148,15 @@ SingleStmt:
 				
 					yyerror( "Expected an ordinal type for constant operand" );
 					
-				_elseif( $<adrs.Size>5 == 1 && numBits( YYS &$<v>3 ) > 8 )
+				_elseif( $<adrs.Size>5 == 1 && numBits32( YYS &$<v>3 ) > 8 )
 				
 					yyerror( "Expected an 8-bit ordinal type in constant expression" );
 				
-				_elseif( $<adrs.Size>5 == 2 && numBits( YYS &$<v>3 ) > 16 )
+				_elseif( $<adrs.Size>5 == 2 && numBits32( YYS &$<v>3 ) > 16 )
 				
 					yyerror( "Expected a 16-bit ordinal type in constant expression" );
 					
-				_elseif( $<adrs.Size>5 == 5 && numBits( YYS &$<v>3 ) > 32 )
+				_elseif( $<adrs.Size>5 == 5 && numBits32( YYS &$<v>3 ) > 32 )
 				
 					yyerror( "Expected a 32-bit ordinal type in constant expression" );
 					
@@ -75292,17 +75292,17 @@ SingleStmt:
 				
 					yyerror( "Expected an ordinal type for constant operand" );
 					
-				_elseif( $<reg.Size>3 == 1 && numBits( YYS &$<v>5 ) > 8 )
+				_elseif( $<reg.Size>3 == 1 && numBits32( YYS &$<v>5 ) > 8 )
 				
 					yyerror( "Expected an 8-bit ordinal type in constant expression" );
 				
-				_elseif( $<reg.Size>3 == 2 && numBits( YYS &$<v>5 ) > 16 )
+				_elseif( $<reg.Size>3 == 2 && numBits32( YYS &$<v>5 ) > 16 )
 				
 					yyerror( "Expected a 16-bit ordinal type in constant expression" );
 					
 				_elseif( $<reg.Size>3 == 4 )
 				
-					_if( $<v.pType>5 != tPointer && numBits( YYS &$<v>5 ) > 32 )
+					_if( $<v.pType>5 != tPointer && numBits32( YYS &$<v>5 ) > 32 )
 				
 						yyerror
 						( 
@@ -75337,15 +75337,15 @@ SingleStmt:
 				
 					yyerror( "Expected an ordinal type for constant operand" );
 					
-				_elseif( $<adrs.Size>3 == 1 && numBits( YYS &$<v>5 ) > 8 )
+				_elseif( $<adrs.Size>3 == 1 && numBits32( YYS &$<v>5 ) > 8 )
 				
 					yyerror( "Expected an 8-bit ordinal type in constant expression" );
 				
-				_elseif( $<adrs.Size>3 == 2 && numBits( YYS &$<v>5 ) > 16 )
+				_elseif( $<adrs.Size>3 == 2 && numBits32( YYS &$<v>5 ) > 16 )
 				
 					yyerror( "Expected a 16-bit ordinal type in constant expression" );
 					
-				_elseif( $<adrs.Size>3 == 5 && numBits( YYS &$<v>5 ) > 32 )
+				_elseif( $<adrs.Size>3 == 5 && numBits32( YYS &$<v>5 ) > 32 )
 				
 					yyerror( "Expected a 32-bit ordinal type in constant expression" );
 					
@@ -76591,15 +76591,15 @@ SingleStmt:
 				yyerror( "Expected an ordinal type in constant expression" );
 			
 			_endif
-			_if( $<reg.Size>5 == 1 && numBits( YYS &$<v>3 ) > 8 )
+			_if( $<reg.Size>5 == 1 && numBits32( YYS &$<v>3 ) > 8 )
 			
 				yyerror( "Expected an 8-bit constant" );
 				
-			_elseif( $<reg.Size>5 == 2 && numBits( YYS &$<v>3 ) > 16 )
+			_elseif( $<reg.Size>5 == 2 && numBits32( YYS &$<v>3 ) > 16 )
 			
 				yyerror( "Expected a 16-bit constant" );
 				
-			_elseif( numBits( YYS &$<v>3 ) > 32 )
+			_elseif( numBits32( YYS &$<v>3 ) > 32 )
 			
 				yyerror( "Expected a 32-bit constant" );
 			
@@ -76623,15 +76623,15 @@ SingleStmt:
 				yyerror( "Expected an ordinal type in constant expression" );
 			
 			_endif
-			_if( $<adrs.Size>5 == 1 && numBits( YYS &$<v>3 ) > 8 )
+			_if( $<adrs.Size>5 == 1 && numBits32( YYS &$<v>3 ) > 8 )
 			
 				yyerror( "Expected an 8-bit constant" );
 				
-			_elseif( $<adrs.Size>5 == 2 && numBits( YYS &$<v>3 ) > 16 )
+			_elseif( $<adrs.Size>5 == 2 && numBits32( YYS &$<v>3 ) > 16 )
 			
 				yyerror( "Expected a 16-bit constant" );
 				
-			_elseif( numBits( YYS &$<v>3 ) > 32 )
+			_elseif( numBits32( YYS &$<v>3 ) > 32 )
 			
 				yyerror( "Expected a 32-bit constant" );
 			
@@ -78751,7 +78751,7 @@ SingleStmt:
 		{						/* $9  */
 
 			$<v.u.intval>$ = LblCntr++;	/* Target for next exception */
-			_if( !IsOrdinal( $<v.pType>6 ) || numBits( YYS &$<v>6 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>6 ) || numBits32( YYS &$<v>6 ) > 32 )
 			
 				ErrorNear
 				( 
@@ -78827,7 +78827,7 @@ SingleStmt:
 		{						/* $11 */
 
 			$<v.u.intval>$ = LblCntr++;	/* Target for next exception */
-			_if( !IsOrdinal( $<v.pType>9 ) || numBits( YYS &$<v>9 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>9 ) || numBits32( YYS &$<v>9 ) > 32 )
 			
 				ErrorNear
 				( 
@@ -78952,7 +78952,7 @@ OneException:
 			char label[ 256 ];
 			char constant[16];
 
-			_if( !IsOrdinal( $<v.pType>3 ) || numBits( YYS &$<v>3 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>3 ) || numBits32( YYS &$<v>3 ) > 32 )
 
 				ErrorNear
 				( 
@@ -79059,7 +79059,7 @@ SingleStmt:
 
 			char constant[16];
 
-			_if( !IsOrdinal( $<v.pType>3 ) || numBits( YYS &$<v>3 ) > 32 )
+			_if( !IsOrdinal( $<v.pType>3 ) || numBits32( YYS &$<v>3 ) > 32 )
 
 				ErrorNear
 				( 
@@ -83917,8 +83917,8 @@ BoolExpr:
 			
 				_if
 				( 
-						numBits( YYS &$<operand>3 ) > 32 
-					||	numBits( YYS &$<operand>5 ) > 32 
+						numBits32( YYS &$<operand>3 ) > 32 
+					||	numBits32( YYS &$<operand>5 ) > 32 
 				)
 				
 					yyerror( "Upper or lower range constant is too large" );
@@ -83942,7 +83942,7 @@ BoolExpr:
 			_elseif
 			( 
 					IsOrdinal( $<operand>3->o.v.pType ) 
-				&&	numBits( YYS &$<operand>3 ) <= 32 
+				&&	numBits32( YYS &$<operand>3 ) <= 32 
 			)
 			
 				_if( $<operand>3->o.v.u.intval > $<operand>5->o.v.u.intval )
@@ -84045,8 +84045,8 @@ BoolExpr:
 
 				_if
 				( 
-						numBits( YYS &$<operand>3 ) > 32 
-					||	numBits( YYS &$<operand>5 ) > 32 
+						numBits32( YYS &$<operand>3 ) > 32 
+					||	numBits32( YYS &$<operand>5 ) > 32 
 				)
 				
 					yyerror( "Upper or lower range constant is too large" );
@@ -84068,7 +84068,7 @@ BoolExpr:
 			_elseif
 			( 
 					IsOrdinal( $<operand>3->o.v.pType ) 
-				&&	numBits( YYS &$<operand>3 ) <= 32 
+				&&	numBits32( YYS &$<operand>3 ) <= 32 
 			)
 			
 				_if( $<operand>3->o.v.u.intval > $<operand>5->o.v.u.intval )
@@ -84585,7 +84585,7 @@ be_const:
 
 			_if
 			( 
-					!( IsOrdinal( $<v.pType>1 ) && numBits( YYS &$<v>1 ) <= 32 ) 
+					!( IsOrdinal( $<v.pType>1 ) && numBits32( YYS &$<v>1 ) <= 32 ) 
 				&&	$<v.pType>1 != tCset
 				&&	$<v.pType>1 != tPointer 
 			)
@@ -84617,7 +84617,7 @@ be_const:
 
 			_if
 			( 
-					!( IsOrdinal( $<v.pType>2 ) && numBits( YYS &$<v>2 ) <= 32 ) 
+					!( IsOrdinal( $<v.pType>2 ) && numBits32( YYS &$<v>2 ) <= 32 ) 
 				&&	$<v.pType>2 != tCset
 				&&	$<v.pType>2 != tPointer 
 			)
@@ -85158,7 +85158,7 @@ Displacement:
 		ConstOnlyExpr
 		{
 			$<v>$ = $<v>2;
-			_if( !( IsOrdinal( $<v.pType>2 ) && numBits( YYS &$<v>2 ) <= 32 ))
+			_if( !( IsOrdinal( $<v.pType>2 ) && numBits32( YYS &$<v>2 ) <= 32 ))
 
 				yyerror( "Expected a 32-bit ordinal displacement value" );
 				FreeValue( YYS &$<v>2 );
@@ -85176,7 +85176,7 @@ Displacement:
 		ConstOnlyExpr
 		{
 			$<v>$ = $<v>3;
-			_if( IsOrdinal( $<v.pType>3 ) && numBits( YYS &$<v>3 ) <= 32 )
+			_if( IsOrdinal( $<v.pType>3 ) && numBits32( YYS &$<v>3 ) <= 32 )
 
 				$<v.u.intval>$ = $<v.u.intval>3;
 				$<v.pType>$ = tInt32;
@@ -85199,7 +85199,7 @@ Displacement2:
 		ConstOnlyExpr
 		{
 			$<v>$ = $<v>1;
-			_if( !( IsOrdinal( $<v.pType>1 ) && numBits( YYS &$<v>1 ) <= 32 ))
+			_if( !( IsOrdinal( $<v.pType>1 ) && numBits32( YYS &$<v>1 ) <= 32 ))
 
 				yyerror( "Expected a 32-bit ordinal displacement value" );
 				FreeValue( YYS &$<v>1 );
@@ -88314,7 +88314,7 @@ ScaledIndexMode:
 			_here;
 			_if
 			( 
-					numBits( YYS &$<v>4 ) > 32
+					numBits32( YYS &$<v>4 ) > 32
 				||	(
 							index != 1 
 						&&	index != 2
@@ -88345,7 +88345,7 @@ ScaledIndexPlus:
 			_here;
 			_if
 			( 
-					numBits( YYS &$<v>4 ) > 32
+					numBits32( YYS &$<v>4 ) > 32
 				||	(
 							index != 1 
 						&&	index != 2
@@ -88382,7 +88382,7 @@ ScaledIndexPlus:
 			_here;
 			_if
 			( 
-					numBits( YYS &$<v>4 ) > 32
+					numBits32( YYS &$<v>4 ) > 32
 				||	(
 							index != 1 
 						&&	index != 2
@@ -88476,7 +88476,7 @@ OptionalScaled:
 			_here;
 			_if
 			( 
-					numBits( YYS &$<v>2 ) > 32
+					numBits32( YYS &$<v>2 ) > 32
 				||	(
 							index != 1 
 						&&	index != 2
@@ -89890,7 +89890,6 @@ _begin( Usage )
 		"  -sn      Produce NASM compatible ASM output file.\n"
 		"  -source  Produce instruction translation (rather than hex output)\n"
 		"  -ccoff   Produce COFF OBJ file using internal version of FASM.\n"
-		"  -celf    Produce ELF OBJ file using internal version of FASM.\n"
 		"  -obj:XX  Output path for coff/elf object files.\n"
 		"  -win32   Generate code for Win32 OS.\n"
 		"  -linux   Generate code for Linux OS.\n"
@@ -90290,7 +90289,6 @@ _begin( main )
 	**	-freebsd		Generate code for freeBSD OS.
 	**	-macos			Generate code for Mac OSX.
 	**	-ccoff			Object output in COFF form (using internal FASM).
-	**	-celf           Object output in ELF form (using internal FASM).
 	**	-d<sym>			Define a symbol.
 	**	-sym			Dump the symbol table.
 	**	-v				Verbose output
@@ -90554,37 +90552,6 @@ _begin( main )
 					
 				_endif
 
-
-			_elseif( _streq( option, "-CELF" ))
-			
-				// If  the -celf command line option is given,
-				// then use the internal version of FASM
-				// to compile to an ELF OBJ file.
-				
-				_if( targetOS == linux_os )
-
-					assembler = fasm;
-					useCFASM = 1;
-					objFmt = 1;
-					fprintf
-					(
-						MsgOut, 
-						"Direct object output under Linux has some known issues\n"
-						"(fails on some distributions) -- Recommend using GAS\n"
-						"as the back-end assembler\n" 
-					);
-					
-				_else
-				
-					yyerror
-					( 
-						"ELF object output is available only under Linux" 
-					);
-					assembler = gas;
-					useCFASM = 0;
-					objFmt = 0;
-					
-				_endif
 
 			
 			// check for "-obj:<path>" here:
@@ -91303,7 +91270,7 @@ _begin( main )
 			
 		_else
 		
-			#if( defined( windows_c ) || defined( linux_c ))
+			#if( defined( windows_c ) )
 			
 			
 				cfasmMain
@@ -91319,7 +91286,7 @@ _begin( main )
 			
 				yyerror
 				( 
-					"Object output is available only under Windows and Linux" 
+					"Object output is available only under Windows" 
 				);
 				assembler = gas;
 				useCFASM = 0;

@@ -2373,6 +2373,123 @@ _end( numBits )
 
 
 
+// numBits32 is just like numBits except it maxes out at 32 bits if
+// the H.O. Lwords contain all zeros or $FFFF_FFFFs.
+
+int 
+numBits32( union YYSTYPE *value )
+_begin( numBits32 )
+
+	_switch( value->v.pType )
+	
+		_case( tBoolean )
+		_case( tEnum )		
+		_case( tChar ) 		
+		_case( tWChar )		
+		_case( tUns8 )		
+		_case( tUns16 )		
+		_case( tUns32 )		
+		_case( tUns64 )		
+		_case( tUns128 )	
+		_case( tByte )		
+		_case( tWord )		
+		_case( tDWord )		
+		_case( tQWord )		
+		_case( tLWord )
+
+			_returnif
+			( 
+					(
+							value->v.u.lwordval[3] != 0 
+						&&	value->v.u.lwordval[3] != 0xffffffff
+					)
+				||	(
+							value->v.u.lwordval[2] != 0 
+						&&	value->v.u.lwordval[2] != 0xffffffff
+					)
+			) 128;
+			
+			_returnif
+			(
+					value->v.u.lwordval[1] != 0 
+				&&	value->v.u.lwordval[1] != 0xffffffff
+			) 64;
+			
+			_returnif( *((unsigned short*)&value->v.u.lwordval + 1) != 0 ) 32;
+			_returnif( *((unsigned char*)&value->v.u.lwordval + 1) != 0 ) 16;
+			_return 8;
+		
+		
+		
+		_case( tInt8 )		
+		_case( tInt16 )		
+		_case( tInt32 )		
+		_case( tInt64 )		
+		_case( tInt128 )
+		
+			_if( *((int*)&value->v.u.lwordval[0]) < 0 )
+			
+				_returnif( value->v.u.lwordval[3] != 0xffffffff ) 128;
+				_returnif( value->v.u.lwordval[2] != 0xffffffff ) 128;
+				_returnif( value->v.u.lwordval[1] != 0xffffffff ) 64;
+				_returnif
+				( 
+					*((unsigned short*)&value->v.u.lwordval + 1) != 0xffff 
+				) 32;
+				
+				_returnif
+				( 
+					*((unsigned char*)&value->v.u.lwordval + 1) != 0xff 
+				) 16;
+				
+				_return 8;
+				
+			_endif
+		
+			_returnif( value->v.u.lwordval[3] != 0 ) 128;
+			_returnif( value->v.u.lwordval[2] != 0 ) 128;
+			_returnif( value->v.u.lwordval[1] != 0 ) 64;
+
+			_returnif( *((unsigned short*)&value->v.u.lwordval + 1) != 0 ) 32;
+			_returnif( *((unsigned char*)&value->v.u.lwordval + 1) != 0 ) 16;
+			_return 8;
+		
+		
+		_case( tPointer )
+		_case( tProcptr )
+		
+			_return 32;
+			
+		_case( tReal32 )
+		
+			_return 32;
+			
+		_case( tReal64 )
+		
+			_return 64;
+			 
+		_case( tReal80 )
+		
+			_return 80;	
+		 
+		_case( tString )
+		_case( tZString )
+		_case( tWString )
+		
+			_return 32;
+			
+		_case( tCset )		
+		
+			_return 128;
+			
+	_endswitch
+	
+	_return 32767;	// Arbitrary catch-all value.
+	
+_end( numBits )
+
+
+
 // Setval - a utility function that sign-extends
 // a 32-bit value throughout the xxxval fields
 // of a YYSTYPE object.

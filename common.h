@@ -653,6 +653,7 @@ extern int	wstrlen( char *s );
 extern int checkSmallInt( union YYSTYPE *value );
 extern int checkSmallUns( union YYSTYPE *value );
 extern int numBits( union YYSTYPE *value );
+extern int numBits32( union YYSTYPE *value );
 
 extern int MakeCompatible( struct SymNode *LeftOp, struct SymNode  *RightOp );
 

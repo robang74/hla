@@ -3321,7 +3321,7 @@ _begin( main )
 						sprintf
 						(
 							CmdLine, 
-							"as -arch i386 -o %s %s %s \"%s\"",
+							"as -o %s %s %s \"%s\"",
 							ObjName,
 							AsmOpts,
 							backEndAsmOptions,
@@ -3600,7 +3600,8 @@ _begin( main )
 		sprintf
 		( 
 			CmdLine, 
-			"ld -arch i386 %s %s  -o \"%s\" \0",
+			"ld %s %s %s  -o \"%s\" \0",
+			_ifx( gasSyntax == macGas, "-arch i386", "" ),
 			linkerOptions,
 			LinkOpts,
 			ExeName

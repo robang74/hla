@@ -4762,7 +4762,7 @@ _begin( fp_arith_noOp_instr )
 			sourceOutput
 		);
 		
-		_endif
+	_endif
 	
 	_if( !sourceOutput )
 	
@@ -4800,13 +4800,17 @@ _begin( fpp_arith_noOp_instr )
 	assert( instr < num_fpp_instrs );
 	_if( instr == fcompp_instr )
 	
-		asmPrintf
-		( 
-			"%s        fcompp%c    %s\n",
-			_ifx( testMode && !sourceOutput, openCmnt[assembler], "" ),
-			_ifx( assembler == hla, 'c', ' '), 
-			_ifx( testMode && !sourceOutput, closeCmnt[assembler], "" ) 
-		);
+		_if( sourceOutput || testMode )
+		
+			asmPrintf
+			( 
+				"%s        fcompp%c    %s\n",
+				_ifx( testMode && !sourceOutput, openCmnt[assembler], "" ),
+				_ifx( assembler == hla, ';', ' '), 
+				_ifx( testMode && !sourceOutput, closeCmnt[assembler], "" ) 
+			);
+			
+		_endif
 		
 	_else
 	

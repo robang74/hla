@@ -17757,7 +17757,7 @@ procs:
 					sprintf
 					( 
 						exitname, 
-						"x%s", 
+						"x%s" sympost, 
 						$<en.s>6->StaticName 
 					); 
 					p->StaticName = hlastrdup2( exitname );
@@ -18188,7 +18188,7 @@ procs:
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<en.s>6->StaticName );
+					sprintf( lbl, "x%s" sympost, $<en.s>6->StaticName );
 					EmitStmtLbl( lbl );
 					_here;
 				}
@@ -18548,7 +18548,7 @@ procs:
 				p->Next = contextList;
 				p->label = $<idStr>2;
 
-				sprintf( exitname, "x%s", $<en.s>6->StaticName ); 
+				sprintf( exitname, "x%s" sympost, $<en.s>6->StaticName ); 
 				p->StaticName = hlastrdup2( exitname );
 				p->LexLevel = CurLexLevel;
 				p->IsProc = 1;
@@ -18988,7 +18988,7 @@ procs:
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<en.s>6->StaticName );
+					sprintf( lbl, "x%s" sympost, $<en.s>6->StaticName );
 					EmitStmtLbl( lbl );
 				}
 
@@ -19324,7 +19324,7 @@ procs:		procedureTkn		/* $1 */
 					p->Next = contextList;
 					p->label = $<s>2->TrueName;
 
-					sprintf( exitname, "x%s", $<s>2->StaticName ); 
+					sprintf( exitname, "x%s" sympost, $<s>2->StaticName ); 
 					p->StaticName = hlastrdup2( exitname );
 					p->LexLevel = CurLexLevel;
 					p->IsProc = 1;
@@ -19750,7 +19750,7 @@ procs:		procedureTkn		/* $1 */
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<s>2->StaticName );
+					sprintf( lbl, "x%s" sympost, $<s>2->StaticName );
 					EmitStmtLbl( lbl );
 				}
 
@@ -20097,7 +20097,7 @@ procs:		methodTkn			/* $1 */
 					p->Next = contextList;
 					p->label = $<s>2->TrueName;
 
-					sprintf( exitname, "x%s", $<s>2->StaticName ); 
+					sprintf( exitname, "x%s" sympost, $<s>2->StaticName ); 
 					p->StaticName = hlastrdup2( exitname );
 					p->LexLevel = CurLexLevel;
 					p->IsProc = 1;
@@ -20523,7 +20523,7 @@ procs:		methodTkn			/* $1 */
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<s>2->StaticName );
+					sprintf( lbl, "x%s" sympost, $<s>2->StaticName );
 					EmitStmtLbl( lbl );
 				}
 
@@ -20898,7 +20898,7 @@ procs:
 				p->Next = contextList;
 				p->label = $<s>2->TrueName;
 
-				sprintf( exitname, "x%s", $<s>2->StaticName ); 
+				sprintf( exitname, "x%s" sympost, $<s>2->StaticName ); 
 				p->StaticName = hlastrdup2( exitname );
 				p->LexLevel = CurLexLevel;
 				p->IsProc = 1;
@@ -21316,7 +21316,7 @@ procs:
 			{
 				char lbl[256];
 				
-				sprintf( lbl, "x%s", $<s>2->StaticName );
+				sprintf( lbl, "x%s" sympost, $<s>2->StaticName );
 				EmitStmtLbl( lbl );
 			}
 
@@ -22481,7 +22481,7 @@ procs:		procedureTkn		/* $1  */
 					p->Next = contextList;
 					p->label = $<s>5->TrueName;
 
-					sprintf( exitname, "x%s", $<s>5->StaticName ); 
+					sprintf( exitname, "x%s" sympost, $<s>5->StaticName ); 
 					p->StaticName = hlastrdup2( exitname );
 					p->LexLevel = CurLexLevel;
 					p->IsProc = 1;
@@ -22903,7 +22903,7 @@ procs:		procedureTkn		/* $1  */
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<s>5->StaticName );
+					sprintf( lbl, "x%s" sympost, $<s>5->StaticName );
 					EmitStmtLbl( lbl );
 				}
 
@@ -23300,7 +23300,7 @@ procs:		iteratorTkn			/* $1  */
 					p->Next = contextList;
 					p->label = $<s>5->TrueName;
 
-					sprintf( exitname, "x%s", $<s>5->StaticName ); 
+					sprintf( exitname, "x%s" sympost, $<s>5->StaticName ); 
 					p->StaticName = hlastrdup2( exitname );
 					p->LexLevel = CurLexLevel;
 					p->IsProc = 1;
@@ -23711,7 +23711,7 @@ procs:		iteratorTkn			/* $1  */
 				{
 					char lbl[256];
 					
-					sprintf( lbl, "x%s", $<s>5->StaticName );
+					sprintf( lbl, "x%s" sympost, $<s>5->StaticName );
 					EmitStmtLbl( lbl );
 				}
 

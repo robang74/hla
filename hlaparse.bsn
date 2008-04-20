@@ -12936,7 +12936,7 @@ InsertProcSym:
 			InsertSym
 			( 
 				$<idStr>-4,
-				NULL,		// &proctype_ste,  -- NULL indicates pointer.
+				&proctype_ste,
 				tProcptr, 
 				cStatic, 
 				0,
@@ -17659,7 +17659,6 @@ procs:
 				** value for this procedure.
 				*/
 
-
 				$<en.s>6->u.proc.parms->u.proc.parms = SymbolTable;
 				$<en.s>6->u.proc.parms->u.proc.returns = 
 					$<options.returns>9;
@@ -17827,6 +17826,7 @@ procs:
 				int						HadPassByValRes;
 				int 					RoundedOffset;
 				struct SymNode			*s;
+				struct SymNode			*bt;
 				struct SymNode			*d;
 				struct SymNode			value;
 
@@ -17842,11 +17842,13 @@ procs:
 
 					HadPassByValRes = 0;
 					s = $<en.s>6->u.proc.parms;
-					_while( s != NULL )
 
+					_while( s != NULL && s != $<en.s>6 )
+
+						bt = GetBaseType( s );
 						_if
 						( 
-								s->pType == tProcptr 
+								bt->pType == tProcptr 
 							&&	(
 										s->pClass == vrp_pc 
 									||	s->pClass == result_pc
@@ -17873,12 +17875,12 @@ procs:
 							);
 
 							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = NULL;
-							SymbolTable->u.proc.parms = SymbolTable;
-							SymbolTable->u.proc.Locals = SymbolTable;
-							SymbolTable->u.proc.Forward = NULL;
-							SymbolTable->u.proc.BaseClass = NULL;
-							SymbolTable->u.proc.ParmSize = 0;
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.Locals = s->u.proc.Locals;
+							SymbolTable->u.proc.Forward = s->u.proc.Forward;
+							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 
 							HadPassByValRes = 
@@ -18533,9 +18535,6 @@ procs:
 			);
 
 
-
-
-
 			/*
 			** Add this procedure to the context list so we
 			** can bail on this procedure via the EXIT and EXITIF
@@ -18617,6 +18616,7 @@ procs:
 			int 			RoundedOffset;
 			struct	SymNode	value;
 			struct	SymNode	*s;
+			struct	SymNode	*bt;
 			struct	SymNode	*d;
 			int				HadPassByValRes;
 
@@ -18630,16 +18630,17 @@ procs:
 			** parameters because we need to allocate local
 			** storage for these.
 			*/
-
+			
 			_if( $<options.UseFrame>9 )
 
 				HadPassByValRes = 0;
 				s = $<en.s>6->u.proc.parms;
-				_while( s != NULL )
+				_while( s != NULL && s != $<en.s>6 )
 
+					bt = GetBaseType( s );
 					_if
 					( 
-							s->pType == tProcptr 
+							bt->pType == tProcptr 
 						&&	(
 									s->pClass == vrp_pc 
 								||	s->pClass == result_pc
@@ -18665,13 +18666,11 @@ procs:
 							s->FieldCnt			/* FieldCnt		*/
 						);
 						SymbolTable->u.proc.returns = hlastrdup2( "" );
-						SymbolTable->u.proc.returns = NULL;
-						SymbolTable->u.proc.parms = SymbolTable;
-						SymbolTable->u.proc.Locals = SymbolTable;
-						SymbolTable->u.proc.Forward = NULL;
-						SymbolTable->u.proc.BaseClass = NULL;
-						SymbolTable->u.proc.ParmSize = 0;
-
+						SymbolTable->u.proc.parms = s->u.proc.parms;
+						SymbolTable->u.proc.Locals = s->u.proc.Locals;
+						SymbolTable->u.proc.Forward = s->u.proc.Forward;
+						SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+						SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 						HadPassByValRes = 
 							HadPassByValRes || (s->pClass == vrp_pc );
@@ -19387,7 +19386,7 @@ procs:		procedureTkn		/* $1 */
 
 					HadPassByValRes = 0;
 					s = $<s>2->u.proc.parms;
-					_while( s != NULL )
+					_while( s != NULL && s != $<s>2 )
 
 						_if
 						( 
@@ -19417,12 +19416,12 @@ procs:		procedureTkn		/* $1 */
 								s->FieldCnt			/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = NULL;
-							SymbolTable->u.proc.parms = SymbolTable;
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.Locals = SymbolTable;
-							SymbolTable->u.proc.Forward = NULL;
-							SymbolTable->u.proc.BaseClass = NULL;
-							SymbolTable->u.proc.ParmSize = 0;
+							SymbolTable->u.proc.Forward = s->u.proc.Forward;
+							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -20163,7 +20162,7 @@ procs:		methodTkn			/* $1 */
 
 					HadPassByValRes = 0;
 					s = $<s>2->u.proc.parms;
-					_while( s != NULL )
+					_while( s != NULL && s != $<s>2 )
 
 						_if
 						( 
@@ -20194,12 +20193,13 @@ procs:		methodTkn			/* $1 */
 							);
 
 							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = NULL;
-							SymbolTable->u.proc.parms = SymbolTable;
-							SymbolTable->u.proc.Locals = SymbolTable;
-							SymbolTable->u.proc.Forward = NULL;
-							SymbolTable->u.proc.BaseClass = NULL;
-							SymbolTable->u.proc.ParmSize = 0;
+	
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.Locals = s->u.proc.Locals;
+							SymbolTable->u.proc.Forward = s->u.proc.Forward;
+							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -20959,7 +20959,7 @@ procs:
 
 				HadPassByValRes = 0;
 				s = $<s>2->u.proc.parms;
-				_while( s != NULL )
+				_while( s != NULL && s != $<s>2 )
 
 					_if
 					( 
@@ -20990,12 +20990,13 @@ procs:
 						);
 
 						SymbolTable->u.proc.returns = hlastrdup2( "" );
-						SymbolTable->u.proc.use = NULL;
-						SymbolTable->u.proc.parms = SymbolTable;
-						SymbolTable->u.proc.Locals = SymbolTable;
-						SymbolTable->u.proc.Forward = NULL;
-						SymbolTable->u.proc.BaseClass = NULL;
-						SymbolTable->u.proc.ParmSize = 0;
+
+						SymbolTable->u.proc.use = s->u.proc.use;
+						SymbolTable->u.proc.parms = s->u.proc.parms;
+						SymbolTable->u.proc.Locals = s->u.proc.Locals;
+						SymbolTable->u.proc.Forward = s->u.proc.Forward;
+						SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+						SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 						HadPassByValRes = 
 							HadPassByValRes || (s->pClass == vrp_pc );
@@ -22542,7 +22543,7 @@ procs:		procedureTkn		/* $1  */
 
 					HadPassByValRes = 0;
 					s = $<s>5->u.proc.parms;
-					_while( s != NULL )
+					_while( s != NULL && s != $<s>5 )
 
 						_if
 						( 
@@ -22573,12 +22574,12 @@ procs:		procedureTkn		/* $1  */
 							);
 
 							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = NULL;
-							SymbolTable->u.proc.parms = SymbolTable;
-							SymbolTable->u.proc.Locals = SymbolTable;
-							SymbolTable->u.proc.Forward = NULL;
-							SymbolTable->u.proc.BaseClass = NULL;
-							SymbolTable->u.proc.ParmSize = 0;
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.Locals = s->u.proc.Locals;
+							SymbolTable->u.proc.Forward = s->u.proc.Forward;
+							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -23362,7 +23363,7 @@ procs:		iteratorTkn			/* $1  */
 
 					HadPassByValRes = 0;
 					s = $<s>5->u.proc.parms;
-					_while( s != NULL )
+					_while( s != NULL && s != $<s>5 )
 
 						_if
 						( 
@@ -23392,12 +23393,12 @@ procs:		iteratorTkn			/* $1  */
 								s->FieldCnt			/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = NULL;
-							SymbolTable->u.proc.parms = SymbolTable;
-							SymbolTable->u.proc.Locals = SymbolTable;
-							SymbolTable->u.proc.Forward = NULL;
-							SymbolTable->u.proc.BaseClass = NULL;
-							SymbolTable->u.proc.ParmSize = 0;
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.Locals = s->u.proc.Locals;
+							SymbolTable->u.proc.Forward = s->u.proc.Forward;
+							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
+							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -27355,14 +27356,6 @@ OneOrMoreParms:
 					InsertSym
 					( 
 						$<idStr>2,
-										/* 3/7/00 rlh 
-										_ifx
-										( 
-											$<s>4->pType == tArray, 
-											GetBaseType( $<s>4 ), 
-											$<s>4 
-										),
-										*/
 						$<s>4,
 						$<s>4->pType, 
 						cParm, 
@@ -27377,7 +27370,6 @@ OneOrMoreParms:
 						$<s>4->Fields,
 						$<s>4->FieldCnt
 					);
-
 
 
 				_else
@@ -27411,9 +27403,18 @@ OneOrMoreParms:
 				_endif
 				SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
 				SymbolTable->u.proc.use = $<v.u.proc.use>1;
-				SymbolTable->u.proc.parms = &true_ste;
+				_if( $<s>4->pType == tProcptr )
+				
+					SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
 
-
+				_else
+				
+					// Put a bogus entry here, for consistency,
+					// if it's not a proc pointer.
+					
+					SymbolTable->u.proc.parms = &true_ste;
+					
+				_endif
 
 				/*
 				** For parameters, the pClass field contains the passing
@@ -27520,6 +27521,18 @@ OneOrMoreParms:
 						$<s>4->FieldCnt
 					);
 					SymbolTable->regnum = $<reg.encoding>6;
+					_if( $<s>4->pType == tProcptr )
+					
+						// Copy parameter info if a proc ptr.
+						
+						memcpy
+						( 
+							&SymbolTable->u, 
+							&$<s>4->u, 
+							sizeof( union ValuesSize )
+						);
+						
+					_endif
 
 
 
@@ -27553,7 +27566,18 @@ OneOrMoreParms:
 				_endif
 				SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
 				SymbolTable->u.proc.use = $<v.u.proc.use>1;
-				SymbolTable->u.proc.parms = &true_ste;
+				_if( $<s>4->pType == tProcptr )
+				
+					SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
+
+				_else
+				
+					// Put a bogus entry here, for consistency,
+					// if it's not a proc pointer.
+					
+					SymbolTable->u.proc.parms = &true_ste;
+					
+				_endif
 
 
 
@@ -27610,14 +27634,6 @@ OneOrMoreParms:
 					InsertSym
 					( 
 						$<idStr>2, 
-										/* 3/7/00 rlh
-										_ifx
-										( 
-											$<s>4->pType == tArray, 
-											GetBaseType( $<s>4 ), 
-											$<s>4 
-										),
-										*/
 						$<s>4,
 						$<s>4->pType, 
 						cParm, 
@@ -27632,6 +27648,18 @@ OneOrMoreParms:
 						$<s>4->Fields,
 						$<s>4->FieldCnt
 					);
+					_if( $<s>4->pType == tProcptr )
+					
+						SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
+
+					_else
+					
+						// Put a bogus entry here, for consistency,
+						// if it's not a proc pointer.
+						
+						SymbolTable->u.proc.parms = &true_ste;
+						
+					_endif
 
 				_elseif
 				(
@@ -27657,6 +27685,18 @@ OneOrMoreParms:
 						0
 					);
 					CurParmSize = 4;
+					_if( $<s>4->pType == tProcptr )
+					
+						SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
+
+					_else
+					
+						// Put a bogus entry here, for consistency,
+						// if it's not a proc pointer.
+						
+						SymbolTable->u.proc.parms = &true_ste;
+						
+					_endif
 
 				_else
 				 
@@ -28120,6 +28160,18 @@ OneOrMoreParms:
 					CurParmSize = 4;
 					SymbolTable->regnum = $<reg.encoding>6;
 
+				_endif
+				_if( $<s>4->pType == tProcptr )
+				
+					SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
+
+				_else
+				
+					// Put a bogus entry here, for consistency,
+					// if it's not a proc pointer.
+					
+					SymbolTable->u.proc.parms = &true_ste;
+					
 				_endif
 
 				/*
@@ -29545,9 +29597,7 @@ TypeDef:
 			union YYSTYPE value;
 			
 			_here;
-			
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
-
 			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
 			$<s>6->u.proc.parms->u.proc.use = NULL;
 
@@ -29713,6 +29763,18 @@ TypeDef:	UndefinedID
 					$<s>3->FieldCnt
 				);
 				SymbolTable->MaxObjectSize = $<s>3->MaxObjectSize;
+				_if( $<s>3->pType == tProcptr )
+				
+					// Copy parameter info if a proc ptr.
+					
+					memcpy
+					( 
+						&SymbolTable->u, 
+						&$<s>3->u, 
+						sizeof( union ValuesSize )
+					);
+					
+				_endif
 
 				/*
 				** Copy any data (e.g., procedure "returns" value) to
@@ -29846,6 +29908,18 @@ TypeDef:	UndefinedID
 						$<s>3->Fields,
 						$<s>3->FieldCnt
 					);
+					_if( $<s>3->pType == tProcptr )
+					
+						// Copy parameter info if a proc ptr.
+						
+						memcpy
+						( 
+							&SymbolTable->u, 
+							&$<s>3->u, 
+							sizeof( union ValuesSize )
+						);
+						
+					_endif
 					
 					/*
 					** For arrays, the MaxObjectSize field must
@@ -29974,6 +30048,18 @@ TypeDef:	UndefinedID
 						$<s>3->Fields,
 						$<s>3->FieldCnt
 					);
+					_if( $<s>3->pType == tProcptr )
+					
+						// Copy parameter info if a proc ptr.
+						
+						memcpy
+						( 
+							&SymbolTable->u, 
+							&$<s>3->u, 
+							sizeof( union ValuesSize )
+						);
+						
+					_endif
 
 					/*
 					** Copy any data (e.g., procedure "returns" value) to
@@ -38855,9 +38941,6 @@ VariableDef:
 					InsertSym
 					( 
 						$<idStr>1, 
-										/* 3/7/00
-										GetBaseType( $<s>3 ),
-										*/
 						$<s>3,
 						$<s>3->pType, 
 						cVar, 
@@ -38872,6 +38955,18 @@ VariableDef:
 						$<s>3->Fields,
 						$<s>3->FieldCnt
 					);
+					_if( $<s>3->pType == tProcptr )
+					
+						// Copy parameter info if a proc ptr.
+						
+						memcpy
+						( 
+							&SymbolTable->u, 
+							&$<s>3->u, 
+							sizeof( union ValuesSize )
+						);
+						
+					_endif
 
 					/*
 					** If this is a class object, we need to duplicate
@@ -38938,11 +39033,11 @@ VariableDef:
 
 
 
-			/*
-			** Array variable definitions:
-			** e.g., b:integer[4];
-			**
-			*/
+	/*
+	** Array variable definitions:
+	** e.g., b:integer[4];
+	**
+	*/
 
 					
 VariableDef:
@@ -39008,9 +39103,6 @@ VariableDef:
 						InsertSym
 						( 
 							$<idStr>1, 
-											/* 3/7/00
-											GetBaseType( $<s>3 ),
-											*/
 							$<s>3,
 							tArray, 
 							cVar, 
@@ -39144,9 +39236,6 @@ VariableDef:
 						InsertSym
 						( 
 							$<idStr>1, 
-											/* 3/7/00
-											GetBaseType( $<s>3 ),
-											*/
 							$<s>3,
 							tArray, 
 							cVar, 
@@ -41197,6 +41286,18 @@ StaticSingleTypeInit:
 					$<s>3->Fields,
 					$<s>3->FieldCnt
 				);
+				_if( $<s>3->pType == tProcptr )
+				
+					// Copy parameter info if a proc ptr.
+					
+					memcpy
+					( 
+						&SymbolTable->u, 
+						&$<s>3->u, 
+						sizeof( union ValuesSize )
+					);
+					
+				_endif
 
 				/*
 				** Check to see if the TypeID and the ConstOnlyExpr
@@ -42440,7 +42541,7 @@ StaticSingleType:
 				InsertSym
 				( 
 					$<idStr>1, 
-					$<s>3, 			/*GetBaseType( $<s>3 ),*/
+					$<s>3,
 					$<s>3->pType, 
 					cStatic, 
 					$<s>3->Arity,
@@ -42454,6 +42555,14 @@ StaticSingleType:
 					$<s>3->Fields,
 					$<s>3->FieldCnt
 				);
+				_if( $<s>3->pType == tProcptr )
+				
+					// Copy parameter info if a proc ptr.
+					
+					memcpy( &SymbolTable->u, &$<s>3->u, sizeof( union ValuesSize ));
+					
+				_endif
+
 
 				// If this is an external declaration,
 				// output an externdef statement to the ASM file.
@@ -42724,9 +42833,6 @@ StaticArray:
 					InsertSym
 					( 
 						$<idStr>1, 
-										/* 3/7/00
-										GetBaseType( $<s>3 ),
-										*/
 						$<s>3,
 						tArray, 
 						cStatic, 
@@ -42954,9 +43060,7 @@ StaticArray:
 					InsertSym
 					( 
 						$<idStr>1, 
-						$<s>3,			/* 3/7/00
-										BaseType,
-										*/
+						$<s>3,
 						tArray, 
 						cStatic, 
 						$<s>3->Arity + $<v.Arity>5,
@@ -45283,6 +45387,18 @@ ReadOnlyDef:
 					$<s>3->Fields,
 					$<s>3->FieldCnt
 				);
+				_if( $<s>3->pType == tProcptr )
+				
+					// Copy parameter info if a proc ptr.
+					
+					memcpy
+					( 
+						&SymbolTable->u, 
+						&$<s>3->u, 
+						sizeof( union ValuesSize )
+					);
+					
+				_endif
 
 
 
@@ -45392,6 +45508,18 @@ ReadOnlyDef:
 					$<s>3->Fields,
 					$<s>3->FieldCnt
 				);
+				_if( $<s>3->pType == tProcptr )
+				
+					// Copy parameter info if a proc ptr.
+					
+					memcpy
+					( 
+						&SymbolTable->u, 
+						&$<s>3->u, 
+						sizeof( union ValuesSize )
+					);
+					
+				_endif
 
 
 
@@ -45842,9 +45970,6 @@ ReadOnlyDef:
 					InsertSym
 					( 
 						$<idStr>1, 
-										/* 3/7/00 rlh
-										GetBaseType( $<s>3 ),
-										*/
 						$<s>3,
 						tArray, 
 						cStatic, 
@@ -45904,9 +46029,6 @@ ReadOnlyDef:
 					InsertSym
 					( 
 						$<idStr>1, 
-										/* 3/7/00
-										GetBaseType( $<s>3 ),
-										*/
 						$<s>3,
 						tArray, 
 						cStatic, 
@@ -64234,7 +64356,7 @@ SingleStmt:
 						);
 
 					_else
-
+ 
 						strcpy
 						(
 							returns,
@@ -65648,12 +65770,21 @@ IndirectCallParameters:
 		'('
 		SavePosn
 		{
-			struct SymNode	*s;
+			enum	PrimType	pType;
+			struct	SymNode		*s;
 
 			_here;
 			
 			assert( $<s>0 != NULL );
+			assert( $<s>0->Type != NULL || $<s>0->pType != tArray );
 
+			pType = 
+				_ifx
+				( 
+					$<s>0->pType == tArray, 
+					GetBaseType($<s>0->Type)->pType,
+					$<s>0->pType
+				);
 
 			/*
 			** If the type field of $<s>0 is NULL, then
@@ -65669,12 +65800,13 @@ IndirectCallParameters:
 			( 
 				
 					$<s>0->Type == NULL
-				||	$<s>0->pType == tThunk
-				||	$<s>0->pType == tMethod
-				||	$<s>0->pType == tIterator
-				||	$<s>0->pType == tProc
-				||	$<s>0->pType == tClassProc
-				||	$<s>0->pType == tClassIter
+				||	pType == tProcptr
+				||	pType == tThunk
+				||	pType == tMethod
+				||	pType == tIterator
+				||	pType == tProc
+				||	pType == tClassProc
+				||	pType == tClassIter
 				||	(
 							$<s>0->SymClass == cParm
 						&&	(
@@ -65688,9 +65820,9 @@ IndirectCallParameters:
 
 			_else
 
-				_if( $<s>0->Type->u.proc.parms != NULL )
+				_if( $<s>0->u.proc.parms != NULL )
 
-					$<s>$ = $<s>0->Type; //->u.proc.parms;
+					$<s>$ = $<s>0;
 
 				_else
 
@@ -65756,7 +65888,20 @@ CopyProc2:
 CopyParms:
 		{
 			_here;
-			$<s>$ = $<s>0->u.proc.parms;
+			_if( $<s>0->pType == tArray )
+			
+				$<s>$ = GetBaseType($<s>0->Type)->u.proc.parms;
+				_if( $<s>$ == NULL )
+				
+					$<s>$ = $<s>0->Type->u.proc.parms;
+					
+				_endif
+				
+			_else
+			
+				$<s>$ = $<s>0->u.proc.parms;
+				
+			_endif
 			assert( $<s>$ != NULL );
 		}
 	;
@@ -70824,7 +70969,7 @@ SingleStmt:
 		Rparen			/* $6 */
 		{
 			_here;
-			Emit_Gv_Ew_r( $<reg.encoding>1, $<reg.encoding>5, $<reg.encoding>3 );
+			Emit_Gv_Ew_r( $<u>1, $<reg.encoding>5, $<reg.encoding>3 );
 			$<returns>$ = hlastrdup( regStrs[ $<reg.encoding>3 ] ); 
 		}
 	;
@@ -73255,7 +73400,7 @@ SingleStmt:
 			yyerror( "Must specify memory size" );
 			yyerror( SizeMismatchStr );
 			FreeAdrs( &$<adrs>2 );
-			$<returns>$ = hlastrdup2( regStrs[ $<reg.encoding>4 ]);
+			$<returns>$ = hlastrdup2( regStrs[ $<reg.encoding>5 ]);
 		}
 	;
 
@@ -77402,8 +77547,8 @@ SingleStmt:
 		{
 			_here;			
 			CompatGpReg( reg_ax, $<u>5 );	// Make sure GPreg is 16-bits
-			EmitMov_sr_r( $<u>3, $<u>5 );
-			$<returns>$ = hlastrdup2( regStrs[ $<u>5 ] );
+			EmitMov_sr_r( $<u>3, $<reg.encoding>5 );
+			$<returns>$ = hlastrdup2( regStrs[ $<reg.encoding>5 ] );
 			_here;			
 		}
 	;
@@ -77508,7 +77653,7 @@ SingleStmt:
 		{
 			_here;
 			CompatGpReg( reg_eax, $<reg.encoding>5 );	// Make sure GPreg is 32 bits
-			EmitMov_cr_r( $<u>3, $<u>5 );
+			EmitMov_cr_r( $<u>3, $<reg.encoding>5 );
 			$<returns>$ = hlastrdup2( regStrs[$<reg.encoding>5] );
 			_here;			
 		}
@@ -77560,9 +77705,9 @@ SingleStmt:
 SingleStmt:
 		movTkn			/* $1 */
 		Lparen			/* $2 */
-		fRegister		/* $5 */
+		fRegister		/* $3 */
 		comma			/* $4 */
-		fDbgRegister	/* $3 */
+		fDbgRegister	/* $5 */
 		Rparen			/* $6 */
 		{
 			_here;			
@@ -84879,7 +85024,6 @@ MemoryDest:
 				$<adrs.pType>1 = $<adrs.Type>1->pType;
 
 			_endif;
-
  			CombineAddresses( &$<adrs>1, &$<adrs>2 );
 			memcpy( &$<adrs>$, &$<adrs>1, sizeof( union YYSTYPE ) );
 			FreeAdrs( &$<adrs>2 );

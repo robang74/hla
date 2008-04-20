@@ -2020,10 +2020,10 @@ _end( CombineAttrs )
 void 
 CreatePtrToProc
 ( 
-	char *newName, 
-	struct SymNode *existingProc,
-	char *staticName,
-	enum ClassType ct 
+	char 			*newName, 
+	struct SymNode	*existingProc,
+	char 			*staticName,
+	enum ClassType 	ct 
 )
 _begin( CreatePtrToProc )
 
@@ -2034,7 +2034,7 @@ _begin( CreatePtrToProc )
 	struct SymNode *sprev;
 	struct SymNode *saveSyms;
 	struct SymNode temp;
-		
+
 	_if( ct == cVar || ct == cParm )
 	
 

@@ -423,7 +423,7 @@ _begin( Help )
 		"  -ct       Compile/assemble to object using TASM (Windows only).\n"
 		"  -cg       Compile/assemble to object using GAS (Linux/FreeBSD only).\n"
 		"  -cx       Compile/assemble to object using GAS (Mac only).\n"
-		"  -co       Compile/assemble to object using internal FASM back-end.\n"
+		"  -co       Compile/assemble to object using internal FASM back-end (Win32).\n"
 		"\n"
 		"  -o:omf    Produce OMF files (for Windows).\n"
 		"  -o:coff   Produce win32 COFF files (for Windows).\n"
@@ -444,7 +444,7 @@ _begin( Help )
 		"  -xt       Compile/assemble/link to object using TASM (Windows only).\n"
 		"  -xg       Compile/assemble/link to object using GAS (Linux/FreeBSD only).\n"
 		"  -xx       Compile/assemble/link to object using GAS (Mac only).\n"
-		"  -xo       Compile/assemble/link to object internal FASM back-end.\n"
+		"  -xo       Compile/assemble/link to object internal FASM back-end (Windows only).\n"
 		"\n"
 		"  -win32    Generate code for Win32 OS.\n"
 		"  -linux    Generate code for Linux OS.\n"
@@ -1418,8 +1418,10 @@ _begin( doCmdLine)
 				
 				_else
 				
-					ObjFmt = elf;
-					
+					printf( "-co option is valid only under Windows\n" );
+					Usage();
+					_return 1;
+				
 				_endif
 				
 			_elseif( _streq( ucArg, "CODE1ST" ))
@@ -1544,12 +1546,13 @@ _begin( doCmdLine)
 						linker = polink;
 						
 					_endif
-				
+					
 				_else
 				
-					ObjFmt = elf;
-					linker = ld;
-					
+					printf( "-xo option is valid only under Windows\n" );
+					Usage();
+					_return 1;
+				
 				_endif
 
 			

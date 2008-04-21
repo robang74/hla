@@ -9035,7 +9035,6 @@ _begin( Emit_bt_r_m )
 	_else
 	
 		adrs->forcedSize = setForced( adrs, regSize( reg ) );
-		adrs->forcedSize = adrs->forcedSize;
 		
 	_endif
 	asm2oprm
@@ -9121,12 +9120,17 @@ _begin( Emit_bt_c_m )
 		adrs->forcedSize = adrs->Size;
 		
 	_endif
+	_if( adrs->forcedSize != 0 )
+	
+		adrs->Size = adrs->forcedSize;
+		
+	_endif
 	asm2oprm
 	(
 		bt_strs[ instr ],
 		cnst,
 		adrs,
-		0,
+		adrs->Size,
 		testMode,
 		sourceOutput
 	);

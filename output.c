@@ -15259,15 +15259,31 @@ _begin( EmitEnter_c_c )
 		
 	_else
 	
-		asm2oprr
-		(
-			"enter",
-			nestingStr,
-			varsStr,
-			0,
-			testMode,
-			sourceOutput
-		);
+		_if( assembler == gas )
+		
+			asm2oprr
+			(
+				"enter",
+				varsStr,		// These operands are not swapped for gas.
+				nestingStr,
+				0,
+				testMode,
+				sourceOutput
+			);
+
+		_else // not gas
+		
+			asm2oprr
+			(
+				"enter",
+				nestingStr,
+				varsStr,
+				0,
+				testMode,
+				sourceOutput
+			);
+			
+		_endif
 		
 	_endif
 	_if( !sourceOutput )

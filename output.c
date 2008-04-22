@@ -159,17 +159,20 @@ char *fpregmap[ numFPregs ][ numAssemblers ] =
 	}; 
 
 
+// Note: for some crazy reason, MASM requires the MMX register names
+// to be upper case when doing a case-sensitive compilation.
+
 char *mmxregmap[ numMMXregs ][ numAssemblers ] =
 	{
 		//	masm	fasm	tasm	gas		nasm	hla 
-		{	"mm0",	"mm0",	"mm0",	"%mm0",	"mm0",	"mm0" },
-		{	"mm1",	"mm1",	"mm1",	"%mm1",	"mm1",	"mm1" },
-		{	"mm2",	"mm2",	"mm2",	"%mm2",	"mm2",	"mm2" },
-		{	"mm3",	"mm3",	"mm3",	"%mm3",	"mm3",	"mm3" },
-		{	"mm4",	"mm4",	"mm4",	"%mm4",	"mm4",	"mm4" },
-		{	"mm5",	"mm5",	"mm5",	"%mm5",	"mm5",	"mm5" },
-		{	"mm6",	"mm6",	"mm6",	"%mm6",	"mm6",	"mm6" },
-		{	"mm7",	"mm7",	"mm7",	"%mm7",	"mm7",	"mm7" }
+		{	"MM0",	"mm0",	"mm0",	"%mm0",	"mm0",	"mm0" },
+		{	"MM1",	"mm1",	"mm1",	"%mm1",	"mm1",	"mm1" },
+		{	"MM2",	"mm2",	"mm2",	"%mm2",	"mm2",	"mm2" },
+		{	"MM3",	"mm3",	"mm3",	"%mm3",	"mm3",	"mm3" },
+		{	"MM4",	"mm4",	"mm4",	"%mm4",	"mm4",	"mm4" },
+		{	"MM5",	"mm5",	"mm5",	"%mm5",	"mm5",	"mm5" },
+		{	"MM6",	"mm6",	"mm6",	"%mm6",	"mm6",	"mm6" },
+		{	"MM7",	"mm7",	"mm7",	"%mm7",	"mm7",	"mm7" }
 		
 	}; 
 
@@ -177,14 +180,14 @@ char *mmxregmap[ numMMXregs ][ numAssemblers ] =
 char *xmmregmap[ numXMMregs ][ numAssemblers ] =
 	{
 		//	masm	fasm	tasm	gas		  nasm	    hla 
-		{	"xmm0",	"xmm0",	"xmm0",	"%xmm0",  "xmm0",	"xmm0" },
-		{	"xmm1",	"xmm1",	"xmm1",	"%xmm1",  "xmm1",	"xmm1" },
-		{	"xmm2",	"xmm2",	"xmm2",	"%xmm2",  "xmm2",	"xmm2" },
-		{	"xmm3",	"xmm3",	"xmm3",	"%xmm3",  "xmm3",	"xmm3" },
-		{	"xmm4",	"xmm4",	"xmm4",	"%xmm4",  "xmm4",	"xmm4" },
-		{	"xmm5",	"xmm5",	"xmm5",	"%xmm5",  "xmm5",	"xmm5" },
-		{	"xmm6",	"xmm6",	"xmm6",	"%xmm6",  "xmm6",	"xmm6" },
-		{	"xmm7",	"xmm7",	"xmm7",	"%xmm7",  "xmm7",	"xmm7" }
+		{	"XMM0",	"xmm0",	"xmm0",	"%xmm0",  "xmm0",	"xmm0" },
+		{	"XMM1",	"xmm1",	"xmm1",	"%xmm1",  "xmm1",	"xmm1" },
+		{	"XMM2",	"xmm2",	"xmm2",	"%xmm2",  "xmm2",	"xmm2" },
+		{	"XMM3",	"xmm3",	"xmm3",	"%xmm3",  "xmm3",	"xmm3" },
+		{	"XMM4",	"xmm4",	"xmm4",	"%xmm4",  "xmm4",	"xmm4" },
+		{	"XMM5",	"xmm5",	"xmm5",	"%xmm5",  "xmm5",	"xmm5" },
+		{	"XMM6",	"xmm6",	"xmm6",	"%xmm6",  "xmm6",	"xmm6" },
+		{	"XMM7",	"xmm7",	"xmm7",	"%xmm7",  "xmm7",	"xmm7" }
 		
 	}; 
 
@@ -192,14 +195,14 @@ char *xmmregmap[ numXMMregs ][ numAssemblers ] =
 char *ctrlregmap[ numCTRLregs ][ numAssemblers ] =
 	{
 		//	masm	fasm	tasm	gas		nasm	hla 
-		{	"cr0",	"cr0",	"cr0",	"%cr0",	"cr0",	"cr0" },
-		{	"cr1",	"cr1",	"cr1",	"%cr1",	"cr1",	"cr1" },
-		{	"cr2",	"cr2",	"cr2",	"%cr2",	"cr2",	"cr2" },
-		{	"cr3",	"cr3",	"cr3",	"%cr3",	"cr3",	"cr3" },
-		{	"cr4",	"cr4",	"cr4",	"%cr4",	"cr4",	"cr4" },
-		{	"cr5",	"cr5",	"cr5",	"%cr5",	"cr5",	"cr5" },
-		{	"cr6",	"cr6",	"cr6",	"%cr6",	"cr6",	"cr6" },
-		{	"cr7",	"cr7",	"cr7",	"%cr7",	"cr7",	"cr7" }
+		{	"CR0",	"cr0",	"cr0",	"%cr0",	"cr0",	"cr0" },
+		{	"CR1",	"cr1",	"cr1",	"%cr1",	"cr1",	"cr1" },
+		{	"CR2",	"cr2",	"cr2",	"%cr2",	"cr2",	"cr2" },
+		{	"CR3",	"cr3",	"cr3",	"%cr3",	"cr3",	"cr3" },
+		{	"CR4",	"cr4",	"cr4",	"%cr4",	"cr4",	"cr4" },
+		{	"CR5",	"cr5",	"cr5",	"%cr5",	"cr5",	"cr5" },
+		{	"CR6",	"cr6",	"cr6",	"%cr6",	"cr6",	"cr6" },
+		{	"CR7",	"cr7",	"cr7",	"%cr7",	"cr7",	"cr7" }
 		
 	}; 
 
@@ -207,14 +210,14 @@ char *ctrlregmap[ numCTRLregs ][ numAssemblers ] =
 char *dbgregmap[ numDBGregs ][ numAssemblers ] =
 	{
 		//	masm	fasm	tasm	gas		nasm	hla 
-		{	"dr0",	"dr0",	"dr0",	"%dr0",	"dr0",	"dr0" },
-		{	"dr1",	"dr1",	"dr1",	"%dr1",	"dr1",	"dr1" },
-		{	"dr2",	"dr2",	"dr2",	"%dr2",	"dr2",	"dr2" },
-		{	"dr3",	"dr3",	"dr3",	"%dr3",	"dr3",	"dr3" },
-		{	"dr4",	"dr4",	"dr4",	"%dr4",	"dr4",	"dr4" },
-		{	"dr5",	"dr5",	"dr5",	"%dr5",	"dr5",	"dr5" },
-		{	"dr6",	"dr6",	"dr6",	"%dr6",	"dr6",	"dr6" },
-		{	"dr7",	"dr7",	"dr7",	"%dr7",	"dr7",	"dr7" }
+		{	"DR0",	"dr0",	"dr0",	"%dr0",	"dr0",	"dr0" },
+		{	"DR1",	"dr1",	"dr1",	"%dr1",	"dr1",	"dr1" },
+		{	"DR2",	"dr2",	"dr2",	"%dr2",	"dr2",	"dr2" },
+		{	"DR3",	"dr3",	"dr3",	"%dr3",	"dr3",	"dr3" },
+		{	"DR4",	"dr4",	"dr4",	"%dr4",	"dr4",	"dr4" },
+		{	"DR5",	"dr5",	"dr5",	"%dr5",	"dr5",	"dr5" },
+		{	"DR6",	"dr6",	"dr6",	"%dr6",	"dr6",	"dr6" },
+		{	"DR7",	"dr7",	"dr7",	"%dr7",	"dr7",	"dr7" }
 		
 	}; 
 
@@ -222,12 +225,12 @@ char *dbgregmap[ numDBGregs ][ numAssemblers ] =
 char *segregmap[ numSEGregs ][ numAssemblers ] =
 	{
 		//	masm	fasm	tasm	gas		nasm	hla 
-		{	"es",	"es",	"es",	"%es",	"es",	"eseg" },
-		{	"cs",	"cs",	"cs",	"%cs",	"cs",	"cseg" },
-		{	"ss",	"ss",	"ss",	"%ss",	"ss",	"sseg" },
-		{	"ds",	"ds",	"ds",	"%ds",	"ds",	"dseg" },
-		{	"fs",	"fs",	"fs",	"%fs",	"fs",	"fseg" },
-		{	"gs",	"gs",	"gs",	"%gs",	"gs",	"gseg" }
+		{	"ES",	"es",	"es",	"%es",	"es",	"eseg" },
+		{	"CS",	"cs",	"cs",	"%cs",	"cs",	"cseg" },
+		{	"SS",	"ss",	"ss",	"%ss",	"ss",	"sseg" },
+		{	"DS",	"ds",	"ds",	"%ds",	"ds",	"dseg" },
+		{	"FS",	"fs",	"fs",	"%fs",	"fs",	"fseg" },
+		{	"GS",	"gs",	"gs",	"%gs",	"gs",	"gseg" }
 	}; 
 
 

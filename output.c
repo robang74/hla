@@ -347,9 +347,16 @@ static char *tbyteStrs[ numAssemblers ] =
 // gasSizeSuffix is initialized to point into the middle of this
 // table. Negative offsets are used to obtain floating-point suffixes,
 // postive offsets are used to obtain integer suffixes.
+// Note that FP/integer operands (e.g., fild) use doubled negative indexes.
 
-static char *_gasSizeSuffixes[21] = 
+static char *_gasSizeSuffixes[27] = 
 {
+	"ll",	// -16
+	"",		// -15
+	"",		// -14
+	"",		// -13
+	"",		// -12
+	"",		// -11
 	"t",	// -10
 	"",		// -9
 	"l",	// -8
@@ -375,7 +382,7 @@ static char *_gasSizeSuffixes[21] =
 	"t",	// 10
 };
 
-char **gasSizeSuffixes = _gasSizeSuffixes + 10;
+char **gasSizeSuffixes = _gasSizeSuffixes + 16;
 
 
 
@@ -2989,14 +2996,13 @@ _begin( asmOneOperand )
 
 	char wideInstr[64];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( !comment || testMode  )
 	
 		_switch( assembler )
 		
 			_case( gas )
 		
-				assert( size >= -10 && size <= 10 );
 				strcpy( wideInstr, instr );
 				strcat( wideInstr, gasSizeSuffixes[ size ] );
 				asmPrintf
@@ -3065,7 +3071,7 @@ asm1opr
 )
 _begin( asm1opr )
 
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput )
 	
 		asmOneOperand( instr, operand, size, 0 );
@@ -3102,7 +3108,7 @@ _begin( asm1opm )
 	
 	// Note: forcedSize must be handle external to this function!
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		forcedSize = abs( size );
@@ -3148,14 +3154,13 @@ _begin( asmTwoOperand )
 
 	char wideInstr[64];
 			
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( !comment || testMode  )
 	
 		_switch( assembler )
 		
 			_case( gas )
 		
-				assert( size >= -10 && size <= 10 );
 				strcpy( wideInstr, instr );
 				strcat( wideInstr, gasSizeSuffixes[ size ] );
 				asmPrintf
@@ -3230,7 +3235,7 @@ asm2oprr
 )
 _begin( asm2oprr )
 
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput )
 	
 		asmTwoOperand( instr, srcOprnd, destOprnd, size, 0 );
@@ -3265,7 +3270,7 @@ _begin( asm2opcr )
 
 	char cnst[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( v->v.pType == tPointer && isdigit( *v->v.u.strval ))
 	
 		v->v.pType = tDWord;
@@ -3349,7 +3354,7 @@ _begin( asm2opcm )
 	char cnst[256];
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( v->v.pType == tPointer && isdigit( *v->v.u.strval ))
 	
 		v->v.pType = tDWord;
@@ -3442,7 +3447,7 @@ _begin( asm2opim )
 	char srcOprnd[32];
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		cnstToImmStr( cnst, srcOprnd );
@@ -3477,7 +3482,7 @@ _begin( asm2opmr )
 	int  forcedSize;
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	forcedSize = abs( size );
 	_if( adrs->forcedSize != 0 )
 	
@@ -3514,7 +3519,7 @@ asm2oprm
 _begin( asm2oprm )
 
 	char adrsStr[256];
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		MakeAdrsStr( adrsStr, adrs, abs(size) );
@@ -3545,7 +3550,7 @@ asmThreeOperand
 )
 _begin( asmThreeOperand )
 
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( !comment || testMode  )
 
 		_switch( assembler )
@@ -3627,7 +3632,7 @@ asm3oprrr
 )
 _begin( asm3oprrr )
 
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	
 	_if( sourceOutput )
 	
@@ -3664,7 +3669,7 @@ _begin( asm3oprrm )
 
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		MakeAdrsStr( adrsStr, adrs, abs(size) );
@@ -3705,7 +3710,7 @@ _begin( asm3opcrr )
 
 	char cnt[64];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		cnstToImmStr( count, cnt );
@@ -3747,7 +3752,7 @@ _begin( asm3opcmr )
 	char cnt[64];
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		MakeAdrsStr( adrsStr, adrs, abs(size) );
@@ -3790,7 +3795,7 @@ _begin( asm3opcrm )
 	char cnt[64];
 	char adrsStr[256];
 	
-	assert( size >= -10 && size <=10 );
+	assert( size >= -16 && size <=10 );
 	_if( sourceOutput || testMode )
 	
 		MakeAdrsStr( adrsStr, adrs, abs(size) );
@@ -4677,17 +4682,17 @@ char *fp_strs[ num_fp_instrs ] =
 };
 
 
-char *gas_fp_strs[ num_fp_instrs ] =
-{
-	"fadd",
-	"fmul",
-	"fcom",
-	"fcomp",
-	"fsubr",	// Gas reverses the fsub/fsubr
-	"fsub",		// and fdiv/fdivr instructions!
-	"fdivr",
-	"fdiv",
-};
+//char *gas_fp_strs[ num_fp_instrs ] =
+//{
+//	"fadd",
+//	"fmul",
+//	"fcom",
+//	"fcomp",
+//	"fsubr",	// Gas reverses the fsub/fsubr
+//	"fsub",		// and fdiv/fdivr instructions!
+//	"fdivr",
+//	"fdiv",
+//};
 
 
 // fpp_strs must be kept in sync with (enum fpp_instrs) in output.h!
@@ -4704,17 +4709,17 @@ char *fpp_strs[ num_fpp_instrs ] =
 	"fdivrp",
 };
 
-char *gas_fpp_strs[ num_fpp_instrs ] =
-{
-	"faddp",
-	"fmulp",
-	"fcomp",
-	"fcompp",
-	"fsubrp",
-	"fsubp",
-	"fdivrp",
-	"fdivp",
-};
+//char *gas_fpp_strs[ num_fpp_instrs ] =
+//{
+//	"faddp",
+//	"fmulp",
+//	"fcomp",
+//	"fcompp",
+//	"fsubrp",
+//	"fsubp",
+//	"fdivrp",
+//	"fdivp",
+//};
 
 
 void
@@ -4740,7 +4745,7 @@ _begin( fp_arith_noOp_instr )
 	};
 
 	assert( instr < num_fp_instrs );
-	instr_str = _ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]); 
+	instr_str = fp_strs[instr]; //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]); 
 	
 	_if( instr == fcom_instr || instr == fcomp_instr )
 	
@@ -4819,7 +4824,7 @@ _begin( fpp_arith_noOp_instr )
 	
 		asm2oprr
 		(
-			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
+			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
 			fpregmap[reg_st0][assembler],
 			fpregmap[reg_st1][assembler],
 			0,
@@ -4833,7 +4838,7 @@ _begin( fpp_arith_noOp_instr )
 			 
 		asmTestMode
 		( 
-			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
+			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
 			testMode 
 		);
 		EmitWordConst( fpp_noOpp_opcodes[ instr ] );
@@ -4886,8 +4891,6 @@ _begin( fp_arith_sti_st0_instr )
 	assert( instr < num_fp_instrs );
 	assert( fpreg <= reg_st7 );
 	
-	// Note that Gas does not swap the XXX and XXXr instructions
-	// for this particular syntax.
 	
 	asm2oprr
 	( 
@@ -4923,7 +4926,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm1opr
 		( 
-			_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+			fp_strs[instr], //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[fpreg][assembler],
 			0,
 			testMode,
@@ -4934,7 +4937,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm2oprr
 		( 
-			_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+			fp_strs[instr], //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler],
 			0,
@@ -4995,7 +4998,7 @@ _begin( fpp_arith_st0_sti_instr )
 	
 		asm2oprr
 		(
-			_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]),
+			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]),
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler], 
 			0,
@@ -5099,7 +5102,18 @@ _begin( fpi_arith_mem_instr );
 	_endif
 	size = -size;
 	
-	asm1opm( fpi_strs[ instr ], adrs, size, testMode, sourceOutput );
+	_if( assembler == gas )
+	
+		// Note that Gas uses "s" for 16 bits, "l" for 32 bits, and
+		// "ll" for 64 bits when assembling integer/FP instructions.
+		
+		asm1opm( fpi_strs[ instr ], adrs, size*2, testMode, sourceOutput );
+		
+	_else
+	
+		asm1opm( fpi_strs[ instr ], adrs, size, testMode, sourceOutput );
+		
+	_endif
 	_if( !sourceOutput )
 	
 		_if( adrs->Size == 4 )
@@ -5319,7 +5333,17 @@ _begin( fist_mem )
 		adrs->forcedSize = adrs->Size;
 		
 	_endif
-	asm1opm( "fist", adrs, -adrs->Size, testMode, sourceOutput );
+	_if( assembler == gas )
+	
+		// Gas has special syntax, so we must multiply the size by two:
+		
+		asm1opm( "fist", adrs, -adrs->Size*2, testMode, sourceOutput );
+		
+	_else
+	
+		asm1opm( "fist", adrs, -adrs->Size, testMode, sourceOutput );
+		
+	_endif
 	_if( !sourceOutput )
 	
 		_if( adrs->Size == 2 )
@@ -5360,7 +5384,17 @@ _begin( fistp_mem )
 		adrs->forcedSize = adrs->Size;
 		
 	_endif
-	asm1opm( "fistp", adrs, -adrs->Size, testMode, sourceOutput );
+	_if( assembler == gas )
+	
+		// Gas has special syntax, so we must multiply the size by two:
+		
+		asm1opm( "fistp", adrs, -adrs->Size*2, testMode, sourceOutput );
+		
+	_else
+	
+		asm1opm( "fistp", adrs, -adrs->Size, testMode, sourceOutput );
+		
+	_endif
 	_if( !sourceOutput )
 	
 		_if( adrs->Size == 2 )
@@ -5415,6 +5449,10 @@ _begin( fisttp_mem )
 		adrs->forcedSize = adrs->Size;
 		
 	_endif
+	
+	// Note: no special Gas output for this guy because
+	// we don't do source output for Gas (see doSource above):
+	
 	asm1opm( "fisttp", adrs, -adrs->Size, testMode, doSource );
 	_if( !doSource )
 	
@@ -5456,7 +5494,18 @@ _begin( fild_mem )
 		adrs->forcedSize = adrs->Size;
 		
 	_endif
-	asm1opm( "fild", adrs, -adrs->Size, testMode, sourceOutput );
+	_if( assembler == gas )
+	
+		// Gas needs the size to be doubled because it uses
+		// "s" for 16 bits, "l" for 32 bits, and "ll" for 64 bits:
+		
+		asm1opm( "fild", adrs, -adrs->Size*2, testMode, sourceOutput );
+		
+	_else
+	
+		asm1opm( "fild", adrs, -adrs->Size, testMode, sourceOutput );
+		
+	_endif
 	_if( !sourceOutput )
 	
 		_if( adrs->Size == 2 )
@@ -15245,7 +15294,7 @@ _begin( EmitEnter_c_c )
 		sprintf( nestingStr, "%s%d", gasImm, nesting );
 			
 	_endif
-	_if( assembler == hla )
+	_if( assembler == gas )
 	
 		asm2oprr
 		(
@@ -15259,31 +15308,15 @@ _begin( EmitEnter_c_c )
 		
 	_else
 	
-		_if( assembler == gas )
-		
-			asm2oprr
-			(
-				"enter",
-				varsStr,		// These operands are not swapped for gas.
-				nestingStr,
-				0,
-				testMode,
-				sourceOutput
-			);
-
-		_else // not gas
-		
-			asm2oprr
-			(
-				"enter",
-				nestingStr,
-				varsStr,
-				0,
-				testMode,
-				sourceOutput
-			);
-			
-		_endif
+		asm2oprr
+		(
+			"enter",
+			nestingStr,
+			varsStr,
+			0,
+			testMode,
+			sourceOutput
+		);
 		
 	_endif
 	_if( !sourceOutput )

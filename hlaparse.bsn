@@ -69235,7 +69235,7 @@ SingleStmt:
 		{				/* $5 */
 			_here;
 			fist_mem( &$<adrs>3 );
-			$<returns>$ = FreeAdrs2( &$<adrs>4 );
+			$<returns>$ = FreeAdrs2( &$<adrs>3 );
 			_here;
 		}
 	;

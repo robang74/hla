@@ -4937,7 +4937,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm2oprr
 		( 
-			fp_strs[instr], //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+			fp_strs[instr],
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler],
 			0,

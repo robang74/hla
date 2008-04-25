@@ -4677,7 +4677,14 @@ _begin( str_instr )
 		
 	_else
 
-		opcode = _ifx( assembler == gas, gas_str_opcodes[ instr ], str_opcodes[ instr ] );
+		opcode = 
+			_ifx
+			( 
+				assembler == gas && targetOS != freeBSD_os, 
+				gas_str_opcodes[ instr ], 
+				str_opcodes[ instr ] 
+			);
+			
 		_switch( assembler )
 		
 			_case( masm )
@@ -9126,7 +9133,7 @@ static void
 doBTLockPrefix( enum bt_instrs *instr, int size )
 _begin( doLockPrefix )
 
-	_if( assembler == gas )
+	_if( assembler == gas && targetOS != freeBSD_os )
 	
 		_if( size == 2)
 		
@@ -9817,7 +9824,7 @@ _begin( EmitMov_sr_m )
 	
 	_if( !sourceOutput )
 	
-		_if( assembler == masm  )
+		_if( assembler == masm || (assembler == gas && targetOS == freeBSD_os)  )
 		
 			EmitByteConst(  0x66 , "size prefix" );
 			
@@ -10740,7 +10747,12 @@ _begin( EmitXadd_r_m )
 	adrs->forcedSize = setForced( adrs, regSize( srcReg ) );
 	asm2oprm
 	(
-		_ifx( lockPrefix != 0, "lock xadd", "xadd" ),
+		_ifx
+		( 
+			lockPrefix != 0, 
+			_ifx( assembler == hla, "lock.xadd", "lock xadd"), 
+			"xadd" 
+		),
 		gpregmap[srcReg][assembler],
 		adrs,
 		0,
@@ -10760,12 +10772,12 @@ _begin( EmitXadd_r_m )
 			
 		_elseif( isReg16( srcReg ))
 		
-			_if( assembler == gas )
+			_if( assembler == gas && targetOS != freeBSD_os  )
 			
 				EmitByteConst( 0x66, "size prefix" );
 				_if( lockPrefix != 0 )
 			
-					EmitByteConst(  lockPrefix , "" );
+					EmitByteConst(  lockPrefix , "Lock Prefix" );
 					
 				_endif
 				
@@ -10773,10 +10785,10 @@ _begin( EmitXadd_r_m )
 			
 				_if( lockPrefix != 0 )
 			
-					EmitByteConst(  lockPrefix , "" );
+					EmitByteConst(  lockPrefix , "Lock Prefix" );
 					
 				_endif
-				EmitWordConst( 0x66 );
+				EmitByteConst( 0x66, "Size Prefix" );
 				
 			_endif
 			EmitWordConst( 0xc10f );
@@ -12876,7 +12888,7 @@ _begin( generic_r_r )
 	);	
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 && assembler != gas )
+		_if( gen_lock[ instr ] != 0 && (assembler != gas || targetOS == freeBSD_os) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12886,7 +12898,7 @@ _begin( generic_r_r )
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
 			
 		_endif
-		_if( gen_lock[ instr ] != 0 && assembler == gas )
+		_if( gen_lock[ instr ] != 0 && assembler == gas && targetOS != freeBSD_os )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12955,7 +12967,7 @@ _begin( EmitGeneric_r_m )
 	_endif	
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 && assembler != gas )
+		_if( gen_lock[ instr ] != 0 && (assembler != gas || targetOS == freeBSD_os) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12965,7 +12977,7 @@ _begin( EmitGeneric_r_m )
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
 			
 		_endif
-		_if( gen_lock[ instr ] != 0 && assembler == gas )
+		_if( gen_lock[ instr ] != 0 && assembler == gas && targetOS != freeBSD_os )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13017,7 +13029,7 @@ _begin( EmitGeneric_m_r )
 	_endif
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 && assembler != gas)
+		_if( gen_lock[ instr ] != 0 && (assembler != gas || targetOS == freeBSD_os) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13027,7 +13039,7 @@ _begin( EmitGeneric_m_r )
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
 			
 		_endif
-		_if( gen_lock[ instr ] != 0 && assembler == gas)
+		_if( gen_lock[ instr ] != 0 && assembler == gas && targetOS != freeBSD_os )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13074,7 +13086,14 @@ _begin( EmitGeneric_i_r )
 			
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 && (assembler != gas || !isReg16( destReg )) )
+		_if
+		( 
+				gen_lock[ instr ] != 0 
+			&&	(
+						(assembler != gas || targetOS == freeBSD_os) 
+					||	!isReg16( destReg )
+				) 
+		)
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13100,7 +13119,7 @@ _begin( EmitGeneric_i_r )
 		_elseif( isReg16( destReg ))
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
-			_if( gen_lock[ instr ] != 0 && assembler == gas  )
+			_if( gen_lock[ instr ] != 0 && assembler == gas && targetOS != freeBSD_os )
 			
 				EmitByteConst(  gen_lock[ instr ] , "" );
 				
@@ -13390,7 +13409,10 @@ _begin( EmitGeneric_i_m )
 	_endif
 	_if( !sourceOutput )	
 
-		_if( gen_lock[ instr ] != 0 && (assembler != gas || adrs->Size != 2) )
+		_if
+		( 
+				gen_lock[ instr ] != 0 
+			&&	((assembler != gas || targetOS == freeBSD_os) || adrs->Size != 2) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13405,7 +13427,7 @@ _begin( EmitGeneric_i_m )
 		_elseif( adrs->Size == 2 )
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
-			_if( gen_lock[ instr ] != 0 && assembler == gas )
+			_if( gen_lock[ instr ] != 0 && assembler == gas && targetOS != freeBSD_os )
 			
 				EmitByteConst(  gen_lock[ instr ] , "" );
 				
@@ -13644,7 +13666,7 @@ _begin( EmitUnary_r )
 	
 		// Special case for lock instructions:
 		
-		_if( isLockUnary( instr ) && assembler != gas )
+		_if( isLockUnary( instr ) && (assembler != gas || targetOS == freeBSD_os) )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -13661,7 +13683,7 @@ _begin( EmitUnary_r )
 		
 		// Special case for lock instructions under GAS:
 		
-		_if( isLockUnary( instr ) && assembler == gas )
+		_if( isLockUnary( instr ) && assembler == gas && targetOS != freeBSD_os )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -13731,7 +13753,7 @@ _begin( EmitUnary_m )
 
 		// Special case for lock instructions:
 		
-		_if( isLockUnary( instr ) && assembler != gas )
+		_if( isLockUnary( instr ) && (assembler != gas || targetOS == freeBSD_os) )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -13748,7 +13770,7 @@ _begin( EmitUnary_m )
 		
 		// Special case for lock instructions (under Gas):
 		
-		_if( isLockUnary( instr ) && assembler == gas )
+		_if( isLockUnary( instr ) && assembler == gas && targetOS != freeBSD_os )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -14274,7 +14296,14 @@ _begin( EmitTest_r_r )
 		
 		_endif
 		EmitByteConst(  0x84 + isReg1632( src ), "" );
-		_if( assembler == masm || (assembler == gas && gasSyntax == macGas) )
+		_if
+		( 
+				assembler == masm 
+			||	(
+						assembler == gas 
+					&&	(gasSyntax == macGas || targetOS == freeBSD_os) 
+				)
+		)
 		
 			EmitByteConst( 0xc0 | (regCode( dest ) << 3) | regCode( src ), "mod-reg-r/m" );
 
@@ -15823,13 +15852,13 @@ _begin( EmitCmpXchg_r_r )
 		
 		_if( isReg16( src ))
 		
-			_if( locked && assembler != gas )
+			_if( locked && (assembler != gas || targetOS == freeBSD_os) )
 		
 				EmitByteConst(  0xf0 , "" );
 		
 			_endif
 			EmitByteConst(  0x66 , "size prefix" );
-			_if( locked && assembler == gas )
+			_if( locked && assembler == gas && targetOS != freeBSD_os )
 		
 				EmitByteConst(  0xf0 , "" );
 		
@@ -15872,13 +15901,13 @@ _begin( EmitCmpXchg_m_r )
 		
 		_if( isReg16( reg ))
 		
-			_if( locked && assembler != gas )
+			_if( locked && (assembler != gas || targetOS == freeBSD_os) )
 		
 				EmitByteConst(  0xf0 , "" );
 		
 			_endif
 			EmitByteConst(  0x66 , "size prefix" );
-			_if( locked && assembler == gas )
+			_if( locked && assembler == gas && targetOS != freeBSD_os )
 		
 				EmitByteConst(  0xf0 , "" );
 		

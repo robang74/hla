@@ -44,7 +44,7 @@
 #include "version.h"
 
 
-
+#define isGAS(s) (assembler == gas && (s))
 #define gasImm	_ifx( assembler == gas, "$", "")
 #define cmt(c) 											\
 		_ifx( *c == '\0', "", openCmnt[assembler]), 	\
@@ -3560,12 +3560,12 @@ _begin( asmThreeOperand )
 				asmPrintf
 				(
 					"%s        %-10s %s, %s, %s %s\n",
-					_ifx( comment, ";", "" ),
+					_ifx( comment, "/*", "" ),
 					instr,
 					count,
 					srcOperand,
 					destOperand,
-					_ifx( comment, "", "" )
+					_ifx( comment, "*/", "" )
 				);
 				
 			_endcase
@@ -4148,18 +4148,18 @@ char *implied_strs[4][ num_implied_instrs ] =
 		"hlt",
 		"into",
 		"invd",
-		"iret",
+		"iretw",
 		"iretl",
 		"lahf",
 		"leave",
 		"nop",
 		"popaw",
 		"popal",
-		"popf",
+		"popfw",
 		"popfl",
 		"pushaw",
 		"pushal",
-		"pushf",
+		"pushfw",
 		"pushfl",
 		"rdmsr",
 		"rdpmc",
@@ -4682,17 +4682,17 @@ char *fp_strs[ num_fp_instrs ] =
 };
 
 
-//char *gas_fp_strs[ num_fp_instrs ] =
-//{
-//	"fadd",
-//	"fmul",
-//	"fcom",
-//	"fcomp",
-//	"fsubr",	// Gas reverses the fsub/fsubr
-//	"fsub",		// and fdiv/fdivr instructions!
-//	"fdivr",
-//	"fdiv",
-//};
+char *gas_fp_strs[ num_fp_instrs ] =
+{
+	"fadd",
+	"fmul",
+	"fcom",
+	"fcomp",
+	"fsubr",	// Gas reverses the fsub/fsubr
+	"fsub",		// and fdiv/fdivr instructions!
+	"fdivr",
+	"fdiv",
+};
 
 
 // fpp_strs must be kept in sync with (enum fpp_instrs) in output.h!
@@ -4709,17 +4709,17 @@ char *fpp_strs[ num_fpp_instrs ] =
 	"fdivrp",
 };
 
-//char *gas_fpp_strs[ num_fpp_instrs ] =
-//{
-//	"faddp",
-//	"fmulp",
-//	"fcomp",
-//	"fcompp",
-//	"fsubrp",
-//	"fsubp",
-//	"fdivrp",
-//	"fdivp",
-//};
+char *gas_fpp_strs[ num_fpp_instrs ] =
+{
+	"faddp",
+	"fmulp",
+	"fcomp",
+	"fcompp",
+	"fsubrp",
+	"fsubp",
+	"fdivrp",
+	"fdivp",
+};
 
 
 void
@@ -4745,7 +4745,7 @@ _begin( fp_arith_noOp_instr )
 	};
 
 	assert( instr < num_fp_instrs );
-	instr_str = fp_strs[instr]; //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]); 
+	instr_str = _ifx( isGAS(sourceOutput), gas_fp_strs[instr], fp_strs[instr]); 
 	
 	_if( instr == fcom_instr || instr == fcomp_instr )
 	
@@ -4824,7 +4824,7 @@ _begin( fpp_arith_noOp_instr )
 	
 		asm2oprr
 		(
-			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
+			_ifx( isGAS(sourceOutput), gas_fpp_strs[instr], fpp_strs[instr]), 
 			fpregmap[reg_st0][assembler],
 			fpregmap[reg_st1][assembler],
 			0,
@@ -4838,7 +4838,7 @@ _begin( fpp_arith_noOp_instr )
 			 
 		asmTestMode
 		( 
-			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]), 
+			_ifx( isGAS(sourceOutput), gas_fpp_strs[instr], fpp_strs[instr]), 
 			testMode 
 		);
 		EmitWordConst( fpp_noOpp_opcodes[ instr ] );
@@ -4926,7 +4926,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm1opr
 		( 
-			fp_strs[instr], //_ifx( assembler == gas, gas_fp_strs[instr], fp_strs[instr]), 
+			_ifx( isGAS(sourceOutput), gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[fpreg][assembler],
 			0,
 			testMode,
@@ -4937,7 +4937,7 @@ _begin( fp_arith_st0_sti_instr )
 	
 		asm2oprr
 		( 
-			fp_strs[instr],
+			_ifx( isGAS(sourceOutput), gas_fp_strs[instr], fp_strs[instr]), 
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler],
 			0,
@@ -4998,7 +4998,7 @@ _begin( fpp_arith_st0_sti_instr )
 	
 		asm2oprr
 		(
-			fpp_strs[instr], //_ifx( assembler == gas, gas_fpp_strs[instr], fpp_strs[instr]),
+			_ifx( isGAS(sourceOutput), gas_fpp_strs[instr], fpp_strs[instr]),
 			fpregmap[0][assembler],
 			fpregmap[fpreg][assembler], 
 			0,
@@ -6491,7 +6491,13 @@ _begin( movq_r_r )
 			
 		_else
 		
-			_if( assembler == fasm || assembler == tasm || assembler == nasm )
+			_if
+			( 
+					assembler == fasm 
+				||	assembler == tasm 
+				||	assembler == nasm 
+				||	assembler == gas
+			)
 			
 				EmitWordConst( 0x6f0f );
 				
@@ -6500,7 +6506,13 @@ _begin( movq_r_r )
 				EmitWordConst( 0x7f0f );
 			
 			_endif
-			_if( assembler == fasm || assembler == tasm || assembler == nasm )
+			_if
+			( 
+					assembler == fasm 
+				||	assembler == tasm 
+				||	assembler == nasm 
+				||	assembler == gas
+			)
 			
 				EmitByteConst( 0xc0 | (reg2 << 3) | reg1 , "mod-reg-r/m" );
 
@@ -7253,13 +7265,20 @@ _begin(Emit_mw_rv_r)
 	(
 		mw_rv_strs[instr],
 		gpregmap[ reg ][ assembler ],
-		0,
+		regSize( reg ),
 		testMode,
 		doSource
 	);
 	_if( !doSource )
 	
-		_if( assembler == fasm || assembler == nasm )
+		_if
+		( 
+				assembler == fasm 
+			||	assembler == nasm
+			||	(
+					isReg16( reg ) && assembler == gas
+				) 
+		)
 		
 			EmitByteConst(  0x66 , "size prefix" );
 			
@@ -8782,7 +8801,7 @@ _begin( Emit_psl_psr_imm )
 	assert( instr < num_psr_psl_instrs );
 	assert( reg < 8 );
 	
-	sprintf( cntStr, "%d", cnt );
+	sprintf( cntStr, "%s%d", _ifx( assembler == gas, "$", ""), cnt );
 	doSource = 
 			sourceOutput 
 		&&	(assembler != tasm || !isXmm)
@@ -9697,17 +9716,7 @@ _begin( EmitMov_sr_r )
 	);
 	_if( !sourceOutput )
 	
-		_if
-		( 
-				assembler == fasm 
-			||	assembler == masm 
-			||	assembler == tasm 
-			||	assembler == nasm 
-		)
-		
-			EmitByteConst(  0x66 , "size prefix" );
-			
-		_endif
+		EmitByteConst(  0x66 , "size prefix" );
 		EmitByteConst(  0x8c , "" );
 		EmitByteConst( 0xc0 | (regCode(sreg) << 3) | regCode(gpreg), "mod-reg-r/m" );
 		
@@ -12992,6 +13001,7 @@ _begin( EmitGeneric_i_r )
 			( 
 					assembler == masm 
 				||	assembler == fasm 
+				||	assembler == gas 
 				||	(
 							assembler == nasm
 						&&	!( 
@@ -14129,7 +14139,7 @@ _begin( EmitTest_r_r )
 		
 		_endif
 		EmitByteConst(  0x84 + isReg1632( src ), "" );
-		_if( assembler == masm )
+		_if( assembler == masm || assembler == gas )
 		
 			EmitByteConst( 0xc0 | (regCode( dest ) << 3) | regCode( src ), "mod-reg-r/m" );
 
@@ -14416,6 +14426,11 @@ _begin( EmitXchg_r_r )
 		_elseif( dest == reg_ax || dest == reg_eax )
 		
 			EmitByteConst(  0x90 | regCode( src ) , "" );
+			
+		_elseif( assembler == gas )
+
+			EmitByteConst( 0x86 + isReg1632( src ), "" );
+			EmitByteConst( 0xc0 | (regCode( src ) << 3) | regCode( dest ), "mod-reg-r/m" );
 			
 		_else
 
@@ -15369,17 +15384,17 @@ _begin( EmitInt_c )
 		
 			EmitByteConst(  0xcc , "" );
 			
-		_elseif
-		( 
-				intnum == 4 
-			&&	assembler != masm 
-			&&	assembler != fasm 
-			&&	assembler != tasm 
-			&&	assembler != nasm 
-		)
-		
-			EmitByteConst(  0xce , "" );
-			
+//		_elseif
+//		( 
+//				intnum == 4 
+//			&&	assembler != masm 
+//			&&	assembler != fasm 
+//			&&	assembler != tasm 
+//			&&	assembler != nasm 
+//		)
+//		
+//			EmitByteConst(  0xce , "" );
+//			
 		_else
 		
 			EmitWordConst( 0xcd | ((intnum & 0xff) << 8 ));
@@ -22878,18 +22893,23 @@ _begin( push_sr )
 	_else
 	
 		asmPush( segregmap[theSegReg][assembler], 2, "", 1 );
+		_if( assembler == gas )
+		
+			EmitByteConst( 0x66, "size prefix" );
+			
+		_endif
 		_switch( theSegReg )
 		
 			_case( reg_cseg )
-				EmitByteConst(  0x0e , "" );
+				EmitByteConst(  0x0e , "opcode" );
 			_endcase
 		
 			_case( reg_dseg )
-				EmitByteConst(  0x1e , "" );
+				EmitByteConst(  0x1e , "opcode" );
 			_endcase
 		
 			_case( reg_eseg )
-				EmitByteConst(  0x06 , "" );
+				EmitByteConst(  0x06 , "opcode" );
 			_endcase
 		
 			_case( reg_fseg )
@@ -22901,7 +22921,7 @@ _begin( push_sr )
 			_endcase
 		
 			_case( reg_sseg )
-				EmitByteConst(  0x16 , "" );
+				EmitByteConst(  0x16 , "opcode" );
 			_endcase
 			
 		_endswitch
@@ -23240,7 +23260,11 @@ _begin( pop_sr )
 	_else
 	
 		asmPop( segregmap[srcReg][assembler], 2, 1 );
-	
+		_if( assembler == gas )
+		
+			EmitByteConst(  0x66 , "size prefix" );
+			
+		_endif	
 		_switch( srcReg )
 		
 			_case( reg_cseg )

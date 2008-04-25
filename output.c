@@ -4441,6 +4441,71 @@ unsigned  str_opcodes[ num_str_instrs ] =
 	0x6df3		// rep_insd_instr,
 };
 
+
+unsigned  gas_str_opcodes[ num_str_instrs ] =
+{
+	0xa4,		// movsb_instr,	
+	0xa566,		// movsw_instr,	
+	0xa5,		// movsd_instr,
+	
+	0xa4f3,		// rep_movsb_instr,	
+	0xa5f366,	// rep_movsw_instr,	
+	0xa5f3,		// rep_movsd_instr,
+	
+	0xac,		// lodsb_instr,	
+	0xad66,		// lodsw_instr,	
+	0xad,		// lodsd_instr,
+	0xacf3,		// rep_lodsb_instr,	
+	0xadf366,	// rep_lodsw_instr,	
+	0xadf3,		// rep_lodsd_instr,
+	
+	0xaa,		// stosb_instr,	
+	0xab66,		// stosw_instr,	
+	0xab,		// stosd_instr,
+	
+	0xaaf3,		// rep_stosb_instr,	
+	0xabf366,	// rep_stosw_instr,	
+	0xabf3,		// rep_stosd_instr,
+	
+	0xa6,		// cmpsb_instr,	
+	0xa766,		// cmpsw_instr,	
+	0xa7,		// cmpsd_instr,
+	
+	0xa6f3,		// repe_cmpsb_instr,	
+	0xa7f366,	// repe_cmpsw_instr,	
+	0xa7f3,		// repe_cmpsd_instr,
+	
+	0xa6f2,		// repne_cmpsb_instr,	
+	0xa7f266,	// repne_cmpsw_instr,	
+	0xa7f2,		// repne_cmpsd_instr,
+	
+	0xae,		// scasb_instr,	
+	0xaf66,		// scasw_instr,	
+	0xaf,		// scasd_instr,
+	
+	0xaef3,		// repe_scasb_instr,	
+	0xaff366,	// repe_scasw_instr,	
+	0xaff3,		// repe_scasd_instr,
+	
+	0xaef2,		// repne_scasb_instr,	
+	0xaff266,	// repne_scasw_instr,	
+	0xaff2,		// repne_scasd_instr,
+	
+	0x6e,		// outsb_instr,	
+	0x6f66,		// outsw_instr,	
+	0x6f,		// outsd_instr,
+	0x6ef3,		// rep_outsb_instr,	
+	0x6ff366,	// rep_outsw_instr,	
+	0x6ff3,		// rep_outsd_instr,
+	
+	0x6c,		// insb_instr,	
+	0x6d66,		// insw_instr,	
+	0x6d,		// insd_instr,
+	0x6cf3,		// rep_insb_instr,	
+	0x6df366,	// rep_insw_instr,	
+	0x6df3		// rep_insd_instr,
+};
+
 char *str_strs[3][ num_str_instrs ] =
 {
 	{	// fasm/masm/tasm/nasm strings
@@ -4603,6 +4668,8 @@ void
 str_instr( enum str_instrs instr )
 _begin( str_instr )
 
+	unsigned long opcode;
+	
 	assert( instr < num_str_instrs );
 	_if( sourceOutput )
 	
@@ -4610,6 +4677,7 @@ _begin( str_instr )
 		
 	_else
 
+		opcode = _ifx( assembler == gas, gas_str_opcodes[ instr ], str_opcodes[ instr ] );
 		_switch( assembler )
 		
 			_case( masm )
@@ -4638,18 +4706,18 @@ _begin( str_instr )
 			
 		_endswitch
 		
-		_if( str_opcodes[ instr ] >= 0x10000 )
+		_if( opcode >= 0x10000 )
 		
-			EmitWordConst( str_opcodes[ instr ] & 0xffff );
-			EmitByteConst(  str_opcodes[ instr ] >> 16 , "opcode" );
+			EmitWordConst( opcode & 0xffff );
+			EmitByteConst(  opcode >> 16 , "opcode" );
 		
 		_elseif( str_opcodes[ instr ] >= 256 )
 		
-			EmitWordConst( str_opcodes[ instr ] );
+			EmitWordConst( opcode );
 			
 		_else
 		
-			EmitByteConst(  str_opcodes[ instr ] , "opcode" );
+			EmitByteConst(  opcode , "opcode" );
 			
 		_endif
 		
@@ -9053,6 +9121,42 @@ static unsigned char bt_opcodes[num_bt_instrs] =
 	0xBB,	// lock.btc
 };	
 	 	
+
+static void
+doBTLockPrefix( enum bt_instrs *instr, int size )
+_begin( doLockPrefix )
+
+	_if( assembler == gas )
+	
+		_if( size == 2)
+		
+			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			
+		_endif 
+		_if( *instr >= lockbts_instr )
+		
+			EmitByteConst(  0xf0 , "" );	// lock prefix
+			*instr = *instr - lockbts_instr + bts_instr;
+			
+		_endif 
+
+	_else
+	
+		_if( *instr >= lockbts_instr )
+		
+			EmitByteConst(  0xf0 , "" );	// lock prefix
+			*instr = *instr - lockbts_instr + bts_instr;
+			
+		_endif 
+		_if( size == 2 )
+		
+			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			
+		_endif 
+	
+	_endif
+
+_end( doLockPrefix )
 	
  
 void
@@ -9073,17 +9177,7 @@ _begin( Emit_bt_r_r )
 	);
 	_if( !sourceOutput )
 	
-		_if( instr >= lockbts_instr )
-		
-			EmitByteConst(  0xf0 , "" );	// lock prefix
-			instr = instr - lockbts_instr + bts_instr;
-			
-		_endif 
-		_if( isReg16( src ))
-		
-			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
-			
-		_endif 
+		doBTLockPrefix( &instr, regSize( src ) );
 		EmitWordConst( (bt_opcodes[instr] << 8) | 0x0f );
 		EmitByteConst( 0xc0 | (regCode( src ) << 3) | regCode( dest ), "mod-reg-r/m" );
 		
@@ -9119,17 +9213,7 @@ _begin( Emit_bt_r_m )
 	);
 	_if( !sourceOutput )
 	
-		_if( instr >= lockbts_instr )
-		
-			EmitByteConst(  0xf0 , "" );	// lock prefix
-			instr = instr - lockbts_instr + bts_instr;
-			
-		_endif 
-		_if( isReg16( reg ))
-		
-			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
-			
-		_endif 
+		doBTLockPrefix( &instr, regSize( reg ) );
 		EmitWordConst( (bt_opcodes[instr] << 8) | 0x0f );
 		EmitModRegRm( regCode(reg), adrs );
 		
@@ -9158,17 +9242,7 @@ _begin( Emit_bt_c_r )
 	);
 	_if( !sourceOutput )
 	
-		_if( instr >= lockbts_instr )
-		
-			EmitByteConst(  0xf0 , "" );	// lock prefix
-			instr = instr - lockbts_instr + bts_instr;
-			
-		_endif 
-		_if( isReg16( reg ))
-		
-			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
-			
-		_endif 
+		doBTLockPrefix( &instr, regSize( reg ) );
 		EmitWordConst( 0xba0f );
 		EmitByteConst( 0xc0 | ((instr+4)<<3) | regCode( reg ) , "mod-reg-r/m" );
 		EmitByteConst(  bitnum , "" );
@@ -9207,18 +9281,7 @@ _begin( Emit_bt_c_m )
 	);
 	_if( !sourceOutput )
 	
-		_if( instr >= lockbts_instr )
-		
-			EmitByteConst(  0xf0 , "" );	// lock prefix
-			instr = instr - lockbts_instr + bts_instr;
-			
-		_endif 
-		
-		_if( adrs->Size == 2 )
-		
-			EmitByteConst(  0x66 , "size prefix" );	// Size Prefix
-			
-		_endif
+		doBTLockPrefix( &instr, adrs->Size );
 		EmitWordConst( 0xba0f );
 		EmitModRegRm( instr+4, adrs );	// sub-opcodes start at /4
 		EmitByteConst(  bitnum , "" );
@@ -10656,7 +10719,7 @@ _begin( EmitXadd_r_r )
 		
 			EmitByteConst(  0x66 , "size prefix" );
 			EmitWordConst( 0xc10f );
-			
+				
 		_else
 		
 			EmitWordConst( 0xc10f );
@@ -10686,25 +10749,49 @@ _begin( EmitXadd_r_m )
 	);
 	_if( !sourceOutput )
 	
-		_if( lockPrefix != 0 )
-	
-			EmitByteConst(  lockPrefix , "" );
-			
-		_endif
 		_if( isReg8( srcReg ))
 		
+			_if( lockPrefix != 0 )
+		
+				EmitByteConst(  lockPrefix , "" );
+				
+			_endif
 			EmitWordConst( 0xc00f );
 			
 		_elseif( isReg16( srcReg ))
 		
-			EmitByteConst(  0x66 , "size prefix" );
+			_if( assembler == gas )
+			
+				EmitByteConst( 0x66, "size prefix" );
+				_if( lockPrefix != 0 )
+			
+					EmitByteConst(  lockPrefix , "" );
+					
+				_endif
+				
+			_else
+			
+				_if( lockPrefix != 0 )
+			
+					EmitByteConst(  lockPrefix , "" );
+					
+				_endif
+				EmitWordConst( 0x66 );
+				
+			_endif
 			EmitWordConst( 0xc10f );
 			
 		_else
 		
+			_if( lockPrefix != 0 )
+		
+				EmitByteConst(  lockPrefix , "" );
+				
+			_endif
 			EmitWordConst( 0xc10f );
 			
 		_endif
+			
 		EmitModRegRm( regCode(srcReg), adrs );
 		
 	_endif
@@ -12789,7 +12876,7 @@ _begin( generic_r_r )
 	);	
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 )
+		_if( gen_lock[ instr ] != 0 && assembler != gas )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12797,6 +12884,11 @@ _begin( generic_r_r )
 		_if( isReg16( srcReg ))
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			
+		_endif
+		_if( gen_lock[ instr ] != 0 && assembler == gas )
+		
+			EmitByteConst(  gen_lock[ instr ] , "" );
 			
 		_endif
 		
@@ -12863,7 +12955,7 @@ _begin( EmitGeneric_r_m )
 	_endif	
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 )
+		_if( gen_lock[ instr ] != 0 && assembler != gas )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12871,6 +12963,11 @@ _begin( EmitGeneric_r_m )
 		_if( isReg16( srcReg ))
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			
+		_endif
+		_if( gen_lock[ instr ] != 0 && assembler == gas )
+		
+			EmitByteConst(  gen_lock[ instr ] , "" );
 			
 		_endif
 		
@@ -12920,7 +13017,7 @@ _begin( EmitGeneric_m_r )
 	_endif
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 )
+		_if( gen_lock[ instr ] != 0 && assembler != gas)
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12928,6 +13025,11 @@ _begin( EmitGeneric_m_r )
 		_if( isReg16( destReg ))
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			
+		_endif
+		_if( gen_lock[ instr ] != 0 && assembler == gas)
+		
+			EmitByteConst(  gen_lock[ instr ] , "" );
 			
 		_endif
 		
@@ -12972,7 +13074,7 @@ _begin( EmitGeneric_i_r )
 			
 	_if( !sourceOutput )
 	
-		_if( gen_lock[ instr ] != 0 )
+		_if( gen_lock[ instr ] != 0 && (assembler != gas || !isReg16( destReg )) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -12998,6 +13100,12 @@ _begin( EmitGeneric_i_r )
 		_elseif( isReg16( destReg ))
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			_if( gen_lock[ instr ] != 0 && assembler == gas  )
+			
+				EmitByteConst(  gen_lock[ instr ] , "" );
+				
+			_endif
+			
 			_if
 			( 
 					assembler == masm 
@@ -13282,7 +13390,7 @@ _begin( EmitGeneric_i_m )
 	_endif
 	_if( !sourceOutput )	
 
-		_if( gen_lock[ instr ] != 0 )
+		_if( gen_lock[ instr ] != 0 && (assembler != gas || adrs->Size != 2) )
 		
 			EmitByteConst(  gen_lock[ instr ] , "" );
 			
@@ -13297,6 +13405,12 @@ _begin( EmitGeneric_i_m )
 		_elseif( adrs->Size == 2 )
 		
 			EmitByteConst(  0x66 , "size prefix" );	// Size prefix
+			_if( gen_lock[ instr ] != 0 && assembler == gas )
+			
+				EmitByteConst(  gen_lock[ instr ] , "" );
+				
+			_endif
+			
 			_if( v->v.u.intval >= -128 && v->v.u.intval <= 127 )
 			
 				EmitByteConst(  0x83 , "" );	// xxx reg16, const8
@@ -13530,7 +13644,7 @@ _begin( EmitUnary_r )
 	
 		// Special case for lock instructions:
 		
-		_if( isLockUnary( instr ))
+		_if( isLockUnary( instr ) && assembler != gas )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -13544,6 +13658,16 @@ _begin( EmitUnary_r )
 			EmitByteConst(  0x66 , "size prefix" );
 			
 		_endif
+		
+		// Special case for lock instructions under GAS:
+		
+		_if( isLockUnary( instr ) && assembler == gas )
+		
+			EmitByteConst(  0xf0 , "" );
+			instr = unlockUnary( instr );
+			
+		_endif
+		
 
 		// Special case for INC/DEC(reg16/reg32)
 			
@@ -13607,7 +13731,7 @@ _begin( EmitUnary_m )
 
 		// Special case for lock instructions:
 		
-		_if( isLockUnary( instr ))
+		_if( isLockUnary( instr ) && assembler != gas )
 		
 			EmitByteConst(  0xf0 , "" );
 			instr = unlockUnary( instr );
@@ -13621,6 +13745,16 @@ _begin( EmitUnary_m )
 			EmitByteConst(  0x66 , "size prefix" );
 			
 		_endif
+		
+		// Special case for lock instructions (under Gas):
+		
+		_if( isLockUnary( instr ) && assembler == gas )
+		
+			EmitByteConst(  0xf0 , "" );
+			instr = unlockUnary( instr );
+			
+		_endif
+		
 
 		EmitByteConst(  unary_opcodes[ instr ] | (adrs->Size >= 2) , "" );
 		EmitModRegRm( unary_subop[instr], adrs );
@@ -14140,7 +14274,7 @@ _begin( EmitTest_r_r )
 		
 		_endif
 		EmitByteConst(  0x84 + isReg1632( src ), "" );
-		_if( assembler == masm || assembler == gas )
+		_if( assembler == masm || (assembler == gas && gasSyntax == macGas) )
 		
 			EmitByteConst( 0xc0 | (regCode( dest ) << 3) | regCode( src ), "mod-reg-r/m" );
 
@@ -15687,15 +15821,24 @@ _begin( EmitCmpXchg_r_r )
 	);
 	_if( !sourceOutput )
 		
-		_if( locked )
+		_if( isReg16( src ))
+		
+			_if( locked && assembler != gas )
+		
+				EmitByteConst(  0xf0 , "" );
+		
+			_endif
+			EmitByteConst(  0x66 , "size prefix" );
+			_if( locked && assembler == gas )
+		
+				EmitByteConst(  0xf0 , "" );
+		
+			_endif
+			
+		_elseif( locked )
 		
 			EmitByteConst(  0xf0 , "" );
 		
-		_endif
-		_if( isReg16( src ))
-		
-			EmitByteConst(  0x66 , "size prefix" );
-			
 		_endif
 		EmitByteConst(  0x0f , "2 byte opcode prefix" );
 		EmitByteConst(  0xb0 + isReg1632( src ) , "" );
@@ -15727,15 +15870,24 @@ _begin( EmitCmpXchg_m_r )
 	);
 	_if( !sourceOutput )
 		
-		_if( locked )
+		_if( isReg16( reg ))
+		
+			_if( locked && assembler != gas )
+		
+				EmitByteConst(  0xf0 , "" );
+		
+			_endif
+			EmitByteConst(  0x66 , "size prefix" );
+			_if( locked && assembler == gas )
+		
+				EmitByteConst(  0xf0 , "" );
+		
+			_endif
+			
+		_elseif( locked )
 		
 			EmitByteConst(  0xf0 , "" );
 		
-		_endif
-		_if( isReg16( reg ))
-		
-			EmitByteConst(  0x66 , "size prefix" );
-			
 		_endif
 		EmitByteConst(  0x0f , "2 byte opcode prefix" );
 		EmitByteConst(  0xb0 + isReg1632( reg ) , "" );

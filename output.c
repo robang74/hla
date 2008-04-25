@@ -9509,7 +9509,7 @@ _begin( EmitMov_r_r )
 
 		// Assume register sizes are already correct.
 		
-		_if( assembler == fasm || assembler == nasm )
+		_if( assembler == fasm || assembler == nasm || assembler == gas )
 		
 			_if( isReg8( src ))
 			
@@ -12803,7 +12803,8 @@ _begin( generic_r_r )
 		_if
 		( 
 				assembler == fasm
-			||	assembler == nasm 
+			||	assembler == nasm
+			||	assembler == gas 
 			||	(assembler == masm && isReg8( srcReg ) && instr == cmp_instr) 
 		)
 		 

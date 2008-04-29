@@ -158,6 +158,9 @@ struct SymNode
 	** a NULL terminated list).  If this is an enum type, then FieldCnt
 	** contains the number of symbol table entries holding enum constants
 	** (that is, the maximum enum value plus one).
+	**
+	** For tPointer objects, BASE points at the base type that the pointer
+	** references.
 	*/
 
 	struct	SymNode		*Fields;
@@ -651,6 +654,13 @@ static struct SymNode aValue;
 
 
 extern struct SymNode *GetBaseType( struct SymNode *object );
+extern struct SymNode *GetCallType
+( 
+	struct SymNode 	*Sym, 
+	struct SymNode 	*Type, 
+	enum PrimType 	pType,
+	int				*isPointer 
+);
 	
 extern void BuildAdrs
 (

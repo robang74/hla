@@ -11752,7 +11752,7 @@ RecDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					&proctype_ste,	/* Type							*/
+					NULL,			/* Type - Filled in later.		*/
 					tProcptr, 		/* pType						*/
 					cVar, 			/* SymClass						*/
 					0,				/* Arity						*/
@@ -11782,7 +11782,7 @@ RecDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					&proctype_ste,
+					NULL,
 					tProcptr, 
 					cVar, 
 					0,
@@ -11829,6 +11829,8 @@ RecDef:
 			*/
 			 
 			{				/* $12 */
+				struct	SymNode *saveST;
+				struct	SymNode *s;
 
 				_here;
 				_if( $<options.NoStorage>10 )
@@ -11836,12 +11838,46 @@ RecDef:
 					yyerror( "'nostorage' option is illegal here" );
 
 				_endif
-				$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
+				saveST = SymbolTable;
+				s =
+					InsertSym
+					( 
+						" (ProcPtrType) ",
+						NULL,			/* Primitive Type.				*/
+						tProcptr, 		/* pType						*/
+						cVar, 			/* SymClass						*/
+						0,				/* Arity						*/
+						NULL,			/* Dimensions					*/
+						0, 				/* NumElements					*/
+						NULL,			/* Initially, no initialization	*/
+						4,				/* Object size					*/
+						0,				/* Offset						*/
+						NULL,			/* Static Name					*/
+						NULL,			/* Base							*/
+						NULL,			/* Fields						*/
+						0				/* FieldCnt						*/
+					);
+					
+				s->u.proc.parms = saveST;
+				s->u.proc.Locals = NULL;
+				s->u.proc.returns = $<options.returns>11;
+				s->u.proc.use = $<options.use>11;
+				s->u.proc.cs = $<options.CallingSequence>11;
+				
+				// Remove the dummy type we just created from the record:
+				
+				SymbolTable = saveST;
+				
+				// Fill in the original procptr fields:
+				
+				$<s>6->u.proc.parms->Type = s;
+				$<s>6->u.proc.parms->u.proc.parms = saveST;
 				$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
 				$<s>6->u.proc.parms->u.proc.use = NULL;
 				$<s>6->u.proc.parms->u.proc.Locals = NULL;
 
-				$<s>6->u.proc.parms = SymbolTable;
+				$<s>6->Type = s;
+				$<s>6->u.proc.parms = saveST;
 				$<s>6->u.proc.Locals = NULL;
 				$<s>6->u.proc.returns = $<options.returns>11;
 				$<s>6->u.proc.use = $<options.use>11;
@@ -11899,9 +11935,9 @@ RecDef:
 
 
 
-			/*
-			** Handle pointer declarations here.
-			*/
+/*
+** Handle pointer declarations here.
+*/
 
 RecDef:
 			RecID				/* $1 */
@@ -18515,6 +18551,7 @@ procs:
 				tUns32,
 				&uns32_ste
 			);
+
 			value.u.unsval = $<v.u.unsval>7;
 			InsertSym
 			( 
@@ -24035,17 +24072,6 @@ ClassStuff:
 			{
 				(void) $<v.u.intval>4;	//Shut up bison
 			}
-
-	/*
-	|		GetLexLvl 
-			macros 	
-			optionalSemicolon			
-			{ 
-				_here; 
-				$<v.u.intval>$ = $<v.u.intval>1; 
-			}
-			ClassStuff
-	*/
 	;
 
 
@@ -24078,6 +24104,7 @@ FwdMethod:
 		{				/* $13 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct MethodListType	*ml;
 			char					*CurrentType;
 			struct SymNode			value;
@@ -24200,13 +24227,37 @@ FwdMethod:
 			_while( ParmList->Next != $<en.s>7 && ParmList->Next != NULL )
 
 				ParmList = ParmList->Next;
-				//assert( ParmList != NULL );
 
 			_endwhile
 		
 			ParmList->Next = NULL;
+			
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (method parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
-
+			
 			/*
 			** Add this method to the
 			** Method List so we can check later to see
@@ -24227,7 +24278,7 @@ FwdMethod:
 			/*
 			** Restore currentNS
 			*/
-			
+
 			currentNS = $<en.cns>7;
 			_here;
 		}
@@ -24256,6 +24307,7 @@ FwdMethod:
 		{							/* $13 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct MethodListType	*ml;
 			char					*CurrentType;
 			struct SymNode			value;
@@ -24395,7 +24447,34 @@ FwdMethod:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (method parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
+			
 
 			/*
 			** Add this method to the
@@ -24693,6 +24772,7 @@ FwdMethod:
 		{							/* $14 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct MethodListType	*ml;
 			char					*CurrentType;
 			struct SymNode			value;
@@ -24828,6 +24908,30 @@ FwdMethod:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (method parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
 
@@ -24912,6 +25016,7 @@ FwdMethod:
 		{				/* $10 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct MethodListType	*ml;
 			char					*CurrentType;
 			struct SymNode			value;
@@ -25026,7 +25131,32 @@ FwdMethod:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (classiter parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
+			
 
 			/*
 			** Add this iterator to the
@@ -25105,6 +25235,7 @@ FwdMethod:
 		{					/* $14 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct SymNode			*sym;
 			struct MethodListType	*ml;
 			char					*CurrentType;
@@ -25236,7 +25367,32 @@ FwdMethod:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (classiter parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
+			
 
 			/*
 			** Add this iterator to the
@@ -25311,6 +25467,7 @@ ClassProc:
 		{					/* $13 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct MethodListType	*ml;
 			char					*CurrentType;
 			struct SymNode			value;
@@ -25426,7 +25583,32 @@ ClassProc:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (classproc parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
+			
 
 			/*
 			** Add this (static) class procedure to the
@@ -25493,6 +25675,7 @@ ClassProc:
 		{							/* $14 */
 
 			struct SymNode			*ParmList;
+			struct SymNode			*s;
 			struct SymNode			*sym;
 			struct MethodListType	*ml;
 			char					*CurrentType;
@@ -25628,7 +25811,32 @@ ClassProc:
 
 			_endwhile
 			ParmList->Next = NULL;
+			
+			// Create a type for the parameter list.
+			
+			s =
+				InsertSym
+				( 
+					" (classproc parms) ", 
+					NULL,
+					tMethod, 
+					cMethod, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+			
+			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
+			
 
 			/*
 			** Add this (static) class procedure to the
@@ -27430,7 +27638,7 @@ OneOrMoreParms:
 				$<v.u.intval>$ = $<v.u.intval>$ + 
 									4 - (max( CurParmSize, MinParmSize) % 4);
 
-			_endif			
+			_endif
 		}
 	;
 			 
@@ -27732,7 +27940,6 @@ OneOrMoreParms:
 
 
 			_endif
-
 			$<v.u.intval>$ = $<v.u.intval>8 + max( CurParmSize, MinParmSize);
 			_if( max( CurParmSize, MinParmSize) % 4 != 0 )
 
@@ -28191,7 +28398,9 @@ OneOrMoreParms:
 	;
 
 		
-			
+// Handle parameters of the form:
+//
+//	symbol:procedure( optional args );			
 			
 OneOrMoreParms:
 		PassBy			/* $1 */
@@ -28214,6 +28423,9 @@ OneOrMoreParms:
 		OptionalParms	/* $8 */
 		{				/* $9 */
 
+			struct	SymNode	*s;
+			struct	SymNode	*t;
+			
 			_here;
 			ProcGlobal = $<s>3;
 
@@ -28234,11 +28446,29 @@ OneOrMoreParms:
 
 			$<s>7->Offset = $<v.u.intval>0;
 
-			/*
-			** Set TYPE to NULL because indirect calls expect this.
-			*/
 
-			$<s>7->Type = NULL;
+			// Create a dummy type to hold the parameter list:
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (parameter Proc Ptr Type) ", 
+				NULL,			/* Default is int32 object.		*/
+				tProcptr,
+				cType, 
+				0,				/* Arity						*/
+				NULL,			/* Dimensions					*/
+				0, 				/* NumElements					*/
+				NULL,			/* No initialization			*/
+				0,				/* Object size					*/
+				0,				/* Offset						*/
+				NULL,			/* Static Name					*/
+				NULL,			/* Base							*/
+				NULL,			/* Fields						*/
+				0				/* FieldCnt						*/
+			);
+			SymbolTable->u.proc.parms = s;
+			$<s>7->Type = SymbolTable;
 
 			/*
 			** Initialize the pointer to the end of the parameters
@@ -28247,18 +28477,22 @@ OneOrMoreParms:
 			** local variable declarations.  
 			*/
 
-			$<s>7->u.proc.parms->u.proc.parms = SymbolTable;
+			$<s>7->u.proc.parms->u.proc.parms = s;
 			$<s>7->u.proc.parms->u.proc.returns = $<v.u.proc.returns>1;
 			$<s>7->u.proc.parms->u.proc.use = $<v.u.proc.use>1;
 			$<s>7->u.proc.parms->u.proc.Locals = NULL;
 
-			$<s>7->u.proc.parms = SymbolTable;
+			$<s>7->u.proc.parms = s;
 			$<s>7->u.proc.Locals = NULL;
 			$<s>7->u.proc.returns = $<v.u.proc.returns>1;
 			$<s>7->u.proc.use = $<v.u.proc.use>1;
 			--CurLexLevel;
 			CurOffset = $<v.u.unsval>5;
 			CurOffsetDir = $<v.u.unsval>6;
+			
+			// Remove the parameter list for this procedure pointer argument
+			// from the symbol table we're building:
+			
 			SymbolTable = $<s>7;
 
 			/*
@@ -28298,7 +28532,10 @@ OneOrMoreParms:
 			fastLookup = 1;
 		}
 		';'				/* $10 */
-		{				/* $11 */
+		{				/* $11 */ 
+		
+			struct	SymNode *s;
+			
 			_here;
 			_if( $<v.pClass>1 != valp_pc )
 
@@ -28310,7 +28547,31 @@ OneOrMoreParms:
 
 			_endif
 
-			$<s>7->Type = NULL;
+
+
+			// Create a dummy type to hold the parameter list:
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (parameter Proc Ptr Type) ", 
+				NULL,			/* Primitive type.		*/
+				tProcptr,
+				cType, 
+				0,				/* Arity				*/
+				NULL,			/* Dimensions			*/
+				0, 				/* NumElements			*/
+				NULL,			/* No initialization	*/
+				0,				/* Object size			*/
+				0,				/* Offset				*/
+				NULL,			/* Static Name			*/
+				NULL,			/* Base					*/
+				NULL,			/* Fields				*/
+				0				/* FieldCnt				*/
+			);
+			SymbolTable->u.proc.parms = s;
+			SymbolTable->u.proc.returns = hlastrdup2( "" );
+			$<s>7->Type = SymbolTable;
 
 			/*
 			** Initialize the pointer to the end of the parameters
@@ -28319,12 +28580,12 @@ OneOrMoreParms:
 			** local variable declarations.  
 			*/
 
-			$<s>7->u.proc.parms->u.proc.parms = SymbolTable;
+			$<s>7->u.proc.parms->u.proc.parms = s;
 			$<s>7->u.proc.parms->u.proc.returns = $<v.u.proc.returns>1;
 			$<s>7->u.proc.parms->u.proc.use = $<v.u.proc.use>1;
 			$<s>7->u.proc.parms->u.proc.Locals = NULL;
 
-			$<s>7->u.proc.parms = SymbolTable;
+			$<s>7->u.proc.parms = s;
 			$<s>7->u.proc.Locals = NULL;
 			$<s>7->u.proc.returns = $<v.u.proc.returns>1;
 			$<s>7->u.proc.use = $<v.u.proc.use>1;
@@ -29701,12 +29962,12 @@ TypeDef:
 
 
 
-			/*
-			** Handle type isomorphisms (renaming) here.
-			** This consists of defining one identifier to be the
-			** same as some other type identifier.
-			**
-			*/
+/*
+** Handle type isomorphisms (renaming) here.
+** This consists of defining one identifier to be the
+** same as some other type identifier.
+**
+*/
 
 
 
@@ -29885,12 +30146,11 @@ TypeDef:	UndefinedID
 					** a some derived type).
 					*/
 
-					TheType =	GetBaseType( $<s>3 );
+					TheType = GetBaseType( $<s>3 );
 
-					/*
-					**  Insert the new type definition into the symbol table.
-					*/
-
+					
+					// Insert the new type definition into the symbol table.
+					
 					InsertSym
 					( 
 						$<idStr>1, 
@@ -30504,6 +30764,7 @@ TypeDef:
 		OptionalInherit	/* $9 */
 		{				/* $10 */
 
+			struct SymNode	*theClass;
 			struct SymNode	TheValue;
 			char			StaticName[ 256 ];
 			char			*sn;
@@ -30544,12 +30805,34 @@ TypeDef:
 				0
 			);
 			
+			// Inject an extra declaration of the class symbol into
+			// the class' local symbols to prevent using this object. 
+			
+			InsertSym
+			(
+				$<idStr>1,
+				SymbolTable,
+				tError,
+				cNone,
+				0,
+				NULL,
+				0,
+				NULL,
+				0,
+				0,
+				NULL,
+				NULL,
+				NULL,
+				0
+			);
+			$<s>$ = SymbolTable;	// So we can find the end of the list later.
+			ClassPtr = SymbolTable;
+			
+			
 			// Patch any pointers to this class:
 			
 			PatchPtrs();
 
-			$<s>$ = SymbolTable;
-			ClassPtr = SymbolTable;
 
 			/*
 			** If this class is inheriting fields from a base class,
@@ -30648,6 +30931,8 @@ TypeDef:
 
 			CurOffsetDir = 1;
 			AddOffset1st = 0;
+			
+			
 			_here;
 
 		}
@@ -30666,6 +30951,7 @@ TypeDef:
 		Semicolon		/* $15 */
 		{				/* $16 */
 
+			struct	SymNode		*classSym;
 			struct	SymNode		*CurSym;
 			int					FieldCnt;
 			char				StaticName[ 256 ];
@@ -30688,6 +30974,7 @@ TypeDef:
 
 			_endwhile
 			CurSym->Next = NULL;
+			classSym = $<s>10->Type;		// Ptr to original class entry.
 
 
 			/*
@@ -30697,14 +30984,14 @@ TypeDef:
 
 
 			CurLexLevel = $<v.u.intval>6;
-			$<s>10->NumElements = FieldCnt;
-			$<s>10->u.intval = CurOffset;
-			$<s>10->ObjectSize = CurOffset;
-			$<s>10->Base = $<s>9;
-			$<s>10->Fields = SymbolTable;
-			$<s>10->FieldCnt = FieldCnt;
-			$<s>10->LexLevel = $<v.u.intval>6;
-			SymbolTable = $<s>10;
+			classSym->NumElements = FieldCnt;
+			classSym->u.intval = CurOffset;
+			classSym->ObjectSize = CurOffset;
+			classSym->Base = $<s>9;
+			classSym->Fields = SymbolTable;
+			classSym->FieldCnt = FieldCnt;
+			classSym->LexLevel = $<v.u.intval>6;
+			SymbolTable = classSym;
 
 
 			/*
@@ -30712,7 +30999,7 @@ TypeDef:
 			** fields.
 			*/
 
-			UpdateVMTOffsets( $<s>10 );
+			UpdateVMTOffsets( classSym );
 
 
 			/*
@@ -38454,6 +38741,7 @@ VariableDef:
 			*/
 
 			{				/* $6 */
+			
 				_here;
 				assert( $<idStr>1 != NULL );
 
@@ -38472,7 +38760,7 @@ VariableDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					&proctype_ste,	/* Type							*/
+					NULL,			/* Type							*/
 					tProcptr, 		/* pType						*/
 					cVar, 			/* SymClass						*/
 					0,				/* Arity						*/
@@ -38510,7 +38798,7 @@ VariableDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					&proctype_ste,
+					NULL,
 					tProcptr, 
 					cVar, 
 					0,
@@ -38557,7 +38845,8 @@ VariableDef:
 			 
 			{				/* $12 */
 
-				union YYSTYPE value;
+				struct	SymNode	*s;
+				union	YYSTYPE	value;
 				
 				_here;
 				_if( $<options.NoStorage>10 )
@@ -38565,6 +38854,40 @@ VariableDef:
 					yyerror( "'nostorage' option is illegal here" );
 
 				_endif
+				
+			
+				// Need to create a dummy type to hold the procedure pointer parameters.
+				
+				s = SymbolTable;
+				InsertSym
+				( 
+					" (procptr parms) ", 
+					NULL,
+					tProcptr, 
+					cType, 
+					0,
+					NULL,
+					0, 
+					NULL,
+					4,
+					0,
+					NULL,
+					NULL,
+					NULL,
+					0
+				);
+				SymbolTable->u.proc.parms = s;
+				SymbolTable->u.proc.returns = hlastrdup2( "" );
+				SymbolTable->u.proc.use = NULL;
+				$<s>6->Type = SymbolTable;
+				$<s>6->u.proc.parms->Type = SymbolTable;
+				
+				// Remove the dummy entry from the symbol table:
+			
+				SymbolTable = s;
+				
+				// Patch the original symbol table entries:
+
 				$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 				$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
 				$<s>6->u.proc.parms->u.proc.use = NULL;
@@ -40132,7 +40455,8 @@ StaticProcUninit:
 		 
 		{					/* $13 */
 
-			union YYSTYPE value;
+			struct	SymNode	*s;
+			union	YYSTYPE	value;
 			
 			_here;
 			_if( $<returns>12 != NULL && $<options.NoStorage>10 )
@@ -40143,6 +40467,38 @@ StaticProcUninit:
 				);
 
 			_endif
+			
+			// Need to create a dummy type to hold the procedure pointer parameters.
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (procptr parms) ", 
+				NULL,
+				tProcptr, 
+				cType, 
+				0,
+				NULL,
+				0, 
+				NULL,
+				4,
+				0,
+				NULL,
+				NULL,
+				NULL,
+				0
+			);
+			SymbolTable->u.proc.parms = s;
+			SymbolTable->u.proc.returns = hlastrdup2( "" );
+			SymbolTable->u.proc.use = NULL;
+			$<s>6->Type = SymbolTable;
+			$<s>6->u.proc.parms->Type = SymbolTable;
+			
+			// Remove the dummy entry from the symbol table:
+			
+			SymbolTable = s;
+			
+			// Patch the original symbol table entries:
 
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
@@ -40420,7 +40776,8 @@ StaticProcInit:
 			*/
 			 
 			{
-				union YYSTYPE value;
+				struct	SymNode	*s;
+				union	YYSTYPE	value;
 				
 				_if( $<options.NoStorage>12 )
 
@@ -40436,6 +40793,39 @@ StaticProcInit:
 					);
 
 				_else
+
+			
+					// Need to create a dummy type to hold the procedure pointer parameters.
+					
+					s = SymbolTable;
+					InsertSym
+					( 
+						" (procptr parms) ", 
+						NULL,
+						tProcptr, 
+						cType, 
+						0,
+						NULL,
+						0, 
+						NULL,
+						4,
+						0,
+						NULL,
+						NULL,
+						NULL,
+						0
+					);
+					SymbolTable->u.proc.parms = s;
+					SymbolTable->u.proc.returns = hlastrdup2( "" );
+					SymbolTable->u.proc.use = NULL;
+					$<s>6->Type = SymbolTable;
+					$<s>6->u.proc.parms->Type = SymbolTable;
+					
+					// Remove the dummy entry from the symbol table:
+					
+					SymbolTable = s;
+			
+					// Patch the original symbol table entries:
 
 					$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 					$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
@@ -43925,18 +44315,18 @@ StaticDef: StaticRedefInit;
 StaticDef: StaticEnum;
 
 
-	/*
-	** Static enum variable with the no storage option.
-	*/
+/*
+** Static enum variable with the no storage option.
+*/
 
 
 
 
 
 
-	/*
-	** Static enum variable with an initializer.
-	*/
+/*
+** Static enum variable with an initializer.
+*/
 
 StaticDef: StaticEnumInit;
 
@@ -44477,6 +44867,7 @@ ReadOnlyDef:
 		ProtoOptions		/* $11 */
 		RequiredExternal	/* $12 */
 		{
+			struct	SymNode	*s;
 			union YYSTYPE value;
 
 			assert( $<returns>12 != NULL );
@@ -44487,6 +44878,39 @@ ReadOnlyDef:
 				yyerror( "'nostorage' option is illegal here" );
 
 			_endif
+			
+			// Need to create a dummy type to hold the procedure pointer parameters.
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (procptr parms) ", 
+				NULL,
+				tProcptr, 
+				cType, 
+				0,
+				NULL,
+				0, 
+				NULL,
+				4,
+				0,
+				NULL,
+				NULL,
+				NULL,
+				0
+			);
+			SymbolTable->u.proc.parms = s;
+			SymbolTable->u.proc.returns = hlastrdup2( "" );
+			SymbolTable->u.proc.use = NULL;
+			$<s>6->Type = SymbolTable;
+			$<s>6->u.proc.parms->Type = SymbolTable;
+			
+			// Remove the dummy entry from the symbol table:
+			
+			SymbolTable = s;
+			
+			// Patch the original symbol table entries:
+
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
 			$<s>6->u.proc.parms->u.proc.use = NULL;
@@ -44632,6 +45056,40 @@ ReadOnlyDef:
 		Semicolon			/* $8 */
 		VarOptions			/* $9 */
 		{
+			struct	SymNode	*s;
+
+			
+			// Need to create a dummy type to hold the procedure pointer parameters.
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (procptr parms) ", 
+				NULL,
+				tProcptr, 
+				cType, 
+				0,
+				NULL,
+				0, 
+				NULL,
+				4,
+				0,
+				NULL,
+				NULL,
+				NULL,
+				0
+			);
+			SymbolTable->u.proc.parms = s;
+			SymbolTable->u.proc.returns = hlastrdup2( "" );
+			SymbolTable->u.proc.use = NULL;
+			$<s>6->Type = SymbolTable;
+			$<s>6->u.proc.parms->Type = SymbolTable;
+			
+			// Remove the dummy entry from the symbol table:
+			
+			SymbolTable = s;
+			
+			// Patch the original symbol table entries:
 
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
@@ -62636,9 +63094,9 @@ hlaSingleIDSVal:
 	
 
 
-	/*
-	** Process the fields of a namespace, union, record, or class here.
-	*/
+/*
+** Process the fields of a namespace, union, record, or class here.
+*/
 
 
 hlaFields:
@@ -62649,13 +63107,15 @@ hlaFields:
 			memcpy( &$<dotName>$, &$<dotName>1, sizeof( union YYSTYPE ));
 			_here;
 		}
+	;
 
-		/*
-		** Handle a chain of dot-fieldnames here.  This code
-		** handles all but the last identifier in the chain of names.
-		*/
+/*
+** Handle a chain of dot-fieldnames here.  This code
+** handles all but the last identifier in the chain of names.
+*/
 
-	|	PtAtHLAFields		/* $1 */
+hlaFields:
+		PtAtHLAFields		/* $1 */
 		'.'					/* $2 */
 		SimpleID			/* $3 */
 		hlaLookup			/* $4 */
@@ -62782,6 +63242,7 @@ SingleFieldName:
 		SimpleID
 		{
 			_here;
+
 			_if( $<s>1 == NULL )
 
 				/*
@@ -62872,7 +63333,13 @@ PtAtHLAFields:
 				
 			_else
 
-				$<s>$ = $<dotName.Sym>0->Fields;
+				$<s>$ = 
+					_ifx
+					(
+						$<dotName.Sym>0->Type != NULL,
+						$<dotName.Sym>0->Type->Fields, 
+						$<dotName.Sym>0->Fields
+					);
 
 			_endif
 
@@ -63743,6 +64210,10 @@ fEitherMemDest:
 		{
 			$<adrs>$ = $<adrs>1;
 			$<adrs.Size>$ = 0;
+			$<adrs.Type>$ = &byte_ste;
+			$<adrs.pType>$ = tByte;
+			$<adrs.Sym>$->Type = &byte_ste;
+			$<adrs.Sym>$->pType = tByte;
 		}
 	;
  
@@ -63756,6 +64227,10 @@ fEitherMem:
 		{
 			$<adrs>$ = $<adrs>1;
 			$<adrs.Size>$ = 0;
+			$<adrs.Type>$ = &byte_ste;
+			$<adrs.pType>$ = tByte;
+			$<adrs.Sym>$->Type = &byte_ste;
+			$<adrs.Sym>$->pType = tByte;
 		}
 	;
 
@@ -63779,6 +64254,8 @@ fEitherMem16Dest:
 			$<adrs.Size>$ = 2;
 			$<adrs.pType>$ = tWord;
 			$<adrs.Type>$ = &word_ste;
+			$<adrs.Sym>$->Type = &word_ste;
+			$<adrs.Sym>$->pType = tWord;
 		}
 	;
 
@@ -63799,6 +64276,8 @@ fEitherMem32Dest:
 			$<adrs.Size>$ = 4;
 			$<adrs.pType>$ = tDWord;
 			$<adrs.Type>$ = &dword_ste;
+			$<adrs.Sym>$->Type = &dword_ste;
+			$<adrs.Sym>$->pType = tDWord;
 		}
 	;
 
@@ -63820,6 +64299,8 @@ fEitherMem64Dest:
 			$<adrs.Size>$ = 8;
 			$<adrs.pType>$ = tQWord;
 			$<adrs.Type>$ = &qword_ste;
+			$<adrs.Sym>$->Type = &qword_ste;
+			$<adrs.Sym>$->pType = tQWord;
 		}
 	;
 
@@ -63843,6 +64324,8 @@ fEitherMem128Dest:
 			$<adrs.Size>$ = 16;
 			$<adrs.pType>$ = tLWord;
 			$<adrs.Type>$ = &lword_ste;
+			$<adrs.Sym>$->Type = &lword_ste;
+			$<adrs.Sym>$->pType = tLWord;
 		}
 	;
 
@@ -63863,6 +64346,8 @@ fEitherMem128or64Dest:
 			$<adrs.Size>$ = 16;
 			$<adrs.pType>$ = tLWord;
 			$<adrs.Type>$ = &lword_ste;
+			$<adrs.Sym>$->Type = &lword_ste;
+			$<adrs.Sym>$->pType = tLWord;
 		}
 	;
 
@@ -64573,11 +65058,11 @@ SingleStmt:
 
 
 
-	/*
-	** Handle procedure pointers that are members of a record or union
-	** here.  Also handle calls to procedures and methods in a pointer
-	** to a class.
-	*/
+
+// Handle procedure pointers that are members of a record or union
+// here.  Also handle calls to procedures and methods in a pointer
+// to a class.
+
 
 
 SingleStmt:
@@ -64587,55 +65072,53 @@ SingleStmt:
 		IndirectCallParameters	/* $4 */
 		{						/* $5 */
 
-			int  			useLEA = 1;
+			int  			useLEA    = 1;
 			int  			useOffset = 1;
+			int  			isPointer = 0;
+			enum ClassType	SymClass;
 			struct SymNode	*classPtr;
+			struct SymNode	*typ;
 			struct SymNode	*s;
 			char			name[ 256 ];
 			char 			returns[ 256 ];
 
 			_here;
 			returns[ 0 ] = '\0';
-
-			/*
-			** Handle classes specially because we get to use the
-			** ESI and EDI registers for class invocations.
-			*/
-
+			
+			// Handle classes specially because we get to use the
+			// ESI and EDI registers for class invocations.
+			//
+			// Note: $<adrs.Sym>1->Type is usually equal to $<adrs.Type>1
+			// They are different for parameters passed by address. In that
+			// case, $<adrs.Type>1 will be a tPointer type and $<adrs.Sym>1->Type
+			// is the base type.  Note that $<adrs.pType>1 will contain tPointer
+			// for a parameter passed by address. In such a case, this code has
+			// to use the (base) type of $<adrs.Sym>1->Type as the object pointed at.
+			//
+			// It shouldn't possible for $<adrs.Sym>1->Type to be NULL. This used
+			// to denote a procedure pointer object that was directly declared (rather
+			// than creating a user-defined procedure type and using that to declare
+			// the object). This should have been corrected everywhere by now (dummy
+			// types should be created), but just in case some old code is laying around,
+			// the assert below was added to catch these.
+			//
+			// In no case should $<adrs.Sym>1 be NULL.  Even for anonymous
+			// memory objects, the Sym field is set to something legitimate.
+			
+			typ = 
+				GetCallType
+				( 
+					$<adrs.Sym>1, 
+					$<adrs.Type>1, 
+					$<adrs.pType>1, 
+					&isPointer 
+				);			
+			
 			classPtr = NULL;
-			_if( $<adrs.pType>1 == tClass )
+			_if( typ->pType == tClass )
 			
-				classPtr = $<adrs.Type>1;
+				classPtr = typ;
 				
-			_elseif
-			(
-					$<adrs.pType>1 == tArray
-				&&	( s = GetBaseType( $<adrs.Type>1 ))->pType == tClass
-			)
-			
-				classPtr = s;
-				
-			_elseif
-			(
-					(
-							$<adrs.pType>1 == tPointer
-						||	(
-									$<adrs.pType>1 == tArray
-								&&	GetBaseType( $<adrs.Sym>1 )->
-											Type->pType 
-												== tPointer
-							)
-					)
-				&&	(s=$<adrs.Sym>1->Base)->pType == tClass
-			)
-				classPtr = s;
-			
-			_endif
-			
-				
-			
-			_if( classPtr != NULL )
-			
 				/*
 				** If we've referenced a class object, we need to set
 				** the IsReferenced field of the _VMT_ field for this class.
@@ -64657,14 +65140,7 @@ SingleStmt:
 				** (for class vars) vs. "mov" (for class pointers).
 				*/
 
-				_if
-				( 
-						$<adrs.pType>1 == tPointer
-					||	(
-								$<adrs.pType>1 == tArray
-							&&	GetBaseType( $<adrs.Type>1 )->pType == tPointer
-						)
-				)
+				_if( isPointer )
 
 					useLEA = 0;
 					useOffset = 0;
@@ -65709,7 +66185,7 @@ SMVm1:
   /* Get the attribute of a SimpleMemoryVar object at $0 */
 
 SMV0:
-		{ 
+		{
 			_if( $<adrs.Sym>0 == NULL )
 			
 				$<s>$ = $<adrs.Type>0; 
@@ -65741,7 +66217,6 @@ CallParameters:
 		SavePosn
 		{
 			_here;
-			assert( $<s>0 != NULL );
 			$<s>$ =	$<s>0;
 			_if( $<s>$ == NULL )
 			
@@ -65759,12 +66234,20 @@ CallParameters:
 	;
 
 
- /*
- ** IndirectCallParameters-
- **
- **	Similar to CallParameters, but used by procedure
- ** invocations made by a procedure pointer variable.
- */
+ 
+//  IndirectCallParameters-
+// 
+// 	Similar to CallParameters, but used by procedure
+//  invocations made by a procedure pointer variable.
+//
+//	$<s>0 - Points at the variable containing the address of the
+//			function we're trying to call.
+//
+//	On Return:
+//
+//	$<s>$ -	Points at the (type) entry that contains the
+//			parameter list pointer in the u.proc.parms field.	
+ 
 
 IndirectCallParameters:
 		'('
@@ -65772,72 +66255,66 @@ IndirectCallParameters:
 		{
 			enum	PrimType	pType;
 			struct	SymNode		*s;
+			struct	SymNode		*typ;
+			char				msg[256];
+			char				name[32];
 
 			_here;
 			
-			assert( $<s>0 != NULL );
-			assert( $<s>0->Type != NULL || $<s>0->pType != tArray );
+			assert( $<s>0 != NULL );			// Must have some symbol
+			assert( $<s>0->Type != NULL );			
 
-			pType = 
-				_ifx
-				( 
-					$<s>0->pType == tArray, 
-					GetBaseType($<s>0->Type)->pType,
-					$<s>0->pType
-				);
-
-			/*
-			** If the type field of $<s>0 is NULL, then
-			** we've got a pointer variable that was
-			** directly declared as a procedure pointer.
-			** If the type field is not NULL, then the
-			** user has defined a procedure type in the
-			** TYPE section and declared this variable
-			** to be of that type.
-			*/
-
-			_if
-			( 
+			_if( $<s>0->Type == NULL )
+			
+				// It must be some primitive type that is not
+				// a function address.
 				
-					$<s>0->Type == NULL
-				||	pType == tProcptr
-				||	pType == tThunk
-				||	pType == tMethod
-				||	pType == tIterator
-				||	pType == tProc
-				||	pType == tClassProc
-				||	pType == tClassIter
-				||	(
-							$<s>0->SymClass == cParm
-						&&	(
-									$<s>0->pClass == name_pc
-								||	$<s>0->pClass == lazy_pc
-							)
-					)
-			)
-
-				$<s>$ =	$<s>0;
+				strncpy( name, $<s>0->TrueName, 31 );
+				name[31] = 0;
+				sprintf( msg, "Object cannot be called: '%s'", name );
+				yyerror( msg );
+				$<s>$ = &dummyProc_ste;
 
 			_else
+			
+			
+				// Get the base type of the (proc) pointer object:
 
-				_if( $<s>0->u.proc.parms != NULL )
-
-					$<s>$ = $<s>0;
-
+				typ = GetBaseType( $<s>0->Type );
+				pType =	typ->pType;
+				_if
+				(
+						pType == tProcptr	// Var is a procedure pointer
+					||	pType == tThunk		//  ... a thunk
+					||	pType == tProc		//  Could be a method
+					||	pType == tMethod	//  ... pointer to a class?
+					||	pType == tClassProc	//  ... pointer to a class?
+					||	pType == tClassIter	//  ... pointer to a class?
+					||	(
+								$<s>0->SymClass == cParm	// name or lazy parm
+							&&	(
+										$<s>0->pClass == name_pc
+									||	$<s>0->pClass == lazy_pc
+								)
+						)
+				)
+				
+					$<s>$ = typ;
+				
 				_else
-
-					yyerror( "Object cannot be called" );
+				
+					// It must be some primitive type that is not
+					// a function address.
+					
+					strncpy( name, $<s>0->TrueName, 31 );
+					name[31] = 0;
+					sprintf( msg, "Object cannot be called: '%s'", name );
+					yyerror( msg );
 					$<s>$ = &dummyProc_ste;
 
 				_endif
-
-			_endif
-			_if( $<s>$ == NULL )
-			
-				yyerror( "Undefined symbol or illegal parameter" );
-				$<s>$ = &dummyProc_ste;
 				
-			_endif
+			_endif	
 			_here;
 		}
 		OptionalCallParameters
@@ -68463,6 +68940,42 @@ SingleStmt:
 			
 			fpi_arith_mem_instr( $<u>1, &$<adrs>3 );
 			FreeAdrs( &$<adrs>3 );
+			$<returns>$ = hlastrdup2( "st0" );
+			_here;
+		}
+	;	
+
+
+// Fake a memory operand for the FP/integer instructions.
+
+SingleStmt:
+		FPI_arith_instr		/* $1 */
+		Lparen				/* $2 */
+		fConstExpr			/* $3 */
+		Rparen				/* $4 */
+		{					/* $5 */
+
+			char			*operand;
+			struct	adrsYYS adrs;
+			char			label[64];
+			
+			_here;
+			
+			operand = CheckOrdinal( YYS &$<v>3, 64 );
+			sprintf( label, "fp_int_const" sympost "%d", LblCntr++ );
+			startStrSeg();
+			EmitData
+			( 
+				label,
+				tQWord, 
+				operand 
+			);
+			endStrSeg();
+			initLbl( &adrs, label, 0 );
+			adrs.Size = 8;
+			fpi_arith_mem_instr( $<u>1, &adrs );
+			FreeValue( YYS &$<v>3 );
+			free2( vss operand );
 			$<returns>$ = hlastrdup2( "st0" );
 			_here;
 		}
@@ -80063,13 +80576,14 @@ SingleStmt:
 		IndirectCallParameters	/* $5 */
 		{						/* $6 */
 
-			char *size;
-			char address[ 256 ];
-			char adrs[ 256 ];
-			char name[ 256 ];
-			int  useLEA=1;
-			int	 offset = 0;
-			struct adrsYYS yysAdrs;
+			int  			useLEA = 1;
+			int	 			offset = 0;
+			struct	SymNode	*typ;
+			char 			*size;
+			struct adrsYYS	yysAdrs;
+			char 			address[ 256 ];
+			char 			adrs[ 256 ];
+			char 			name[ 256 ];
 
 			_here;
 
@@ -85182,7 +85696,7 @@ MemoryDest:
 			$<adrs.Sym>$ = &false_ste;
 			$<adrs.Type>$ = &boolean_ste;
 			$<adrs.pType>$ = tBoolean;		/* No real type 	*/
-			$<adrs.pType>$ = valp_pc;		/* No real pClass	*/
+			$<adrs.pClass>$ = valp_pc;		/* No real pClass	*/
 			$<adrs.SymClass>$ = cStatic;	/* No real class	*/
 			_here;
 		}
@@ -85212,7 +85726,7 @@ MemoryDest:
 			$<adrs.Sym>$ = &false_ste;
 			$<adrs.Type>$ = &boolean_ste;
 			$<adrs.pType>$ = tBoolean;		/* No real type 	*/
-			$<adrs.pType>$ = valp_pc;		/* No real pClass	*/
+			$<adrs.pClass>$ = valp_pc;		/* No real pClass	*/
 			$<adrs.SymClass>$ = cStatic;	/* No real class	*/
 			_here;
 		}
@@ -85646,7 +86160,8 @@ AnonMem:
 		amGutz				/* $3 */
 		zeroOrMoreGutz		/* $4 */
 		{
-			int index;
+			int				index;
+			struct	SymNode	*s;
 			
 			_here;
 			mergeMem( YYM &$<mem>3, YYM &$<mem>4 );
@@ -85677,6 +86192,29 @@ AnonMem:
 				$<mem.scale>3,
 				$<mem.disp>3
 			);
+			
+			// Create a dummy symbol for the <adrs.Sym> field so it is never NULL.
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (anonsym) ", 
+				&dword_ste,		/* Default is int32 object.		*/
+				tDWord,
+				cStatic,		/* Not really static, but...	*/ 
+				0,				/* Arity						*/
+				NULL,			/* Dimensions					*/
+				0, 				/* NumElements					*/
+				0,				/* No initialization			*/
+				0,				/* Object size					*/
+				0,				/* Offset						*/
+				NULL,			/* Static Name					*/
+				NULL,			/* Base							*/
+				NULL,			/* Fields						*/
+				0				/* FieldCnt						*/
+			);
+			$<adrs.Sym>$ = SymbolTable;
+			SymbolTable = s;
 			_here;
 		}
 
@@ -85799,10 +86337,8 @@ SimpleMemoryVar:
 
 
 
-		/*
-		** Handle a Class VAR ID here.
-		*/
 
+// Handle a Class VAR ID here.
 
 SimpleMemoryVar:
 		ClassVarID
@@ -85907,16 +86443,16 @@ SimpleMemoryVar:
 
 		  
 
-		/*
-		** Handle intermediate variables (non-local and
-		** non-static) here.  The syntax is:
-		**
-		**	reg32::id
-		**
-		**	e.g.,
-		**
-		**		ebx::i
-		*/
+
+// Handle intermediate variables (non-local and
+// non-static) here.  The syntax is:
+//
+//	reg32::id
+//
+//	e.g.,
+//
+//		ebx::i
+
 	
 
 SimpleMemoryVar:
@@ -85946,8 +86482,8 @@ SimpleMemoryVar:
 				&&	ByAddress( $<s>3->pClass )
 			)
 
-				$<adrs.Type>$ = &dword_ste;
-				$<adrs.pType>$ = tDWord;
+				$<adrs.Type>$ = &pointer_ste;
+				$<adrs.pType>$ = tPointer;
 				$<adrs.Size>$ = 4;
 
 			_else
@@ -85994,10 +86530,12 @@ SimpleMemoryVar:
 		}
 	;
 
-		/*
-		** Handle a single static identifier (at any lex level)
-		** here.
-		*/
+
+
+
+// Handle a single static identifier (at any lex level)
+// here.
+
 
 SimpleMemoryVar:
 		AnyStaticID
@@ -86060,10 +86598,10 @@ SimpleMemoryVar:
 		')'					/* $5 */
 		{					/* $6 */
 
-			char adrs[256];
+			struct	SymNode	*s;
+			char 			adrs[256];
 
 			_here;
-
 
 			/*
 			** If the SymClass is cParm and the pClass is
@@ -86110,11 +86648,32 @@ SimpleMemoryVar:
 			$<adrs.Scale>$ = $<adrs.Scale>4;
 			$<adrs.Disp>$ = $<adrs.Disp>4;
 			$<adrs.Sym>$ = $<adrs.Sym>4;
-			$<adrs.Type>$ = $<s>3;
-			$<adrs.pType>$ = $<s>3->pType;
 			$<adrs.SymClass>$ = $<adrs.SymClass>4;
 			$<adrs.pClass>$ = $<adrs.pClass>4;
 
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Type>$ = $<s>3;
+			$<adrs.pType>$ = $<s>3->pType;
+			$<adrs.Sym>$ = s;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 			_here;
 		}
 	;
@@ -86130,7 +86689,8 @@ SimpleMemoryVar:
 		')'					/* $6 */
 		{					/* $7 */
 
-			char adrs[256];
+			struct	SymNode	*s;
+			char 			adrs[256];
 
 			_here;
 
@@ -86180,11 +86740,31 @@ SimpleMemoryVar:
 			$<adrs.Scale>$ = $<adrs.Scale>5;
 			$<adrs.Disp>$ = $<adrs.Disp>5;
 			$<adrs.Sym>$ = $<adrs.Sym>5;
-			$<adrs.Type>$ = $<s>3;
-			$<adrs.pType>$ = $<s>3->pType;
 			$<adrs.SymClass>$ = $<adrs.SymClass>5;
 			$<adrs.pClass>$ = $<adrs.pClass>5;
-
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
+			$<adrs.Type>$ = $<s>3;
+			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 			_here;
 		}
 	;
@@ -86200,6 +86780,7 @@ SimpleMemoryVar:
 		Rparen				/* $6 */
 		{					/* $7 */
 
+			struct	SymNode	*s;
 
 			_here;
 
@@ -86250,11 +86831,32 @@ SimpleMemoryVar:
 			$<adrs.Scale>$ = $<adrs.Scale>4;
 			$<adrs.Disp>$ = $<adrs.Disp>4;
 			$<adrs.Sym>$ = $<adrs.Sym>4;
-			$<adrs.Type>$ = $<s>3;
-			$<adrs.pType>$ = $<s>3->pType;
 			$<adrs.SymClass>$ = $<adrs.SymClass>4;
 			$<adrs.pClass>$ = $<adrs.pClass>4;
 
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
+			$<adrs.Type>$ = $<s>3;
+			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 
 			FreeAdrs( &$<adrs>5 );
 			_here;
@@ -86272,7 +86874,8 @@ SimpleMemoryVar:
 		IndexAdrsMode		/* $6 */
 		Rparen				/* $7 */
 		{					/* $8 */
-
+		
+			struct	SymNode	*s;
 
 			_here;
 
@@ -86324,11 +86927,32 @@ SimpleMemoryVar:
 			$<adrs.Scale>$ = $<adrs.Scale>5;
 			$<adrs.Disp>$ = $<adrs.Disp>5;
 			$<adrs.Sym>$ = $<adrs.Sym>5;
-			$<adrs.Type>$ = $<s>3;
-			$<adrs.pType>$ = $<s>3->pType;
 			$<adrs.SymClass>$ = $<adrs.SymClass>5;
 			$<adrs.pClass>$ = $<adrs.pClass>5;
 
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
+			$<adrs.Type>$ = $<s>3;
+			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 
 			FreeAdrs( &$<adrs>6 );
 			_here;
@@ -86345,7 +86969,9 @@ SimpleMemoryVar:
 		FieldStuff			/* $5 */
 		Rparen				/* $6 */
 		{					/* $7 */
-
+		
+			struct	SymNode	*s;
+			
 			_here;
 			memcpy( &$<adrs>$, &$<adrs>5, sizeof( union YYSTYPE ));
 			_if( $<s>3->Arity == 0 )
@@ -86374,8 +87000,31 @@ SimpleMemoryVar:
 
 			$<adrs.ObjectSize>$ = $<s>3->ObjectSize;
 			$<adrs.forcedSize>$ = $<s>3->ObjectSize;
+
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
 			$<adrs.Type>$ = $<s>3;
 			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
+
 			FreeAdrs( &$<adrs>4 );
 			_here;
 		}
@@ -86393,6 +87042,8 @@ SimpleMemoryVar:
 		Rparen				/* $7 */
 		{					/* $8 */
 
+			struct	SymNode	*s;
+			
 			_here;
 			memcpy( &$<adrs>$, &$<adrs>6, sizeof( union YYSTYPE ));
 			_if( $<s>3->Arity == 0 )
@@ -86421,8 +87072,32 @@ SimpleMemoryVar:
 
 			$<adrs.ObjectSize>$ = $<s>3->ObjectSize;
 			$<adrs.forcedSize>$ = $<s>3->ObjectSize;
+
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
 			$<adrs.Type>$ = $<s>3;
 			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
+
+			
 			FreeAdrs( &$<adrs>5 );
 			_here;
 		}
@@ -86440,7 +87115,8 @@ SimpleMemoryVar:
 		Rparen				/* $7 */
 		{					/* $8 */
 
-
+			struct	SymNode	*s;
+			
 			_here;
 			memcpy( &$<adrs>$, &$<adrs>5, sizeof( union YYSTYPE ));
 			CombineAddresses( &$<adrs>$, &$<adrs>6 );
@@ -86470,8 +87146,30 @@ SimpleMemoryVar:
 
 			$<adrs.ObjectSize>$ = $<s>3->ObjectSize;
 			$<adrs.forcedSize>$ = $<s>3->ObjectSize;
+
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
 			$<adrs.Type>$ = $<s>3;
 			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 
 			FreeAdrs( &$<adrs>4 );
 			FreeAdrs( &$<adrs>6 );
@@ -86492,7 +87190,8 @@ SimpleMemoryVar:
 		Rparen				/* $8 */
 		{					/* $9 */
 
-
+			struct	SymNode	*s;
+			
 			_here;
 			memcpy( &$<adrs>$, &$<adrs>6, sizeof( union YYSTYPE ));
 			CombineAddresses( &$<adrs>$, &$<adrs>7 );
@@ -86522,8 +87221,30 @@ SimpleMemoryVar:
 
 			$<adrs.forcedSize>$ = $<s>3->ObjectSize;
 			$<adrs.ObjectSize>$ = $<s>3->ObjectSize;
+
+			
+			// Memory leak! We have to guarantee that Sym's type matches Type.
+			// In order to do this, we have to create a new symbol table entry
+			// and copy Sym's data to it (shallow copy is fine) so we can copy
+			// the TYPE field to Sym's type without affecting the original
+			// symbol's definition.
+			
+			s = malloc( sizeof( struct SymNode ));
+			memcpy
+			( 
+				s, 
+				$<adrs.Sym>$, 
+				sizeof( struct SymNode ) - sizeof( union ValuesSize )
+			);
+			s->Type = $<s>3;
+			s->pType = $<s>3->pType;
+			$<adrs.Sym>$ = s;
 			$<adrs.Type>$ = $<s>3;
 			$<adrs.pType>$ = $<s>3->pType;
+			
+			// Copy the parameter information from the type:
+			
+			memcpy( &s->u, &$<s>3->u, sizeof( union ValuesSize ));
 
 			FreeAdrs( &$<adrs>5 );
 			FreeAdrs( &$<adrs>7 );
@@ -86533,11 +87254,11 @@ SimpleMemoryVar:
 
 
 
-		/*
-		** Handle type coercion of anonymous memory operands here.
-		**
-		**	e.g.,  "( type int8 [ebx] )"
-		*/
+/*
+** Handle type coercion of anonymous memory operands here.
+**
+**	e.g.,  "( type int8 [ebx] )"
+*/
 
 SimpleMemoryVar:
 		'('
@@ -86547,7 +87268,8 @@ SimpleMemoryVar:
 		Rparen
 
 		{
-
+			struct	SymNode	*s;
+			
 			_here;
 			_if( $<s>3->Arity == 0 )
 
@@ -86583,12 +87305,35 @@ SimpleMemoryVar:
 			$<adrs.IndexReg>$ = $<adrs.IndexReg>4;
 			$<adrs.Scale>$ = $<adrs.Scale>4;
 			$<adrs.Disp>$ = $<adrs.Disp>4;
-			$<adrs.Sym>$ = NULL;
 			$<adrs.Type>$ = $<s>3;
 			$<adrs.pType>$ = $<s>3->pType;
 			$<adrs.pClass>$ = valp_pc;
 			$<adrs.SymClass>$ = cVar;
 			$<adrs.BaseType>$ = $<s>3;
+			
+			// Create a dummy symbol so that the SYM field is never NULL
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (anon sym) ", 
+				$<s>3,			/* Type							*/
+				$<s>3->pType,
+				cStatic, 
+				0,				/* Arity						*/
+				NULL,			/* Dimensions					*/
+				0, 				/* NumElements					*/
+				NULL,			/* No initialization			*/
+				0,				/* Object size					*/
+				0,				/* Offset						*/
+				NULL,			/* Static Name					*/
+				NULL,			/* Base							*/
+				NULL,			/* Fields						*/
+				0				/* FieldCnt						*/
+			);
+			
+			$<adrs.Sym>$ = SymbolTable;
+			SymbolTable = s;
 			_here;
 		}
 	;
@@ -86666,6 +87411,7 @@ SimpleMemoryVar:
 		coloncolonTkn	/* $2 */
 		UndefID			/* $3 */
 		{
+			struct	SymNode *s;
 			_here;
 			yyerror( "Undefined intermediate ID" );
 			$<adrs.Size>$ = 0;
@@ -86677,12 +87423,36 @@ SimpleMemoryVar:
 			$<adrs.IndexReg>$ = NULL;
 			$<adrs.Scale>$ = 0;
 			$<adrs.Disp>$ = 0;
-			$<adrs.Sym>$ = NULL;
 			$<adrs.Type>$ = &boolean_ste;
 			$<adrs.BaseType>$ = &boolean_ste;
 			$<adrs.pType>$ = tBoolean;
 			$<adrs.pClass>$ = valp_pc;
 			$<adrs.SymClass>$ = cStatic;
+			
+			
+			// Create a dummy symbol so that the SYM field is never NULL
+			
+			s = SymbolTable;
+			InsertSym
+			( 
+				" (anon sym) ", 
+				$<adrs.Type>$,	/* Type							*/
+				$<adrs.pType>$,
+				cStatic, 
+				0,				/* Arity						*/
+				NULL,			/* Dimensions					*/
+				0, 				/* NumElements					*/
+				NULL,			/* No initialization			*/
+				0,				/* Object size					*/
+				0,				/* Offset						*/
+				NULL,			/* Static Name					*/
+				NULL,			/* Base							*/
+				NULL,			/* Fields						*/
+				0				/* FieldCnt						*/
+			);
+			
+			$<adrs.Sym>$ = SymbolTable;
+			SymbolTable = s;
 			_here;
 		}
 	;
@@ -86788,6 +87558,7 @@ FieldStuff:
 					)
 				||	IsStaticClass( $<adrs.SymClass>0 )
 			)
+
 				$<adrs.SymClass>$ = $<adrs.SymClass>0;
 				$<adrs.pClass>$ = $<adrs.pClass>0;
 
@@ -86806,10 +87577,10 @@ FieldStuff:
 
 
 
-		/*
-		** This production handles all the "intermediate" field names;
-		** that is, those with periods on both sides of the name.
-		*/
+
+// This production handles all the "intermediate" field names;
+// that is, those with periods on both sides of the name.
+
 
 recFieldStuff:
 		PointAtFields	/* $1 */
@@ -86822,7 +87593,6 @@ recFieldStuff:
 			struct SymNode	*sym;
 
 			_here;
-
 
 			/*
 			** The following adrs fields are the same no matter
@@ -86989,14 +87759,16 @@ recFieldStuff:
 			FreeAdrs( &$<adrs>5 );
 			_here;
 		}
+	;
 
 
-		/*
-		** This production processes the last fieldname
-		** in a qualified field name list.
-		*/
+/*
+** This production processes the last fieldname
+** in a qualified field name list.
+*/
 
-	|	PointAtFields	/* $1 */
+recFieldStuff:
+		PointAtFields	/* $1 */
 		PeriodAndSaveST	/* $2 */
 		AnyID			/* $3 */
 		{				/* $4 */
@@ -87007,7 +87779,6 @@ recFieldStuff:
 
 			SymbolTable = $<s>2;
 
-
 			/*
 			** $<s>1 (PointAtFields) is NULL if there was an error along the
 			** fieldname list leading up to this point.  If this
@@ -87016,7 +87787,6 @@ recFieldStuff:
 			*/
 
 			_if( $<s>1 == NULL )
-
 
 				/*
 				** Okay, there is no "Fields" pointer for the
@@ -87027,6 +87797,7 @@ recFieldStuff:
 				*/
 
 				yyerror( "Expected Class, Record, or Union type" );
+				
 				$<adrs.Size>$ = 1;
 				$<adrs.forcedSize>$ = 0;
 				$<adrs.ObjectSize>$ = 1;
@@ -87282,17 +88053,17 @@ LookupSym:
 
 
 
-	/*
-	** The following is a quick utility function that points
-	** the $<s>$ attribute at the current field list of the
-	** symbol located by the LookupSym production or the original
-	** class/record/union object that got us into this code.
-	*/
+/*
+** The following is a quick utility function that points
+** the $<s>$ attribute at the current field list of the
+** symbol located by the LookupSym production or the original
+** class/record/union object that got us into this code.
+*/
 
 PointAtFields:
 		{
+			struct	SymNode	*s;
 			_here;
-			
 			_if( $<adrs.Type>0 != NULL )
 
 				_if( $<adrs.Type>0->pType == tPointer )

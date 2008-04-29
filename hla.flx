@@ -11802,6 +11802,7 @@ _begin( ProcessID )
         ** push the fieldnames back onto the input and
         ** return only the object name as our attribute.
         */
+
         
         yylval->s = CurObject;  /* Retrieve ptr to original object */
         
@@ -11869,7 +11870,7 @@ _begin( ProcessID )
                 char    *DotLocation;
                 
         #define dn d1dnReturnVal.dotName
-        
+
         PushBackStr( "\xF5" );
         CurObject = symbol;
         LastRefdObject = symbol;

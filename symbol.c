@@ -1290,8 +1290,19 @@ _begin( GetBaseType )
 
 	assert( typ != NULL );
 	_forever
-
+		// Immediately return with a proc ptr type, because the first one we
+		// find will have the parameter information.
+		
+		_breakif( typ->pType == tProcptr );
+		
+		// Return if the underlying type is NULL, because this is a
+		// primitive type.
+		
 		_breakif( typ->Type == NULL );
+		
+		// Return immediately if we have a pointer to an array. Don't
+		// go any lower.
+				
 		_breakif( typ->pType == tPointer && typ->Type->pType == tArray );
 
 		typ = typ->Type;
@@ -1303,6 +1314,120 @@ _end( GetBaseType )
 
 
 
+// GetCallType-
+//
+//	Used to determine the base type of a variable that contains a function
+// pointer.  Used by procedure pointers, classes, and stuff like that.
+
+struct SymNode*
+GetCallType
+( 
+	struct SymNode 	*Sym, 
+	struct SymNode	*Type, 
+	enum PrimType	pType,
+	int				*isPointer 
+)
+_begin( GetCallType )
+
+	struct	SymNode	*typ;
+	
+	// Note: Sym1->Type is usually equal to Type
+	// They are different for parameters passed by address. In that
+	// case, Type will be a tPointer type and Sym->Type
+	// is the base type.  Note that Type will contain tPointer
+	// for a parameter passed by address. In such a case, this code has
+	// to use the (base) type of Sym->Type as the object pointed at.
+	//
+	// It shouldn't possible for Sym->Type to be NULL. This used
+	// to denote a procedure pointer object that was directly declared (rather
+	// than creating a user-defined procedure type and using that to declare
+	// the object). This should have been corrected everywhere by now (dummy
+	// types should be created), but just in case some old code is laying around,
+	// the assert below was added to catch these.
+	//
+	// In no case should Sym be NULL.  Even for anonymous
+	// memory objects, the Sym field is set to something legitimate.
+	
+	assert( Sym != NULL );
+	assert( Sym->Type != NULL );
+	assert( Type != NULL );
+	
+	// If $<adrs.pType>1 is tPointer but $<adrs.Sym>1->pType is not, this means
+	// that we've got a parameter passed by address and we need to use
+	// $<adrs.Sym>1->Type rather than $<adrs.Type>1
+	
+	*isPointer = 0;	// Assume this is not a pointer variable.
+	_if( pType == tPointer )
+	
+		_if( Sym->pType == tPointer )
+		
+			// If Sym is also a tPointer, get the
+			// pointer base type.
+
+			
+			typ = GetBaseType( Sym->Base );
+			
+		_else
+		
+			// If Sym is not a tPointer, get its base type:
+			
+			typ = GetBaseType( Sym->Type );
+			
+		_endif
+		*isPointer = 1;	// It is a pointer object.
+		
+	_elseif( pType == tArray )
+	
+		typ = GetBaseType( Sym );
+		_if( typ->pType == tPointer )
+		
+			typ = GetBaseType( Sym->Base );
+			*isPointer = 1;	// It is a pointer object.
+			
+		_else
+		
+			typ = GetBaseType( Sym->Type );
+			
+		_endif
+
+	_else
+	
+		// If the pType is not a pointer, then use the base type
+		// of the Type pointer:
+		
+		typ = GetBaseType( Type );
+		
+		// Could have had an array of pointers, so let's make one
+		// last check for a pointer here.
+		
+		_if( typ->pType == tPointer )
+		
+			typ = GetBaseType( typ->Base );
+			*isPointer = 1;	// It is a pointer object.
+			
+		_endif
+		
+	_endif
+				
+	// If it's a pointer type, then follow the BASE pointer
+	// one level and the the base type of whatever BASE references.
+	
+	_if( typ->pType == tPointer )
+
+		typ = GetBaseType( typ->Base );
+		*isPointer = 1;	// It is a pointer object.
+		
+	_endif
+	_return typ;		
+			
+_end( GetCallType )
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////
+//
 // InsertStaticSym-
 //
 //	This function is used to initialize and enter statically-allocated
@@ -2012,12 +2137,9 @@ _begin( InsertProc )
 	NewEntry->CurField		= NULL;
 	NewEntry->CurIndex		= 0;
 	NewEntry->regnum		= -1;
-	NewEntry->u.proc.Locals	= NULL;
-	NewEntry->u.proc.returns	= "";
-	NewEntry->u.proc.BaseClass= NULL;
-	NewEntry->u.proc.ParmSize = 0;
 
 	memset( &NewEntry->u.StartOfValues, 0, sizeof( union ValuesSize ));
+	NewEntry->u.proc.returns	= "";
 
 	// If a symbol is being inserted at lex level zero, then update
 	// the MainLocals value:
@@ -3039,14 +3161,18 @@ _begin( CopySymbols )
 
 		_elseif
 		( 
-				IsProc( SymbolsToCopy->pType ) 
-			||	SymbolsToCopy->pType == tProcptr
+				IsProc( SymbolsToCopy->pType )
+			||	SymbolsToCopy->pType == tProcptr 
 		)
 
 			memcpy( temp, SymbolsToCopy, sizeofSymNode );
+			_if( temp->u.proc.parms == NULL )
+			
+				temp->u.proc.parms = temp->Type->u.proc.parms;
+				
+			_endif
 			CopyParms( temp );
 			temp->Next = NextItem;
-
 
 		_else	  
 

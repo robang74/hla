@@ -2033,6 +2033,7 @@ _begin( CreatePtrToProc )
 	struct SymNode *beforeS;
 	struct SymNode *sprev;
 	struct SymNode *saveSyms;
+	struct SymNode *dummy;
 	struct SymNode temp;
 
 	_if( ct == cVar || ct == cParm )
@@ -2129,7 +2130,38 @@ _begin( CreatePtrToProc )
 		saveSyms->u.proc.BaseClass = NULL;
 		saveSyms->u.proc.ParmSize = temp.u.proc.ParmSize;
 		saveSyms->u.proc.cs = temp.u.proc.cs;
-		SymbolTable = saveSyms;				
+		SymbolTable = saveSyms;
+		
+		
+		// We need to create a dummy type to hold the parameters
+		// as the new way of processing parameters requires a TYPE field.
+		
+		dummy = SymbolTable;	// Save, so we can remove the dummy entry later.
+		InsertSym
+		( 
+			" (dummy proc ptr) ",
+			NULL,			/* Type							*/
+			tProcptr, 		/* pType						*/
+			cType, 			/* SymClass						*/
+			0,				/* Arity						*/
+			NULL,			/* Dimensions					*/
+			0, 				/* NumElements					*/
+			NULL,			/* Initially, no initialization	*/
+			4,				/* Object size					*/
+			0,				/* Offset						*/
+			NULL,			/* Static Name					*/
+			NULL,			/* Base							*/
+			NULL,			/* Fields						*/
+			0				/* FieldCnt						*/
+		);
+		SymbolTable->u.proc.parms = temp.u.proc.parms;
+		SymbolTable->u.proc.returns = saveSyms->u.proc.returns;
+		SymbolTable->u.proc.use = saveSyms->u.proc.use;
+		saveSyms->Type = SymbolTable;
+		
+		// Remove the dummy entry from the symbol table:
+		
+		SymbolTable = dummy;				
 
 		// Tuck away a pointer to the original procedure
 		// so we can do a sanity check on forward and

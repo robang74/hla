@@ -5169,7 +5169,7 @@ _begin( fpi_arith_mem_instr );
 	int size = adrs->Size;
 	
 	assert( instr < num_fpi_instrs );
-	_if( size != 2 && size != 4 )
+	_if( size != 2 && size != 4 && size != 8 )
 	
 		yyerror( "Illegal operand size for FP/integer arithmetic instruction" );
 		_return;

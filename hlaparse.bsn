@@ -11782,7 +11782,7 @@ RecDef:
 				InsertSym
 				( 
 					$<idStr>1,
-					NULL,
+					NULL, 
 					tProcptr, 
 					cVar, 
 					0,
@@ -17696,9 +17696,7 @@ procs:
 				*/
 
 				$<en.s>6->u.proc.parms->u.proc.parms = SymbolTable;
-				$<en.s>6->u.proc.parms->u.proc.returns = 
-					$<options.returns>9;
-					
+				$<en.s>6->u.proc.parms->u.proc.returns = $<options.returns>9;
 				$<en.s>6->u.proc.parms->u.proc.use = $<options.use>9;
 
 
@@ -17891,11 +17889,12 @@ procs:
 								)
 						)
 
+
 							CurOffset = CurOffset - 4;
 							InsertSym
 							(
 								s->TrueName, 
-								&proctype_ste,		/* Type			*/
+								NULL,				/* Type			*/
 								tProcptr,		 	/* pType		*/
 								cVar,				/* SymClass		*/ 
 								s->Arity,			/* Arity		*/
@@ -17909,15 +17908,41 @@ procs:
 								s->Fields,			/* Fields		*/
 								s->FieldCnt			/* FieldCnt		*/
 							);
+							d = SymbolTable;
+							d->u.proc.returns = hlastrdup2( "" );
+							d->u.proc.use = s->u.proc.use;
+							d->u.proc.parms = s->u.proc.parms;
+							d->u.proc.Locals = s->u.proc.Locals;
+							d->u.proc.Forward = s->u.proc.Forward;
+							d->u.proc.BaseClass = s->u.proc.BaseClass;
+							d->u.proc.ParmSize = s->u.proc.ParmSize;
 
-							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = s->u.proc.use;
+							InsertSym
+							(
+								" (procptr type) ", 
+								NULL,				/* Type			*/
+								tProcptr,		 	/* pType		*/
+								cType,				/* SymClass		*/ 
+								0,					/* Arity		*/
+								NULL,				/* dimensions	*/
+								0,					/* # elements	*/
+								NULL,				/* Value		*/
+								4,					/* ObjectSize	*/
+								0,					/* Offset 		*/
+								NULL,				/* StaticName	*/
+								NULL,				/* Base			*/
+								NULL,				/* Fields		*/
+								NULL				/* FieldCnt		*/
+							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.returns = d->u.proc.returns;
+							SymbolTable->u.proc.use = s->u.proc.use;
 							SymbolTable->u.proc.Locals = s->u.proc.Locals;
 							SymbolTable->u.proc.Forward = s->u.proc.Forward;
 							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
-
+							d->Type = SymbolTable;
+							SymbolTable = d;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -18688,7 +18713,7 @@ procs:
 						InsertSym
 						(
 							s->TrueName, 
-							&proctype_ste,		/* Type			*/
+							NULL,				/* Type			*/
 							tProcptr,		 	/* pType		*/
 							cVar,				/* SymClass		*/ 
 							s->Arity,			/* Arity		*/
@@ -18702,12 +18727,43 @@ procs:
 							s->Fields,			/* Fields		*/
 							s->FieldCnt			/* FieldCnt		*/
 						);
-						SymbolTable->u.proc.returns = hlastrdup2( "" );
+						d = SymbolTable;
+						d->u.proc.returns = hlastrdup2( "" );
+						d->u.proc.use = s->u.proc.use;
+						d->u.proc.parms = s->u.proc.parms;
+						d->u.proc.Locals = s->u.proc.Locals;
+						d->u.proc.Forward = s->u.proc.Forward;
+						d->u.proc.BaseClass = s->u.proc.BaseClass;
+						d->u.proc.ParmSize = s->u.proc.ParmSize;
+
+						// Insert a dummy type for the parameter list.
+						
+						InsertSym
+						(
+							" (procptr type) ", 
+							NULL,				/* Type			*/
+							tProcptr,		 	/* pType		*/
+							cType,				/* SymClass		*/ 
+							0,					/* Arity		*/
+							NULL,				/* dimensions	*/
+							0,					/* # elements	*/
+							NULL,				/* Value		*/
+							4,					/* ObjectSize	*/
+							0,					/* Offset 		*/
+							NULL,				/* StaticName	*/
+							NULL,				/* Base			*/
+							NULL,				/* Fields		*/
+							NULL				/* FieldCnt		*/
+						);
 						SymbolTable->u.proc.parms = s->u.proc.parms;
+						SymbolTable->u.proc.returns = d->u.proc.returns;
+						SymbolTable->u.proc.use = s->u.proc.use;
 						SymbolTable->u.proc.Locals = s->u.proc.Locals;
 						SymbolTable->u.proc.Forward = s->u.proc.Forward;
 						SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 						SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+						d->Type = SymbolTable;
+						SymbolTable = d;
 
 						HadPassByValRes = 
 							HadPassByValRes || (s->pClass == vrp_pc );
@@ -19438,7 +19494,7 @@ procs:		procedureTkn		/* $1 */
 							InsertSym
 							(
 								s->TrueName, 
-								&proctype_ste,		/* Type			*/
+								NULL,				/* Type			*/
 								tProcptr,		 	/* pType		*/
 								cVar,				/* SymClass		*/ 
 								s->Arity,			/* Arity		*/
@@ -19452,13 +19508,42 @@ procs:		procedureTkn		/* $1 */
 								s->Fields,			/* Fields		*/
 								s->FieldCnt			/* FieldCnt		*/
 							);
-							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = s->u.proc.use;
+							d = SymbolTable;
+							d->u.proc.returns = hlastrdup2( "" );
+							d->u.proc.use = s->u.proc.use;
+							d->u.proc.parms = s->u.proc.parms;
+							d->u.proc.Locals = SymbolTable;
+							d->u.proc.Forward = s->u.proc.Forward;
+							d->u.proc.BaseClass = s->u.proc.BaseClass;
+							d->u.proc.ParmSize = s->u.proc.ParmSize;
+
+
+							InsertSym
+							(
+								" (procptr type) ", 
+								NULL,				/* Type			*/
+								tProcptr,		 	/* pType		*/
+								cType,				/* SymClass		*/ 
+								0,					/* Arity		*/
+								NULL,				/* dimensions	*/
+								0,					/* # elements	*/
+								NULL,				/* Value		*/
+								4,					/* ObjectSize	*/
+								0,					/* Offset 		*/
+								NULL,				/* StaticName	*/
+								NULL,				/* Base			*/
+								NULL,				/* Fields		*/
+								NULL				/* FieldCnt		*/
+							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
-							SymbolTable->u.proc.Locals = SymbolTable;
+							SymbolTable->u.proc.returns = d->u.proc.returns;
+							SymbolTable->u.proc.use = s->u.proc.use;
+							SymbolTable->u.proc.Locals = s->u.proc.Locals;
 							SymbolTable->u.proc.Forward = s->u.proc.Forward;
 							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+							d->Type = SymbolTable;
+							SymbolTable = d;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -20214,7 +20299,7 @@ procs:		methodTkn			/* $1 */
 							InsertSym
 							(
 								s->TrueName, 
-								&proctype_ste,		/* Type			*/
+								NULL,				/* Type			*/
 								tProcptr,		 	/* pType		*/
 								cVar,				/* SymClass		*/ 
 								s->Arity,			/* Arity		*/
@@ -20228,15 +20313,42 @@ procs:		methodTkn			/* $1 */
 								s->Fields,			/* Fields		*/
 								s->FieldCnt			/* FieldCnt		*/
 							);
-
-							SymbolTable->u.proc.returns = hlastrdup2( "" );
+							d = SymbolTable;
+							d->u.proc.returns = hlastrdup2( "" );
 	
-							SymbolTable->u.proc.use = s->u.proc.use;
+							d->u.proc.use = s->u.proc.use;
+							d->u.proc.parms = s->u.proc.parms;
+							d->u.proc.Locals = s->u.proc.Locals;
+							d->u.proc.Forward = s->u.proc.Forward;
+							d->u.proc.BaseClass = s->u.proc.BaseClass;
+							d->u.proc.ParmSize = s->u.proc.ParmSize;
+
+							InsertSym
+							(
+								" (procptr type) ", 
+								NULL,				/* Type			*/
+								tProcptr,		 	/* pType		*/
+								cType,				/* SymClass		*/ 
+								0,					/* Arity		*/
+								NULL,				/* dimensions	*/
+								0,					/* # elements	*/
+								NULL,				/* Value		*/
+								4,					/* ObjectSize	*/
+								0,					/* Offset 		*/
+								NULL,				/* StaticName	*/
+								NULL,				/* Base			*/
+								NULL,				/* Fields		*/
+								NULL				/* FieldCnt		*/
+							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.returns = d->u.proc.returns;
+							SymbolTable->u.proc.use = s->u.proc.use;
 							SymbolTable->u.proc.Locals = s->u.proc.Locals;
 							SymbolTable->u.proc.Forward = s->u.proc.Forward;
 							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+							d->Type = SymbolTable;
+							SymbolTable = d;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -21011,7 +21123,7 @@ procs:
 						InsertSym
 						(
 							s->TrueName, 
-							&proctype_ste,		/* Type			*/
+							NULL,				/* Type			*/
 							tProcptr,		 	/* pType		*/
 							cVar,				/* SymClass		*/ 
 							s->Arity,			/* Arity		*/
@@ -21025,15 +21137,42 @@ procs:
 							s->Fields,			/* Fields		*/
 							s->FieldCnt			/* FieldCnt		*/
 						);
+						d = SymbolTable;
+						d->u.proc.returns = hlastrdup2( "" );
+						d->u.proc.use = s->u.proc.use;
+						d->u.proc.parms = s->u.proc.parms;
+						d->u.proc.Locals = s->u.proc.Locals;
+						d->u.proc.Forward = s->u.proc.Forward;
+						d->u.proc.BaseClass = s->u.proc.BaseClass;
+						d->u.proc.ParmSize = s->u.proc.ParmSize;
 
-						SymbolTable->u.proc.returns = hlastrdup2( "" );
 
-						SymbolTable->u.proc.use = s->u.proc.use;
+						InsertSym
+						(
+							" (procptr type) ", 
+							NULL,				/* Type			*/
+							tProcptr,		 	/* pType		*/
+							cType,				/* SymClass		*/ 
+							0,					/* Arity		*/
+							NULL,				/* dimensions	*/
+							0,					/* # elements	*/
+							NULL,				/* Value		*/
+							4,					/* ObjectSize	*/
+							0,					/* Offset 		*/
+							NULL,				/* StaticName	*/
+							NULL,				/* Base			*/
+							NULL,				/* Fields		*/
+							NULL				/* FieldCnt		*/
+						);
 						SymbolTable->u.proc.parms = s->u.proc.parms;
+						SymbolTable->u.proc.returns = d->u.proc.returns;
+						SymbolTable->u.proc.use = s->u.proc.use;
 						SymbolTable->u.proc.Locals = s->u.proc.Locals;
 						SymbolTable->u.proc.Forward = s->u.proc.Forward;
 						SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 						SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+						d->Type = SymbolTable;
+						SymbolTable = d;
 
 						HadPassByValRes = 
 							HadPassByValRes || (s->pClass == vrp_pc );
@@ -22595,7 +22734,7 @@ procs:		procedureTkn		/* $1  */
 							InsertSym
 							(
 								s->TrueName, 
-								&proctype_ste,		/* Type			*/
+								NULL,				/* Type			*/
 								tProcptr,		 	/* pType		*/
 								cVar,				/* SymClass		*/ 
 								s->Arity,			/* Arity		*/
@@ -22609,14 +22748,42 @@ procs:		procedureTkn		/* $1  */
 								s->Fields,			/* Fields		*/
 								s->FieldCnt			/* FieldCnt		*/
 							);
+							d = SymbolTable;
+							d->u.proc.returns = hlastrdup2( "" );
+							d->u.proc.use = s->u.proc.use;
+							d->u.proc.parms = s->u.proc.parms;
+							d->u.proc.Locals = s->u.proc.Locals;
+							d->u.proc.Forward = s->u.proc.Forward;
+							d->u.proc.BaseClass = s->u.proc.BaseClass;
+							d->u.proc.ParmSize = s->u.proc.ParmSize;
 
-							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = s->u.proc.use;
+
+							InsertSym
+							(
+								" (procptr type) ", 
+								NULL,				/* Type			*/
+								tProcptr,		 	/* pType		*/
+								cType,				/* SymClass		*/ 
+								0,					/* Arity		*/
+								NULL,				/* dimensions	*/
+								0,					/* # elements	*/
+								NULL,				/* Value		*/
+								4,					/* ObjectSize	*/
+								0,					/* Offset 		*/
+								NULL,				/* StaticName	*/
+								NULL,				/* Base			*/
+								NULL,				/* Fields		*/
+								NULL				/* FieldCnt		*/
+							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.returns = d->u.proc.returns;
+							SymbolTable->u.proc.use = s->u.proc.use;
 							SymbolTable->u.proc.Locals = s->u.proc.Locals;
 							SymbolTable->u.proc.Forward = s->u.proc.Forward;
 							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+							d->Type = SymbolTable;
+							SymbolTable = d;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -23415,7 +23582,7 @@ procs:		iteratorTkn			/* $1  */
 							InsertSym
 							(
 								s->TrueName, 
-								&proctype_ste,		/* Type			*/
+								NULL,				/* Type			*/
 								tProcptr,		 	/* pType		*/
 								cVar,				/* SymClass		*/ 
 								s->Arity,			/* Arity		*/
@@ -23429,13 +23596,42 @@ procs:		iteratorTkn			/* $1  */
 								s->Fields,			/* Fields		*/
 								s->FieldCnt			/* FieldCnt		*/
 							);
-							SymbolTable->u.proc.returns = hlastrdup2( "" );
-							SymbolTable->u.proc.use = s->u.proc.use;
+							d = SymbolTable;
+							d->u.proc.returns = hlastrdup2( "" );
+							d->u.proc.use = s->u.proc.use;
+							d->u.proc.parms = s->u.proc.parms;
+							d->u.proc.Locals = s->u.proc.Locals;
+							d->u.proc.Forward = s->u.proc.Forward;
+							d->u.proc.BaseClass = s->u.proc.BaseClass;
+							d->u.proc.ParmSize = s->u.proc.ParmSize;
+
+
+							InsertSym
+							(
+								" (procptr type) ", 
+								NULL,				/* Type			*/
+								tProcptr,		 	/* pType		*/
+								cType,				/* SymClass		*/ 
+								0,					/* Arity		*/
+								NULL,				/* dimensions	*/
+								0,					/* # elements	*/
+								NULL,				/* Value		*/
+								4,					/* ObjectSize	*/
+								0,					/* Offset 		*/
+								NULL,				/* StaticName	*/
+								NULL,				/* Base			*/
+								NULL,				/* Fields		*/
+								NULL				/* FieldCnt		*/
+							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
+							SymbolTable->u.proc.returns = d->u.proc.returns;
+							SymbolTable->u.proc.use = s->u.proc.use;
 							SymbolTable->u.proc.Locals = s->u.proc.Locals;
 							SymbolTable->u.proc.Forward = s->u.proc.Forward;
 							SymbolTable->u.proc.BaseClass = s->u.proc.BaseClass;
 							SymbolTable->u.proc.ParmSize = s->u.proc.ParmSize;
+							d->Type = SymbolTable;
+							SymbolTable = d;
 
 							HadPassByValRes = 
 								HadPassByValRes || (s->pClass == vrp_pc );
@@ -24931,6 +25127,8 @@ FwdMethod:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -25154,6 +25352,8 @@ FwdMethod:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -25390,6 +25590,8 @@ FwdMethod:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -25606,6 +25808,8 @@ ClassProc:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -25834,6 +26038,8 @@ ClassProc:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -26622,9 +26828,9 @@ ProcessProcParm:
 					);
 					yyerror( msg );
 
-				/*
-				** Be sure the original parameter was a procedural parameter.
-				*/
+				
+				// Be sure the original parameter was a procedural parameter.
+				
 
 				_elseif( $<s>-6->pType != tProcptr )
 
@@ -27856,6 +28062,8 @@ OneOrMoreParms:
 						$<s>4->Fields,
 						$<s>4->FieldCnt
 					);
+					SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
+					SymbolTable->u.proc.use = $<v.u.proc.use>1;
 					_if( $<s>4->pType == tProcptr )
 					
 						SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
@@ -27893,6 +28101,8 @@ OneOrMoreParms:
 						0
 					);
 					CurParmSize = 4;
+					SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
+					SymbolTable->u.proc.use = $<v.u.proc.use>1;
 					_if( $<s>4->pType == tProcptr )
 					
 						SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
@@ -28368,6 +28578,8 @@ OneOrMoreParms:
 					SymbolTable->regnum = $<reg.encoding>6;
 
 				_endif
+				SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
+				SymbolTable->u.proc.use = $<v.u.proc.use>1;
 				_if( $<s>4->pType == tProcptr )
 				
 					SymbolTable->u.proc.parms = $<s>4->u.proc.parms;
@@ -28468,6 +28680,8 @@ OneOrMoreParms:
 				0				/* FieldCnt						*/
 			);
 			SymbolTable->u.proc.parms = s;
+			SymbolTable->u.proc.returns = $<v.u.proc.returns>1;
+			SymbolTable->u.proc.use = $<v.u.proc.use>1;
 			$<s>7->Type = SymbolTable;
 
 			/*
@@ -28571,6 +28785,7 @@ OneOrMoreParms:
 			);
 			SymbolTable->u.proc.parms = s;
 			SymbolTable->u.proc.returns = hlastrdup2( "" );
+			SymbolTable->u.proc.use = $<v.u.proc.use>1;
 			$<s>7->Type = SymbolTable;
 
 			/*
@@ -28732,6 +28947,9 @@ EnterProcName:
 			*/
 
 			$<s>$->u.proc.parms = SymbolTable;
+			$<s>$->u.proc.returns = hlastrdup2( "" );
+			$<s>$->u.proc.use = NULL;
+			
 
 		}
 	;
@@ -28877,6 +29095,8 @@ EnterName:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
+				$<en.s>$->u.proc.returns = NULL;
+				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -28983,6 +29203,8 @@ EnterName4:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
+				$<en.s>$->u.proc.returns = NULL;
+				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -29098,6 +29320,8 @@ EnterIterName:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
+				$<en.s>$->u.proc.returns = NULL;
+				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -29829,6 +30053,8 @@ TypeDef:
 			*/
 
 			$<s>$->u.proc.parms = SymbolTable;
+			$<s>$->u.proc.returns = hlastrdup2( "" );
+			$<s>$->u.proc.use = NULL;
 
 		}
 		OptionalParms 	/* $7 */
@@ -29916,6 +30142,8 @@ TypeDef:
 			);
 			$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 			$<s>6->u.proc.Locals = SymbolTable;
+			$<s>6->u.proc.returns = hlastrdup2( "" );
+			$<s>6->u.proc.use = NULL;
 			
 			SymbolTable = $<s>6;
 
@@ -30804,27 +31032,6 @@ TypeDef:
 				NULL,
 				0
 			);
-			
-			// Inject an extra declaration of the class symbol into
-			// the class' local symbols to prevent using this object. 
-			
-			InsertSym
-			(
-				$<idStr>1,
-				SymbolTable,
-				tError,
-				cNone,
-				0,
-				NULL,
-				0,
-				NULL,
-				0,
-				0,
-				NULL,
-				NULL,
-				NULL,
-				0
-			);
 			$<s>$ = SymbolTable;	// So we can find the end of the list later.
 			ClassPtr = SymbolTable;
 			
@@ -30974,7 +31181,7 @@ TypeDef:
 
 			_endwhile
 			CurSym->Next = NULL;
-			classSym = $<s>10->Type;		// Ptr to original class entry.
+			classSym = $<s>10;		// Ptr to original class entry.
 
 
 			/*
@@ -38819,6 +39026,8 @@ VariableDef:
 				*/
 
 				$<s>$->u.proc.parms = SymbolTable;
+				$<s>$->u.proc.returns = hlastrdup2( "" );
+				$<s>$->u.proc.use = NULL;
 
 			}
 			OptionalParms	/* $7 */ 
@@ -38947,6 +39156,8 @@ VariableDef:
 				);
 				$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 				$<s>6->u.proc.Locals = SymbolTable;
+				$<s>6->u.proc.returns = hlastrdup2( "" );
+				$<s>6->u.proc.use = NULL;
 							
 				SymbolTable = $<s>6;
 				_here;
@@ -40278,8 +40489,7 @@ UndefinedForward:
 		Lparen			/* $4 */
 		UndefinedID		/* $5 */
 		Rparen			/* $6 */
-		Semicolon		/* $7 */
-		{				/* $8 */
+		{				/* $7 */
 
 			union YYSTYPE v;
 
@@ -40306,6 +40516,11 @@ UndefinedForward:
 				0				/* FieldCnt			*/ 
 			);
 
+			_here;
+		}
+		
+		Semicolon		/* $8 */
+		{				/* $9 */
 			_here;
 		}
 	;
@@ -40399,8 +40614,6 @@ StaticPtrToProcUninit:
 
 			_endif
 			_here;
-
-			_here;
 		}
 	;
 
@@ -40457,7 +40670,7 @@ StaticProcUninit:
 
 			struct	SymNode	*s;
 			union	YYSTYPE	value;
-			
+
 			_here;
 			_if( $<returns>12 != NULL && $<options.NoStorage>10 )
 
@@ -40558,6 +40771,8 @@ StaticProcUninit:
 			);
 			$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 			$<s>6->u.proc.Locals = SymbolTable;
+			$<s>6->u.proc.returns = hlastrdup2( "" );
+			$<s>6->u.proc.use = NULL;
 			
 			SymbolTable = $<s>6;
 
@@ -40820,6 +41035,8 @@ StaticProcInit:
 					SymbolTable->u.proc.use = NULL;
 					$<s>6->Type = SymbolTable;
 					$<s>6->u.proc.parms->Type = SymbolTable;
+					$<s>6->u.proc.returns = hlastrdup2( "" );
+					$<s>6->u.proc.use = NULL;
 					
 					// Remove the dummy entry from the symbol table:
 					
@@ -40887,7 +41104,7 @@ StaticProcInit:
 					);
 					$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 					$<s>6->u.proc.Locals = SymbolTable;
-			
+					
 					SymbolTable = $<s>6;
 					EmitTypedLabel( $<s>6->StaticName, tDWord );
 					EmitAdrs( $<v.u.strval>10 ); 
@@ -42175,9 +42392,6 @@ StaticArrayInit:
 					InsertSym
 					( 
 						$<idStr>1, 
-										/* 3/7/00 rlh
-										GetBaseType( $<s>3 ),
-										*/
 						$<s>3->Type,
 						tArray, 
 						cStatic, 
@@ -43084,7 +43298,6 @@ StaticSingleExt:
 
 			struct	SymNode	*BaseType;
 
-
 			assert( $<s>1 != NULL );
 			assert( $<s>3 != NULL );
 
@@ -43385,7 +43598,20 @@ StaticArray:
 										$<s>3, 
 										$<v.NumElements>5 
 									);
-									
+								
+								_elseif
+								( 
+										$<s>3->pType == tPointer 	
+									||	$<s>3->pType == tProcptr
+								) 	
+								
+									ReserveTypedStorage
+									(
+										StaticName,
+										&dword_ste, 
+										$<v.NumElements>5 
+									);
+								
 								_else
 								
 									ReserveUntypedStorage
@@ -64718,7 +64944,11 @@ SingleStmt:
 					** as the "returns" value.
 					*/
 
-					strcpy( returns, $<adrs.Sym>1->u.proc.returns );
+					_if( $<adrs.Sym>1->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>1->u.proc.returns );
+						
+					_endif
 
 
 				_elseif( $<adrs.pClass>1 == valp_pc )
@@ -64754,7 +64984,11 @@ SingleStmt:
 						** pointer is of some user-defined type.
 						*/
 
-						_if( $<adrs.Sym>1->Type != NULL )
+						_if
+						( 
+								$<adrs.Sym>1->Type != NULL
+							&&	$<adrs.Sym>1->Type->u.proc.returns != NULL 
+						)
 
 							strcpy
 							(
@@ -64840,7 +65074,7 @@ SingleStmt:
 							$<adrs.Sym>1->Type->u.proc.returns
 						);
 
-					_else
+					_elseif( $<adrs.Sym>1->u.proc.returns != NULL ) 
  
 						strcpy
 						(
@@ -64900,7 +65134,11 @@ SingleStmt:
 				)
 
 					call_thunk( &$<adrs>1 );
-					strcpy( returns, $<adrs.Sym>1->u.proc.returns );
+					_if( $<adrs.Sym>1->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>1->u.proc.returns );
+						
+					_endif
 
 
 				_elseif( $<adrs.pClass>1 == valp_pc )
@@ -65280,7 +65518,6 @@ SingleStmt:
 					*/
 					
 					assert( $<adrs.Sym>2->StaticName != NULL );
-					assert( $<adrs.Sym>2->u.proc.returns != NULL );
 
 					/*
 					** This is just a class procedure.
@@ -65288,7 +65525,11 @@ SingleStmt:
 					*/
 
 					call_proc( $<adrs.Sym>2 );
-					strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+					_if( $<adrs.Sym>2->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+						
+					_endif
 
 				
 				
@@ -65302,14 +65543,6 @@ SingleStmt:
 					struct adrsYYS adrs;
 
 					/*
-					** Since this is a method, the following
-					** should always have some sort of value
-					** (besides NULL).
-					*/
-					
-					assert( $<adrs.Sym>2->u.proc.returns != NULL );
-
-					/*
 					** First, get the address of the virtual
 					** method table into EDI (VMT is always at
 					** offset zero within the object and ESI is
@@ -65321,7 +65554,11 @@ SingleStmt:
 
 					initAdrs1( &adrs, reg_edi, $<adrs.Sym>2->Offset );
 					EmitCall_m( &adrs );
-					strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+					_if( $<adrs.Sym>2->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+						
+					_endif
 
 				/*
 				** If the field is a pointer to a procedure, issue
@@ -65834,7 +66071,6 @@ SingleStmt:
 					*/
 					
 					assert( $<adrs.Sym>2->StaticName != NULL );
-					assert( $<adrs.Sym>2->u.proc.returns != NULL );
 
 					/*
 					** This is just a class procedure.
@@ -65842,7 +66078,11 @@ SingleStmt:
 					*/
 
 					call_proc( $<adrs.Sym>2 );
-					strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+					_if( $<adrs.Sym>2->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+						
+					_endif
 				
 				/*
 				** If the field is a class method, issue the
@@ -65852,14 +66092,6 @@ SingleStmt:
 				_elseif( $<adrs.SymClass>2 == cMethod )
 
 					struct adrsYYS adrs;
-
-					/*
-					** Since this is a method, the following
-					** should always have some sort of value
-					** (besides NULL).
-					*/
-					
-					assert( $<adrs.Sym>2->u.proc.returns != NULL );
 
 					/*
 					** First, get the address of the virtual
@@ -65873,7 +66105,11 @@ SingleStmt:
 
 					initAdrs1( &adrs, reg_edi, $<adrs.Sym>2->Offset );
 					EmitCall_m( &adrs );
-					strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+					_if( $<adrs.Sym>2->u.proc.returns != NULL )
+					
+						strcpy( returns, $<adrs.Sym>2->u.proc.returns );
+						
+					_endif
 
 
 				/*
@@ -66198,19 +66434,13 @@ SMV0:
 		};
 
 
-
-
-
-
-
-
- /*
- ** CallParameters-
- **
- **	Processes the actual parameter list for a procedure call.
- **
- **	On entry, $<s>0 points at the procedure's symbol table entry.
- */
+/*
+** CallParameters-
+**
+**	Processes the actual parameter list for a procedure call.
+**
+**	On entry, $<s>0 points at the procedure's symbol table entry.
+*/
 
 CallParameters:
 		'('
@@ -66352,6 +66582,7 @@ CopyProc:
 		{
 			_here;
 			$<s>$ = $<s>0;
+			
 		}
 	;
 
@@ -66975,6 +67206,7 @@ OneCallParameter:
 		fMemory
 		{
 			_here;
+			
 			_if( $<s>-1 != NULL && $<s>-2 != NULL )
 			
 				OutputMemParm( $<s>-2, $<s>-1, &$<adrs>1, 0 );

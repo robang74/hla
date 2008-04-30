@@ -576,6 +576,11 @@ char *
 hla2asmType( enum PrimType pType )
 _begin( hla2asmType )
  
+ 	_if( pType == tPointer || pType == tPointer )
+
+		pType = tDWord;
+		
+	_endif
  	_returnif( !IsPrimitive( pType ) && pType != tLabel ) "";
 	
 	_switch( assembler )
@@ -3112,10 +3117,21 @@ _begin( asm1opm )
 	_if( sourceOutput || testMode )
 	
 		forcedSize = abs( size );
-		_if( assembler == nasm && adrs->forcedSize != 0 )
+		_if
+		( 
+				(
+						assembler == nasm 
+					||	assembler == fasm
+				)
+			&&	adrs->forcedSize != 0 )
 
 			forcedSize = adrs->forcedSize;
 
+		_endif
+		_if( forcedSize != 0 )
+		
+			adrs->Size = forcedSize;
+			
 		_endif			
 		MakeAdrsStr( adrsStr, adrs, forcedSize );
 
@@ -10542,22 +10558,72 @@ _begin( EmitLea_m_r2 )
 	// to medium (for low-level code, always emit the
 	// instruction -- they wrote it, they get it).
 	
-	_returnif
-	(
-			langLevel >= medium_level 
-		&&	reg == reg_esi
+	_if
+	( 
+			langLevel >= medium_level
 		&&	adrs->BaseReg != NULL 
+		&&	adrs->IndexReg == NULL
+		&&	adrs->Disp == 0
 		&&	(
-					stricmp( adrs->BaseReg, "esi") == 0
-				&&	adrs->IndexReg == NULL
-				&&	adrs->Disp == 0
-				&&	(
-							adrs->StaticName == NULL
-						||	*adrs->StaticName == '\0'
-					)
+					adrs->StaticName == NULL
+				||	*adrs->StaticName == '\0'
 			)
-	);
+	)
 
+		_switch( reg )
+		
+			_case( reg_eax )
+			
+				_returnif( stricmp( adrs->BaseReg, "eax" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_ebx )
+			
+				_returnif( stricmp( adrs->BaseReg, "ebx" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_ecx )
+			
+				_returnif( stricmp( adrs->BaseReg, "ecx" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_edx )
+			
+				_returnif( stricmp( adrs->BaseReg, "edx" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_esi )
+			
+				_returnif( stricmp( adrs->BaseReg, "esi" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_edi )
+			
+				_returnif( stricmp( adrs->BaseReg, "edi" ) == 0 );
+				
+			_endcase
+		
+			_case( reg_ebp )
+			
+				_returnif( stricmp( adrs->BaseReg, "ebp" ) == 0 );
+				
+			_endcase
+			
+			_case( reg_esp )
+			
+				_returnif( stricmp( adrs->BaseReg, "esp" ) == 0 );
+				
+			_endcase
+			
+		_endswitch
+		
+		
+	_endif
 	EmitLea_m_r( adrs, reg );
 		
 _end( EmitLea_m_r2 )
@@ -21564,11 +21630,13 @@ _begin( OutValue )
 
 	_elseif( Type->pType == tArray )
 
-		union YYSTYPE *CurValue;
+		enum	PrimType	pType;
+		union	YYSTYPE	*CurValue;
 
 		assert( Type->Type != NULL );
-		EmitTypedLabel( Name, Type->Type->pType );
-		_if( IsStr( Type->Type->pType ))
+		pType = GetBaseType( Type )->pType;
+		EmitTypedLabel( Name, pType ); //Type->Type->pType );
+		_if( IsStr( pType )) //Type->Type->pType ))
 
 			int *strLbls;
 			
@@ -21657,7 +21725,7 @@ _begin( OutValue )
 
 
 		
-		_elseif( Type->Type->pType == tWString )
+		_elseif( pType == tWString ) //Type->Type->pType == tWString )
 
 			// If it is a unicode string array, we've got to use special
 			// code because we've got to emit pointers and the
@@ -25491,7 +25559,6 @@ _begin( OutputMemParm )
 
 	assert( formal != NULL );
 	assert( actual != NULL );
-
 	abt = 	_ifx
 			( 
 				actual->Type != NULL, 
@@ -26520,7 +26587,7 @@ _begin( OutputMemParm )
 						
 							push_r( reg_eax );
 							push_r( reg_eax );
-							EmitLea_m_r( actual, reg_eax );
+							EmitLea_m_r2( actual, reg_eax );
 							initMov_r_m( reg_eax, reg_esp, 4, 4 );
 							pop_r( reg_eax );
 						
@@ -26820,20 +26887,22 @@ _begin( OutputMemParm )
 								
 									regnum = strToReg( actual->BaseReg );
 									assert( regnum >= reg_eax && regnum <= reg_edi );
-								
-									sprintf( operand, "%d", actual->Disp );
 									push_r( regnum );
-									initAdrs1( &tAdrs, reg_esp, 0 );
-									tAdrs.forcedSize = 4;
-									tAdrs.Size = 4;
-									EmitGeneric_c_m
-									( 
-										add_instr, 
-										actual->Disp, 
-										&tAdrs 
-									);
-									
 								
+									_if( actual->Disp != 0 )
+									
+										sprintf( operand, "%d", actual->Disp );
+										initAdrs1( &tAdrs, reg_esp, 0 );
+										tAdrs.forcedSize = 4;
+										tAdrs.Size = 4;
+										EmitGeneric_c_m
+										( 
+											add_instr, 
+											actual->Disp, 
+											&tAdrs 
+										);
+									
+									_endif
 								
 								_else
 								
@@ -26843,7 +26912,7 @@ _begin( OutputMemParm )
 								
 									push_r( reg_eax );
 									push_r( reg_eax );
-									EmitLea_m_r( actual, reg_eax );
+									EmitLea_m_r2( actual, reg_eax );
 									initMov_r_m( reg_eax, reg_esp, 4, 4 );
 									pop_r( reg_eax );
 									

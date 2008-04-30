@@ -1289,6 +1289,7 @@ GetBaseType( struct SymNode *typ )
 _begin( GetBaseType )
 
 	assert( typ != NULL );
+	_here;
 	_forever
 		// Immediately return with a proc ptr type, because the first one we
 		// find will have the parameter information.
@@ -1308,7 +1309,8 @@ _begin( GetBaseType )
 		typ = typ->Type;
 
 	_endfor
-	return typ;
+	_here;
+	_return typ;
 
 _end( GetBaseType )
 
@@ -2140,6 +2142,7 @@ _begin( InsertProc )
 
 	memset( &NewEntry->u.StartOfValues, 0, sizeof( union ValuesSize ));
 	NewEntry->u.proc.returns	= "";
+	NewEntry->u.proc.use        = NULL;
 
 	// If a symbol is being inserted at lex level zero, then update
 	// the MainLocals value:

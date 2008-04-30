@@ -29095,8 +29095,6 @@ EnterName:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
-				$<en.s>$->u.proc.returns = NULL;
-				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -29203,8 +29201,6 @@ EnterName4:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
-				$<en.s>$->u.proc.returns = NULL;
-				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -29320,8 +29316,6 @@ EnterIterName:
 				*/
 
 				$<en.s>$->u.proc.parms = SymbolTable;
-				$<en.s>$->u.proc.returns = NULL;
-				$<en.s>$->u.proc.use = NULL;
 
 				/*
 				** Create the "_initialize_" and "_finalize_" text symbols 
@@ -30085,8 +30079,8 @@ TypeDef:
 			
 			_here;
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
-			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
-			$<s>6->u.proc.parms->u.proc.use = NULL;
+			$<s>6->u.proc.parms->u.proc.returns = $<options.returns>10;
+			$<s>6->u.proc.parms->u.proc.use = $<options.use>10;
 
 			$<s>6->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.returns = $<options.returns>10;
@@ -30142,8 +30136,6 @@ TypeDef:
 			);
 			$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 			$<s>6->u.proc.Locals = SymbolTable;
-			$<s>6->u.proc.returns = hlastrdup2( "" );
-			$<s>6->u.proc.use = NULL;
 			
 			SymbolTable = $<s>6;
 
@@ -39026,8 +39018,6 @@ VariableDef:
 				*/
 
 				$<s>$->u.proc.parms = SymbolTable;
-				$<s>$->u.proc.returns = hlastrdup2( "" );
-				$<s>$->u.proc.use = NULL;
 
 			}
 			OptionalParms	/* $7 */ 
@@ -39098,8 +39088,8 @@ VariableDef:
 				// Patch the original symbol table entries:
 
 				$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
-				$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
-				$<s>6->u.proc.parms->u.proc.use = NULL;
+				$<s>6->u.proc.parms->u.proc.returns = $<options.returns>11;
+				$<s>6->u.proc.parms->u.proc.use = $<options.use>11;
 
 				$<s>6->u.proc.parms = SymbolTable;
 				$<s>6->u.proc.returns = $<options.returns>11;
@@ -39156,8 +39146,6 @@ VariableDef:
 				);
 				$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 				$<s>6->u.proc.Locals = SymbolTable;
-				$<s>6->u.proc.returns = hlastrdup2( "" );
-				$<s>6->u.proc.use = NULL;
 							
 				SymbolTable = $<s>6;
 				_here;
@@ -40702,8 +40690,8 @@ StaticProcUninit:
 				0
 			);
 			SymbolTable->u.proc.parms = s;
-			SymbolTable->u.proc.returns = hlastrdup2( "" );
-			SymbolTable->u.proc.use = NULL;
+			SymbolTable->u.proc.returns = $<options.returns>11;
+			SymbolTable->u.proc.use = $<options.use>11;
 			$<s>6->Type = SymbolTable;
 			$<s>6->u.proc.parms->Type = SymbolTable;
 			
@@ -40771,8 +40759,6 @@ StaticProcUninit:
 			);
 			$<s>6->u.proc.parms->u.proc.Locals = SymbolTable;
 			$<s>6->u.proc.Locals = SymbolTable;
-			$<s>6->u.proc.returns = hlastrdup2( "" );
-			$<s>6->u.proc.use = NULL;
 			
 			SymbolTable = $<s>6;
 
@@ -41031,8 +41017,8 @@ StaticProcInit:
 						0
 					);
 					SymbolTable->u.proc.parms = s;
-					SymbolTable->u.proc.returns = hlastrdup2( "" );
-					SymbolTable->u.proc.use = NULL;
+					SymbolTable->u.proc.returns = $<options.returns>13;
+					SymbolTable->u.proc.use = $<options.use>13;
 					$<s>6->Type = SymbolTable;
 					$<s>6->u.proc.parms->Type = SymbolTable;
 					$<s>6->u.proc.returns = hlastrdup2( "" );

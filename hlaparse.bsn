@@ -39078,6 +39078,7 @@ VariableDef:
 				SymbolTable->u.proc.parms = s;
 				SymbolTable->u.proc.returns = hlastrdup2( "" );
 				SymbolTable->u.proc.use = NULL;
+				SymbolTable->u.proc.cs = $<options.CallingSequence>11;
 				$<s>6->Type = SymbolTable;
 				$<s>6->u.proc.parms->Type = SymbolTable;
 				
@@ -40692,6 +40693,7 @@ StaticProcUninit:
 			SymbolTable->u.proc.parms = s;
 			SymbolTable->u.proc.returns = $<options.returns>11;
 			SymbolTable->u.proc.use = $<options.use>11;
+			SymbolTable->u.proc.cs = $<options.CallingSequence>11;
 			$<s>6->Type = SymbolTable;
 			$<s>6->u.proc.parms->Type = SymbolTable;
 			
@@ -41019,6 +41021,7 @@ StaticProcInit:
 					SymbolTable->u.proc.parms = s;
 					SymbolTable->u.proc.returns = $<options.returns>13;
 					SymbolTable->u.proc.use = $<options.use>13;
+					SymbolTable->u.proc.cs = $<options.CallingSequence>13;
 					$<s>6->Type = SymbolTable;
 					$<s>6->u.proc.parms->Type = SymbolTable;
 					$<s>6->u.proc.returns = hlastrdup2( "" );
@@ -45114,6 +45117,7 @@ ReadOnlyDef:
 			SymbolTable->u.proc.parms = s;
 			SymbolTable->u.proc.returns = hlastrdup2( "" );
 			SymbolTable->u.proc.use = NULL;
+			SymbolTable->u.proc.cs = $<options.CallingSequence>11;
 			$<s>6->Type = SymbolTable;
 			$<s>6->u.proc.parms->Type = SymbolTable;
 			
@@ -45267,6 +45271,17 @@ ReadOnlyDef:
 		OptionalParms 		/* $7 */
 		Semicolon			/* $8 */
 		VarOptions			/* $9 */
+		{					/* $10 */
+
+			/*
+			** Must restore before ProtoOptions
+			*/
+
+			--CurLexLevel;
+			CurOffset = $<v.u.intval>4;
+			CurOffsetDir = $<v.u.unsval>5;
+		}
+		ProtoOptions		/* $11 */
 		{
 			struct	SymNode	*s;
 
@@ -45294,6 +45309,7 @@ ReadOnlyDef:
 			SymbolTable->u.proc.parms = s;
 			SymbolTable->u.proc.returns = hlastrdup2( "" );
 			SymbolTable->u.proc.use = NULL;
+			SymbolTable->u.proc.cs = $<options.CallingSequence>11;
 			$<s>6->Type = SymbolTable;
 			$<s>6->u.proc.parms->Type = SymbolTable;
 			
@@ -45312,9 +45328,7 @@ ReadOnlyDef:
 			$<s>6->u.proc.Locals = NULL;
 			$<s>6->u.proc.returns = hlastrdup2( "" );
 			$<s>6->u.proc.use = NULL;
-			--CurLexLevel;
-			CurOffset = $<v.u.unsval>4;
-			CurOffsetDir = $<v.u.unsval>5;
+
 			SymbolTable = $<s>6;
 			_if( $<options.NoStorage>9 )
 

@@ -17932,7 +17932,7 @@ procs:
 								NULL,				/* StaticName	*/
 								NULL,				/* Base			*/
 								NULL,				/* Fields		*/
-								NULL				/* FieldCnt		*/
+								0					/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -18753,7 +18753,7 @@ procs:
 							NULL,				/* StaticName	*/
 							NULL,				/* Base			*/
 							NULL,				/* Fields		*/
-							NULL				/* FieldCnt		*/
+							0					/* FieldCnt		*/
 						);
 						SymbolTable->u.proc.parms = s->u.proc.parms;
 						SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -19533,7 +19533,7 @@ procs:		procedureTkn		/* $1 */
 								NULL,				/* StaticName	*/
 								NULL,				/* Base			*/
 								NULL,				/* Fields		*/
-								NULL				/* FieldCnt		*/
+								0					/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -20338,7 +20338,7 @@ procs:		methodTkn			/* $1 */
 								NULL,				/* StaticName	*/
 								NULL,				/* Base			*/
 								NULL,				/* Fields		*/
-								NULL				/* FieldCnt		*/
+								0					/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -21162,7 +21162,7 @@ procs:
 							NULL,				/* StaticName	*/
 							NULL,				/* Base			*/
 							NULL,				/* Fields		*/
-							NULL				/* FieldCnt		*/
+							0					/* FieldCnt		*/
 						);
 						SymbolTable->u.proc.parms = s->u.proc.parms;
 						SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -22773,7 +22773,7 @@ procs:		procedureTkn		/* $1  */
 								NULL,				/* StaticName	*/
 								NULL,				/* Base			*/
 								NULL,				/* Fields		*/
-								NULL				/* FieldCnt		*/
+								0					/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -23621,7 +23621,7 @@ procs:		iteratorTkn			/* $1  */
 								NULL,				/* StaticName	*/
 								NULL,				/* Base			*/
 								NULL,				/* Fields		*/
-								NULL				/* FieldCnt		*/
+								0					/* FieldCnt		*/
 							);
 							SymbolTable->u.proc.parms = s->u.proc.parms;
 							SymbolTable->u.proc.returns = d->u.proc.returns;
@@ -45080,15 +45080,13 @@ ReadOnlyDef:
 			CurOffsetDir = $<v.u.unsval>5;
 		}
 		ProtoOptions		/* $11 */
-		RequiredExternal	/* $12 */
+		OptionalExternal	/* $12 */
 		{
 			struct	SymNode	*s;
 			union YYSTYPE value;
 
-			assert( $<returns>12 != NULL );
-
 			_here;
-			_if( $<options.NoStorage>9 )
+			_if( $<options.NoStorage>9 && $<returns>12 != NULL )
 
 				yyerror( "'nostorage' option is illegal here" );
 
@@ -45130,6 +45128,7 @@ ReadOnlyDef:
 			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
 			$<s>6->u.proc.parms->u.proc.use = NULL;
+			$<s>6->u.proc.parms->u.proc.Locals = NULL;
 
 			$<s>6->u.proc.parms = SymbolTable;
 			$<s>6->u.proc.returns = $<options.returns>11;
@@ -45189,19 +45188,38 @@ ReadOnlyDef:
 			
 			SymbolTable = $<s>6;
 
-			$<s>6->IsExternal = 1;
-		 	free2( vss $<s>6->StaticName );
-			_if( *$<returns>12 == '\0' )
+			// Deal with the @external option here:
+			
+			_if( $<returns>12 != NULL )
+			
+				$<s>6->IsExternal = 1;
+			 	free2( vss $<s>6->StaticName );
+				_if( *$<returns>12 == '\0' )
 
-				$<s>6->StaticName = hlastrdup2( $<s>6->TrueName );
-				free2( vss $<returns>12 );
+					$<s>6->StaticName = hlastrdup2( $<s>6->TrueName );
+					free2( vss $<returns>12 );
+
+				_else
+					
+					$<s>6->StaticName = $<returns>12;
+
+				_endif
+				EmitTypedExtern( $<s>6, $<s>6->StaticName, tDWord );
+				
+			_elseif( $<options.NoStorage>9 )
+
+				// @nostorage option was present.
+				
+				EmitTypedLabel( $<s>6->StaticName, tDWord );
 
 			_else
-				
-				$<s>6->StaticName = $<returns>12;
 
-			_endif
-			EmitTypedExtern( $<s>6, $<s>6->StaticName, tDWord );
+				yyerror
+				( 
+					NeedsInitializerMsg 
+				);
+
+			_endif 
 			_here;
 		}
 	;
@@ -45229,7 +45247,7 @@ ReadOnlyDef:
 
 			_if( $<options.NoStorage>8 )
 
-				yyerror( "'nostorage' option is illegal here" );
+				yyerror( "'@nostorage' option is illegal here" );
 
 			_endif
 
@@ -45256,95 +45274,6 @@ ReadOnlyDef:
 	;
 
 
- /*
- ** Handle a readonly procedure declaration without
- ** an initializer.
- */
-
-ReadOnlyDef:
-		UndefinedID			/* $1 */ 
-		Colon 				/* $2 */
-		procedureTkn 		/* $3 */
-		SaveOffset 			/* $4 */
-		SaveDirection		/* $5 */
-		InsertProcSym 		/* $6 */
-		OptionalParms 		/* $7 */
-		Semicolon			/* $8 */
-		VarOptions			/* $9 */
-		{					/* $10 */
-
-			/*
-			** Must restore before ProtoOptions
-			*/
-
-			--CurLexLevel;
-			CurOffset = $<v.u.intval>4;
-			CurOffsetDir = $<v.u.unsval>5;
-		}
-		ProtoOptions		/* $11 */
-		{
-			struct	SymNode	*s;
-
-			
-			// Need to create a dummy type to hold the procedure pointer parameters.
-			
-			s = SymbolTable;
-			InsertSym
-			( 
-				" (procptr parms) ", 
-				NULL,
-				tProcptr, 
-				cType, 
-				0,
-				NULL,
-				0, 
-				NULL,
-				4,
-				0,
-				NULL,
-				NULL,
-				NULL,
-				0
-			);
-			SymbolTable->u.proc.parms = s;
-			SymbolTable->u.proc.returns = hlastrdup2( "" );
-			SymbolTable->u.proc.use = NULL;
-			SymbolTable->u.proc.cs = $<options.CallingSequence>11;
-			$<s>6->Type = SymbolTable;
-			$<s>6->u.proc.parms->Type = SymbolTable;
-			
-			// Remove the dummy entry from the symbol table:
-			
-			SymbolTable = s;
-			
-			// Patch the original symbol table entries:
-
-			$<s>6->u.proc.parms->u.proc.parms = SymbolTable;
-			$<s>6->u.proc.parms->u.proc.returns = hlastrdup2( "" );
-			$<s>6->u.proc.parms->u.proc.use = NULL;
-			$<s>6->u.proc.parms->u.proc.Locals = NULL;
-
-			$<s>6->u.proc.parms = SymbolTable;
-			$<s>6->u.proc.Locals = NULL;
-			$<s>6->u.proc.returns = hlastrdup2( "" );
-			$<s>6->u.proc.use = NULL;
-
-			SymbolTable = $<s>6;
-			_if( $<options.NoStorage>9 )
-
-				EmitTypedLabel( $<s>6->StaticName, tDWord );
-
-			_else
-
-				yyerror
-				( 
-					NeedsInitializerMsg 
-				);
-
-			_endif
-			_here;
-		}
-	;
 
 
 ReadOnlyDef:

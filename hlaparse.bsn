@@ -87756,38 +87756,51 @@ recFieldStuff:
 		{				/* $6 */
 
 			struct SymNode	*sym;
+			struct SymNode	*type0;
+			struct SymNode	*type5;
 
 			_here;
-
-			/*
-			** The following adrs fields are the same no matter
-			** what else happens, so deal with them here.
-			*/
+			
+			// The following adrs fields are the same no matter
+			// what else happens, so deal with them here.
+			
 
 			$<adrs.Scale>$ = 0;
 			$<adrs.BaseReg>$ = NULL;
 			$<adrs.IndexReg>$ = NULL;
 
-			/*
-			** SymbolTable is NULL if there was an error along the
-			** fieldname list leading up to this point.  If this
-			** is the case, don't do any processing since we don't
-			** know the validity of any of the pointers.
-			*/
+			// For memory objects of the form "(type xxx yyy)" the
+			// symbol passed in could be returned as a type ID (xxx),
+			// so handle that here.
+			
+			type0 = $<adrs.Type>0;
+			_if( type0 == NULL )
+			
+				type0 = $<adrs.Sym>0;
+				
+			_endif
+			assert( type0 != NULL );
+			
+			// SymbolTable is NULL if there was an error along the
+			// fieldname list leading up to this point.  If this
+			// is the case, don't do any processing since we don't
+			// know the validity of any of the pointers.
+			
 
 			_if( $<s>1 == NULL )
 
 
-				/*
-				** Okay, there is no "Fields" pointer for the
-				** previous symbol.  We don't have to print an
-				** error message because doing so would be redundant.
-				** The previous production will print an appropriate
-				** error message since LookUpSym in this production
-				** will pass NULL on through to any other names appearing
-				** in the field list (which eventually passes NULL as
-				** $<s>0 to the production above).
-				*/
+				
+				
+				// Okay, there is no "Fields" pointer for the
+				// previous symbol.  We don't have to print an
+				// error message because doing so would be redundant.
+				// The previous production will print an appropriate
+				// error message since LookUpSym in this production
+				// will pass NULL on through to any other names appearing
+				// in the field list (which eventually passes NULL as
+				// $<s>0 to the production above).
+				
 
 				$<adrs.Size>$ = 1;
 				$<adrs.forcedSize>$ = 0;
@@ -87795,7 +87808,7 @@ recFieldStuff:
 				$<adrs.regnum>$ = $<adrs.regnum>0;
 				$<adrs.Disp>$ = 0;
 				$<adrs.Sym>$ = $<adrs.Sym>0;
-				$<adrs.Type>$ = $<adrs.Type>0;
+				$<adrs.Type>$ = type0;
 				$<adrs.pType>$ = $<adrs.pType>0;
 				$<adrs.pClass>$ = $<adrs.pClass>0;
 				$<adrs.SymClass>$ = $<adrs.SymClass>0;
@@ -87810,7 +87823,15 @@ recFieldStuff:
 				sym = $<adrs.Sym>4;
 				_if( sym != NULL )
 
-					$<adrs.Size>$ = $<adrs.Type>5->ObjectSize;
+					type5 = $<adrs.Type>5;
+					_if( type5 == NULL )
+					
+						type5 = $<adrs.Sym>5;
+						
+					_endif
+					assert( type5 != NULL );
+					
+					$<adrs.Size>$ = type5->ObjectSize;
 					$<adrs.forcedSize>$ = 0;
 					$<adrs.ObjectSize>$ = $<adrs.Size>$;
 					_if
@@ -87868,7 +87889,7 @@ recFieldStuff:
 
 					_endif
 					$<adrs.Sym>$ = $<adrs.Sym>5;
-					$<adrs.Type>$ = $<adrs.Type>5;
+					$<adrs.Type>$ = type5;
 					$<adrs.pType>$ = $<adrs.pType>5;
 					$<adrs.pClass>$ = $<adrs.pClass>5;
 					$<adrs.regnum>$ = $<adrs.regnum>5;
@@ -87902,7 +87923,7 @@ recFieldStuff:
 					$<adrs.regnum>$ = -1;
 					$<adrs.Disp>$ = 0;
 					$<adrs.Sym>$ = $<adrs.Sym>0;
-					$<adrs.Type>$ = $<adrs.Type>0;
+					$<adrs.Type>$ = type0;
 					$<adrs.pType>$ = $<adrs.pType>0;
 					$<adrs.pClass>$ = $<adrs.pClass>0;
 					$<adrs.SymClass>$ = $<adrs.SymClass>0;
@@ -87939,17 +87960,26 @@ recFieldStuff:
 		{				/* $4 */
 
 			struct SymNode	*sym;
+			struct SymNode	*type0;
 
 			_here;
 
 			SymbolTable = $<s>2;
 
-			/*
-			** $<s>1 (PointAtFields) is NULL if there was an error along the
-			** fieldname list leading up to this point.  If this
-			** is the case, don't do any processing since we don't
-			** know the validity of any of the pointers.
-			*/
+
+			type0 = $<s>0->Type;
+			_if( type0 == NULL )
+			
+				type0 = $<s>0;
+				
+			_endif
+			
+			
+			// $<s>1 (PointAtFields) is NULL if there was an error along the
+			// fieldname list leading up to this point.  If this
+			// is the case, don't do any processing since we don't
+			// know the validity of any of the pointers.
+			
 
 			_if( $<s>1 == NULL )
 
@@ -87973,7 +88003,7 @@ recFieldStuff:
 				$<adrs.Scale>$ = 0;
 				$<adrs.Disp>$ = 0;
 				$<adrs.Sym>$ = $<adrs.Sym>0;
-				$<adrs.Type>$ = $<adrs.Type>0;
+				$<adrs.Type>$ = type0;					
 				$<adrs.pType>$ = $<adrs.pType>0;
 				$<adrs.pClass>$ = $<adrs.pClass>0;
 				$<adrs.SymClass>$ = $<adrs.SymClass>0;
@@ -87990,15 +88020,15 @@ recFieldStuff:
 				_if( sym != NULL )
 
 
-					/*
-					** The symbol exists.  This is good!
-					** Now fill in the adrs fields with the
-					** data gleened from this symbol.
-					**
-					**	Begin by computing the object's size.
-					**	If it's an array, we want the size of
-					**	an element, not the size of the whole array.
-					*/
+					
+					// The symbol exists.  This is good!
+					// Now fill in the adrs fields with the
+					// data gleened from this symbol.
+					//
+					//	Begin by computing the object's size.
+					//	If it's an array, we want the size of
+					//	an element, not the size of the whole array.
+					
 
 					_if( sym->Arity == 0 )
 
@@ -88012,10 +88042,10 @@ recFieldStuff:
 
 					_else
 
-						/*
-						** If an array type, set the size to the size
-						** of the base type.
-						*/
+						
+						// If an array type, set the size to the size
+						// of the base type.
+						
 
 						$<adrs.Size>$ = sym->Type->ObjectSize;
 						$<adrs.ObjectSize>$ = sym->ObjectSize;
@@ -88054,7 +88084,8 @@ recFieldStuff:
 
 					_else
 
-						$<adrs.Type>$ = sym->Type;
+						$<adrs.Type>$ = 
+							_ifx( sym->Type == NULL, sym, sym->Type );
 
 					_endif
 					$<adrs.pClass>$ = sym->pClass;
@@ -88092,7 +88123,9 @@ recFieldStuff:
 					$<adrs.Scale>$ = 0;
 					$<adrs.Disp>$ = 0;
 					$<adrs.Sym>$ = $<adrs.Sym>0;
-					$<adrs.Type>$ = $<adrs.Type>0;
+					$<adrs.Type>$ = 
+						_ifx( $<adrs.Type>0 == NULL, $<adrs.Sym>0, $<adrs.Type>0 );
+					
 					$<adrs.pType>$ = $<adrs.pType>0;
 					$<adrs.pClass>$ = $<adrs.pClass>0;
 					$<adrs.SymClass>$ = $<adrs.SymClass>0;

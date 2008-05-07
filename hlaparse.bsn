@@ -87789,9 +87789,6 @@ recFieldStuff:
 
 			_if( $<s>1 == NULL )
 
-
-				
-				
 				// Okay, there is no "Fields" pointer for the
 				// previous symbol.  We don't have to print an
 				// error message because doing so would be redundant.
@@ -87966,14 +87963,13 @@ recFieldStuff:
 
 			SymbolTable = $<s>2;
 
-
-			type0 = $<s>0->Type;
+			type0 = $<adrs.Type>0;
 			_if( type0 == NULL )
 			
-				type0 = $<s>0;
+				type0 = $<adrs.Sym>0;
 				
 			_endif
-			
+			assert( type0 != NULL );
 			
 			// $<s>1 (PointAtFields) is NULL if there was an error along the
 			// fieldname list leading up to this point.  If this
@@ -87982,6 +87978,8 @@ recFieldStuff:
 			
 
 			_if( $<s>1 == NULL )
+			
+				_here;
 
 				/*
 				** Okay, there is no "Fields" pointer for the
@@ -88010,12 +88008,12 @@ recFieldStuff:
 
 			_else /* SymbolTable is non-NULL, so no error (yet) */
 
+				_here;
 
-				/*
-				** Okay, lookup the current symbol in the previous
-				** symbol's "Fields" symbol table.
-				*/
-
+				
+				// Okay, lookup the current symbol in the previous
+				// symbol's "Fields" symbol table.
+				
 				sym = lookupin( $<idStr>3, $<s>1 );
 				_if( sym != NULL )
 
@@ -88029,7 +88027,7 @@ recFieldStuff:
 					//	If it's an array, we want the size of
 					//	an element, not the size of the whole array.
 					
-
+					_here;
 					_if( sym->Arity == 0 )
 
 						/*
@@ -88060,6 +88058,7 @@ recFieldStuff:
 					** symbol's Offset as the displacement.
 					*/
 
+					_here;
 					_if( IsStaticClass( sym->SymClass ))
 
 						$<adrs.StaticName>$ = hlastrdup2( sym->StaticName );
@@ -88078,6 +88077,7 @@ recFieldStuff:
 					$<adrs.Sym>$ = sym;
 					$<adrs.pType>$ = sym->pType;
 					$<adrs.regnum>$ = sym->regnum;
+					_here;
 					_if( sym->pType == tProcptr )
 
 						$<adrs.Type>$ = &proctype_ste;
@@ -88090,6 +88090,7 @@ recFieldStuff:
 					_endif
 					$<adrs.pClass>$ = sym->pClass;
 					$<adrs.SymClass>$ = sym->SymClass;
+					_here;
 					_if
 					( 
 							IsStaticClass( $<adrs.SymClass>0 )
@@ -88102,12 +88103,12 @@ recFieldStuff:
 
 				_else
 
-					/*
-					** If the field name doesn't appear in the current
-					** symbol table (field list), this section prints
-					** an appropriate error message and sets up the
-					** return values to indicate an undefined variable.
-					*/
+					
+					// If the field name doesn't appear in the current
+					// symbol table (field list), this section prints
+					// an appropriate error message and sets up the
+					// return values to indicate an undefined variable.
+					
 
 					char msg[ 256 ];
 

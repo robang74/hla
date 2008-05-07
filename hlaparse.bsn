@@ -24451,6 +24451,8 @@ FwdMethod:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			
@@ -24668,6 +24670,8 @@ FwdMethod:
 				);
 			
 			s->u.proc.parms = $<en.s>7->u.proc.parms;
+			s->u.proc.returns = $<en.s>7->u.proc.returns;
+			s->u.proc.use = $<en.s>7->u.proc.use;
 			$<en.s>7->Type = s;
 			SymbolTable = $<en.s>7;
 			

@@ -11767,7 +11767,6 @@ RecDef:
 					0				/* FieldCnt						*/
 				);
 				$<s>$ = SymbolTable;
-				$<v.u.intval>4 += 4 * CurOffsetDir;
 
 				CurOffset = StartParmOffs;
 				++CurLexLevel;
@@ -11806,15 +11805,15 @@ RecDef:
 				$<s>$->u.proc.parms = SymbolTable;
 
 			}
-			OptionalParms	/* $7 */ 
-			Semicolon		/* $8 */
-			{				/* $9 */
+			OptionalParms	/* $7  */ 
+			Semicolon		/* $8  */
+			{				/* $9  */
 
 				/*
 				** Must restore before ProtoOptions
 				*/
 
-				--CurLexLevel;
+				--CurLexLevel;				
 				CurOffset = $<v.u.intval>4;
 				CurOffsetDir = $<v.u.unsval>5;
 			}
@@ -11833,11 +11832,6 @@ RecDef:
 				struct	SymNode *s;
 
 				_here;
-				_if( $<options.NoStorage>10 )
-
-					yyerror( "'nostorage' option is illegal here" );
-
-				_endif
 				saveST = SymbolTable;
 				s =
 					InsertSym
@@ -11883,6 +11877,13 @@ RecDef:
 				$<s>6->u.proc.use = $<options.use>11;
 				$<s>6->u.proc.cs = $<options.CallingSequence>11;
 				SymbolTable = $<s>6;
+				
+				_if( !$<options.NoStorage>10 )
+				
+					CurOffset += 4 * CurOffsetDir;
+					
+				_endif
+				
 				_here;
 
 				/*
@@ -11908,7 +11909,8 @@ RecDef:
 		procedureTkn 	/* $5 */
 		DefinedID		/* $6 */
 		Semicolon		/* $7 */
-		{				/* $8 */
+		VarOptions		/* $8 */
+		{				/* $9 */
 			
 			_here;
 			assert( $<idStr>1 != NULL );
@@ -11922,7 +11924,13 @@ RecDef:
 			);
 			
 			CreatePtrToProc( $<idStr>1, $<s>6, NULL, cVar );
-			CurOffset += 4 * CurOffsetDir;
+			
+				
+			_if( !$<options.NoStorage>8 )
+			
+				CurOffset += 4 * CurOffsetDir;
+				
+			_endif
 
 			/*
 			** "Prime" fastLookup for the next identifier we encounter:
@@ -11946,7 +11954,8 @@ RecDef:
 			toTkn				/* $4 */
 			AnyID				/* $5 */
 			Semicolon			/* $6 */
-			{					/* $7 */
+			VarOptions			/* $7 */
+			{					/* $8 */
 
 				struct	SymNode			*BaseType;
 
@@ -12001,7 +12010,11 @@ RecDef:
 				** If processing records, unions, parameters, etc.
 				*/
 
-				CurOffset += 4 * CurOffsetDir;
+				_if( !$<options.NoStorage>7 )
+				
+					CurOffset += 4 * CurOffsetDir;
+					
+				_endif
 
 				/*
 				** "Prime" fastLookup for the next identifier we encounter:
@@ -12022,11 +12035,11 @@ RecDef:
 			toTkn				/* $4 */
 			ReservedTypeIDs		/* $5 */
 			Semicolon			/* $6 */
-			{					/* $7 */
+			VarOptions			/* $7 */
+			{					/* $8 */
 
 			
 				assert( $<idStr>1 != NULL );
-
 				AlignTo
 				( 
 					&CurOffset, 
@@ -12052,8 +12065,12 @@ RecDef:
 					0					/* FieldCnt		*/
 				);
 
-				CurOffset += 4 * CurOffsetDir;
+				_if( !$<options.NoStorage>7 )
 
+					CurOffset += 4 * CurOffsetDir;
+
+				_endif
+				
 				/*
 				** "Prime" fastLookup for the next identifier we encounter:
 				*/
@@ -12072,10 +12089,11 @@ RecDef:
 
 
 RecDef:
-			RecID 
-			Colon 
-			TypeID 
-			Semicolon
+			RecID				/* $1 */ 
+			Colon				/* $2 */ 
+			TypeID				/* $3 */ 
+			Semicolon			/* $4 */
+			VarOptions			/* $5 */
 			{
 				assert( $<idStr>1 != NULL );
 				assert( $<s>3 != NULL );
@@ -12160,7 +12178,11 @@ RecDef:
 						SymbolTable->Type = $<s>3;	/* so we can patch later */
 
 					_endif
-					CurOffset += $<s>3->ObjectSize * CurOffsetDir;
+					_if( !$<options.NoStorage>5 )
+						
+						CurOffset += $<s>3->ObjectSize * CurOffsetDir;
+						
+					_endif
 
 				_endif
 
@@ -12183,13 +12205,14 @@ RecDef:
 
 					
 RecDef:
-			RecID 
-			Colon
-			TypeID 
-			'[' 
-			DimList 
-			Rbrack  
-			Semicolon
+			RecID				/* $1 */ 
+			Colon				/* $2 */
+			TypeID				/* $3 */ 
+			'['					/* $4 */ 
+			DimList				/* $5 */ 
+			Rbrack				/* $6 */  
+			Semicolon			/* $7 */
+			VarOptions			/* $8 */
 			{
 				int	*DimensionArray;
 				int	ArraySize;
@@ -12311,7 +12334,11 @@ RecDef:
 						_endif
 
 
-						CurOffset += ArraySize * CurOffsetDir;
+						_if( !$<options.NoStorage>8 )
+							
+							CurOffset += ArraySize * CurOffsetDir;
+							
+						_endif
 
 
 					/*
@@ -12404,7 +12431,11 @@ RecDef:
 						_endif
 
 
-						CurOffset += ArraySize * CurOffsetDir;
+						_if( !$<options.NoStorage>8 )
+						
+							CurOffset += ArraySize * CurOffsetDir;
+							
+						_endif
 						free2( vss $<v.Dimensions>5 );
 
 					_endif
@@ -12431,15 +12462,15 @@ RecDef:
 
 
 RecDef:
-			RecID			/* $1 */
-			Colon			/* $2 */
-			dorecordTkn		/* $3 */
-			recordOpts		/* $4 */
-			OptInherits		/* $5 */
-			RecordStuff		/* $6 */
-			endrecordTkn	/* $7 */
-			Semicolon		/* $8 */
-			{				/* $9 */
+			RecID			/* $1  */
+			Colon			/* $2  */
+			dorecordTkn		/* $3  */
+			recordOpts		/* $4  */
+			OptInherits		/* $5  */
+			RecordStuff		/* $6  */
+			endrecordTkn	/* $7  */
+			Semicolon		/* $8  */
+			{				/* $9  */
 			
 				struct	SymNode	*Fields;
 				struct	SymNode	*CurSym;

@@ -38984,6 +38984,7 @@ VariableDef:
 				** assigning it to the symbol.
 				*/
 				
+				$<v.u.intval>$ = CurOffset;
 				_if( AddOffset1st && !HoldOffset )
 				
 					$<v.u.intval>4 += 4 * CurOffsetDir;
@@ -39055,19 +39056,27 @@ VariableDef:
 				$<s>$->u.proc.parms = SymbolTable;
 
 			}
-			OptionalParms	/* $7 */ 
-			Semicolon		/* $8 */
-			{				/* $9 */
+			OptionalParms	/* $7 	*/ 
+			Semicolon		/* $8 	*/
+			VarOptions		/* $9 	*/
+			{				/* $10	*/
 
 				/*
 				** Must restore before ProtoOptions
 				*/
 
 				--CurLexLevel;
-				CurOffset = $<v.u.intval>4;
+				_if( $<options.NoStorage>9 )
+				
+					CurOffset = $<v.u.intval>6;
+					
+				_else
+				
+					CurOffset = $<v.u.intval>4;
+					
+				_endif
 				CurOffsetDir = $<v.u.unsval>5;
 			}
-			VarOptions		/* $10 */
 			ProtoOptions	/* $11 */
 			 
 			/*
@@ -39083,12 +39092,6 @@ VariableDef:
 				union	YYSTYPE	value;
 				
 				_here;
-				_if( $<options.NoStorage>10 )
-
-					yyerror( "'nostorage' option is illegal here" );
-
-				_endif
-				
 			
 				// Need to create a dummy type to hold the procedure pointer parameters.
 				
@@ -39197,7 +39200,10 @@ VariableDef:
 		procedureTkn 	/* $5 */
 		DefinedID		/* $6 */
 		Semicolon		/* $7 */
-		{				/* $8 */
+		VarOptions		/* $8 */
+		{				/* $9 */
+			
+			int coSave = CurOffset;
 			
 			_here;
 			assert( $<idStr>1 != NULL );
@@ -39214,6 +39220,11 @@ VariableDef:
 			
 				CurOffset += 4 * CurOffsetDir;
 
+			_endif
+			_if( $<options.NoStorage>8 )
+			
+				CurOffset = coSave;
+				
 			_endif
 			_here;
 		}
@@ -39322,10 +39333,9 @@ VariableDef:
 
 
 
-			/*
-			** Handle pointer declarations here.
-			*/
-
+			
+// Handle pointer declarations here.
+			
 VariableDef:
 			UndefinedID			/* $1 */
 			Colon				/* $2 */
@@ -39333,18 +39343,19 @@ VariableDef:
 			toTkn				/* $4 */
 			AnyID				/* $5 */
 			Semicolon			/* $6 */
-			{					/* $7 */
+			VarOptions			/* $7 */
+			{					/* $8 */
 
-				struct	SymNode			*BaseType;
+				int 				coSave = CurOffset;
+				struct	SymNode		*BaseType;
 
 			
 				assert( $<idStr>1 != NULL );
 				assert( $<idStr>5 != NULL );
 
-				/*
-				** If processing local vars...
-				*/
-
+				
+				// If processing local vars...
+				
 				_if( AddOffset1st && !HoldOffset )
 				
 					CurOffset += 4 * CurOffsetDir;
@@ -39388,14 +39399,18 @@ VariableDef:
 
 				_endif
 
-				/*
-				** If processing records, unions, parameters, etc.
-				*/
-
+				
+				// If processing records, unions, parameters, etc.
+				
 				_if( !AddOffset1st )
 				
 					CurOffset += 4 * CurOffsetDir;
 
+				_endif
+				_if( $<options.NoStorage>7 )
+				
+					CurOffset = coSave;
+					
 				_endif
 
 			}
@@ -39411,8 +39426,10 @@ VariableDef:
 			toTkn				/* $4 */
 			ReservedTypeIDs		/* $5 */
 			Semicolon			/* $6 */
-			{					/* $7 */
+			VarOptions			/* $7 */
+			{					/* $8 */
 
+				int coSave = CurOffset;
 			
 				assert( $<idStr>1 != NULL );
 
@@ -39453,23 +39470,28 @@ VariableDef:
 					CurOffset += 4 * CurOffsetDir;
 
 				_endif
+				_if( $<options.NoStorage>7 )
+				
+					CurOffset = coSave;
+					
+				_endif
 			}
 	;
 
 
-			/*
-			** Variable declarations using a single type ID:
-			** e.g., i:integer;
-			**
-			*/
-
+			
+// Variable declarations using a single type ID:
+// e.g., i:int32;
 
 VariableDef:
-			UndefinedID 
-			Colon 
-			TypeID 
-			Semicolon
+			UndefinedID			/* $1 */ 
+			Colon				/* $2 */ 
+			TypeID				/* $3 */ 
+			Semicolon			/* $4 */
+			VarOptions			/* $5 */
 			{
+				int coSave = CurOffset;
+
 				assert( $<idStr>1 != NULL );
 				assert( $<s>3 != NULL );
 
@@ -39584,6 +39606,11 @@ VariableDef:
 					_endif
 
 				_endif
+				_if( $<options.NoStorage>5 )
+				
+					CurOffset = coSave;
+					
+				_endif
 
 			}
 	;
@@ -39591,262 +39618,266 @@ VariableDef:
 
 
 
-	/*
-	** Array variable definitions:
-	** e.g., b:integer[4];
-	**
-	*/
-
-					
+	
+// Array variable definitions:
+// e.g., b:integer[4];
+						
 VariableDef:
-			UndefinedID 
-			Colon
-			TypeID 
-			'[' 
-			DimList 
-			Rbrack  
-			Semicolon
-			{
-				int	*DimensionArray;
-				int	ArraySize;
+		UndefinedID			/* $1 */ 
+		Colon				/* $2 */
+		TypeID				/* $3 */ 
+		'['					/* $4 */ 
+		DimList				/* $5 */ 
+		Rbrack				/* $6 */  
+		Semicolon			/* $7 */
+		VarOptions			/* $8 */
+		{
+			int	coSave = CurOffset;
+			int	*DimensionArray;
+			int	ArraySize;
 
-				assert( $<idStr>1 != NULL );
-				assert( $<s>3 != NULL );
-				assert( $<v.NumElements>5 > 0 );
-				assert( $<v.Dimensions>5 != NULL );
+			assert( $<idStr>1 != NULL );
+			assert( $<s>3 != NULL );
+			assert( $<v.NumElements>5 > 0 );
+			assert( $<v.Dimensions>5 != NULL );
 
+			/*
+			** Make sure this is a legal variable type
+			** (e.g., no text variables).
+			*/
+
+			_if( CantBeVar( $<s>3->pType ))
+			
+				yyerror( "Illegal variable type" );
+				
+			_else 
+			
 				/*
-				** Make sure this is a legal variable type
-				** (e.g., no text variables).
+				** Check to see if TypeID is an array type
+				** (i.e., we're creating a multi-dimensional array).
 				*/
 
-				_if( CantBeVar( $<s>3->pType ))
-				
-					yyerror( "Illegal variable type" );
-					
-				_else 
-				
-					/*
-					** Check to see if TypeID is an array type
-					** (i.e., we're creating a multi-dimensional array).
-					*/
-
-					_if( $<s>3->pType != tArray )
-
-						/*
-						** TypeID is *not* an array type, so create
-						** a single dimension array here.
-						*/
-
-						ArraySize = $<s>3->ObjectSize * $<v.NumElements>5;
-
-						/*
-						** If local variable.
-						*/
-
-						_if( AddOffset1st && !HoldOffset )
-
-							CurOffset += ArraySize * CurOffsetDir;
-
-						_endif
-
-						CurOffset = 
-							AlignVarOffset
-							( 
-								CurOffset, 
-								ArraySize, 
-								CurOffsetDir 
-							);
-							
-						InsertSym
-						( 
-							$<idStr>1, 
-							$<s>3,
-							tArray, 
-							cVar, 
-							$<v.Arity>5,
-							$<v.Dimensions>5,
-							$<v.NumElements>5, 
-							NULL,
-							ArraySize,
-							CurOffset,
-							NULL,
-							$<s>3->Base,
-							$<s>3->Fields,
-							$<s>3->FieldCnt
-						);
-
-						/*
-						** If this is a class object, we need to duplicate
-						** all the fields to all private constants, etc.
-						*/
-
-						_if( $<s>3->pType == tClass )
-
-							SymbolTable->Fields = 
-								CopySymbols
-								( 
-									$<s>3->Fields,
-									$<s>3->StaticName
-								);
-							NullTerminate( SymbolTable->Fields, SymbolTable );
-
-						_elseif(  $<s>3->pType == tThunk )
-
-							/*
-							** Need some dummy local vars for a thunk.
-							*/
-
-							SymbolTable->u.proc.parms = &true_ste;
-
-
-						_endif
-
-						/*
-						** If the type is a pointer type, we need to check
-						** to see if there was a forward reference so we
-						** can eventually patch the "Base" field.
-						*/
-
-						_if( $<s>3->pType == tPointer && $<s>3->Base == NULL )
-
-							struct PatchListType *pbl;
-
-							pbl = malloc2( sizeof( struct PatchListType ));
-							
-							pbl->Next = PatchBaseList;
-							pbl->Symbol = SymbolTable;
-							PatchBaseList = pbl;
-
-							/*
-							** So we can patch later:
-							*/
-
-							SymbolTable->Type = $<s>3;	
-
-						_endif
-
-
-						/*
-						** If not a local variable
-						*/
-
-						_if( !AddOffset1st )
-
-							CurOffset += ArraySize * CurOffsetDir;
-
-						_endif
-
+				_if( $<s>3->pType != tArray )
 
 					/*
-					** Okay, down here TypeID *is* an array type,
-					** so we're creating a multi-dimensional array.
+					** TypeID is *not* an array type, so create
+					** a single dimension array here.
 					*/
 
-					_else
+					ArraySize = $<s>3->ObjectSize * $<v.NumElements>5;
 
-						assert( $<s>3->Dimensions != NULL );
+					/*
+					** If local variable.
+					*/
 
-						/*
-						** Create the new dimension array by concatenating
-						** the two existing dimension arrays.
-						*/
+					_if( AddOffset1st && !HoldOffset )
 
-						DimensionArray = 
-							malloc2
-							( 
-								( $<s>3->Arity + $<v.NumElements>5 ) * 
-									sizeof( int )
-							);
-
-						memcpy
-						( 
-							DimensionArray, 
-							$<s>3->Dimensions, 
-							$<s>3->Arity * sizeof( int )
-						);
-						memcpy
-						(
-							&DimensionArray[ $<s>3->Arity ],
-							$<v.Dimensions>5,
-							$<v.Arity>5 * sizeof( int )
-						);
-						ArraySize = $<s>3->ObjectSize * $<v.NumElements>5;
-
-						/*
-						** Add the new array to the symbol table.
-						*/
-
-						_if( AddOffset1st && !HoldOffset ) /* If local variable */
-
-							CurOffset += ArraySize * CurOffsetDir;
-
-						_endif
-
-						CurOffset = 
-							AlignVarOffset
-							( 
-								CurOffset, 
-								ArraySize,
-								CurOffsetDir 
-							);
-							
-						InsertSym
-						( 
-							$<idStr>1, 
-							$<s>3,
-							tArray, 
-							cVar, 
-							$<s>3->Arity + $<v.Arity>5,
-							DimensionArray,
-							$<s>3->NumElements * $<v.NumElements>5, 
-							NULL,
-							ArraySize,
-							CurOffset,
-							NULL,
-							$<s>3->Base,
-							$<s>3->Fields,
-							$<s>3->FieldCnt
-						);
-
-						/*
-						** If this is a class object, we need to duplicate
-						** all the fields to all private constants, etc.
-						*/
-
-						_if( $<s>3->pType == tClass )
-
-
-							SymbolTable->Fields = 
-								CopySymbols
-								( 
-									$<s>3->Fields,
-									$<s>3->StaticName
-								);
-							NullTerminate( SymbolTable->Fields, SymbolTable );
-
-						_elseif(  $<s>3->pType == tThunk )
-
-							/*
-							** Need some dummy local vars for a thunk.
-							*/
-
-							SymbolTable->u.proc.parms = &true_ste;
-
-						_endif
-
-
-						_if( !AddOffset1st )	/* If not a local variable */
-
-							CurOffset += ArraySize * CurOffsetDir;
-
-						_endif
-						free2( vss $<v.Dimensions>5 );
+						CurOffset += ArraySize * CurOffsetDir;
 
 					_endif
 
+					CurOffset = 
+						AlignVarOffset
+						( 
+							CurOffset, 
+							ArraySize, 
+							CurOffsetDir 
+						);
+						
+					InsertSym
+					( 
+						$<idStr>1, 
+						$<s>3,
+						tArray, 
+						cVar, 
+						$<v.Arity>5,
+						$<v.Dimensions>5,
+						$<v.NumElements>5, 
+						NULL,
+						ArraySize,
+						CurOffset,
+						NULL,
+						$<s>3->Base,
+						$<s>3->Fields,
+						$<s>3->FieldCnt
+					);
+
+					/*
+					** If this is a class object, we need to duplicate
+					** all the fields to all private constants, etc.
+					*/
+
+					_if( $<s>3->pType == tClass )
+
+						SymbolTable->Fields = 
+							CopySymbols
+							( 
+								$<s>3->Fields,
+								$<s>3->StaticName
+							);
+						NullTerminate( SymbolTable->Fields, SymbolTable );
+
+					_elseif(  $<s>3->pType == tThunk )
+
+						/*
+						** Need some dummy local vars for a thunk.
+						*/
+
+						SymbolTable->u.proc.parms = &true_ste;
+
+
+					_endif
+
+					/*
+					** If the type is a pointer type, we need to check
+					** to see if there was a forward reference so we
+					** can eventually patch the "Base" field.
+					*/
+
+					_if( $<s>3->pType == tPointer && $<s>3->Base == NULL )
+
+						struct PatchListType *pbl;
+
+						pbl = malloc2( sizeof( struct PatchListType ));
+						
+						pbl->Next = PatchBaseList;
+						pbl->Symbol = SymbolTable;
+						PatchBaseList = pbl;
+
+						/*
+						** So we can patch later:
+						*/
+
+						SymbolTable->Type = $<s>3;	
+
+					_endif
+
+
+					/*
+					** If not a local variable
+					*/
+
+					_if( !AddOffset1st )
+
+						CurOffset += ArraySize * CurOffsetDir;
+
+					_endif
+
+
+				/*
+				** Okay, down here TypeID *is* an array type,
+				** so we're creating a multi-dimensional array.
+				*/
+
+				_else
+
+					assert( $<s>3->Dimensions != NULL );
+
+					/*
+					** Create the new dimension array by concatenating
+					** the two existing dimension arrays.
+					*/
+
+					DimensionArray = 
+						malloc2
+						( 
+							( $<s>3->Arity + $<v.NumElements>5 ) * 
+								sizeof( int )
+						);
+
+					memcpy
+					( 
+						DimensionArray, 
+						$<s>3->Dimensions, 
+						$<s>3->Arity * sizeof( int )
+					);
+					memcpy
+					(
+						&DimensionArray[ $<s>3->Arity ],
+						$<v.Dimensions>5,
+						$<v.Arity>5 * sizeof( int )
+					);
+					ArraySize = $<s>3->ObjectSize * $<v.NumElements>5;
+
+					/*
+					** Add the new array to the symbol table.
+					*/
+
+					_if( AddOffset1st && !HoldOffset ) /* If local variable */
+
+						CurOffset += ArraySize * CurOffsetDir;
+
+					_endif
+
+					CurOffset = 
+						AlignVarOffset
+						( 
+							CurOffset, 
+							ArraySize,
+							CurOffsetDir 
+						);
+						
+					InsertSym
+					( 
+						$<idStr>1, 
+						$<s>3,
+						tArray, 
+						cVar, 
+						$<s>3->Arity + $<v.Arity>5,
+						DimensionArray,
+						$<s>3->NumElements * $<v.NumElements>5, 
+						NULL,
+						ArraySize,
+						CurOffset,
+						NULL,
+						$<s>3->Base,
+						$<s>3->Fields,
+						$<s>3->FieldCnt
+					);
+
+					/*
+					** If this is a class object, we need to duplicate
+					** all the fields to all private constants, etc.
+					*/
+
+					_if( $<s>3->pType == tClass )
+
+
+						SymbolTable->Fields = 
+							CopySymbols
+							( 
+								$<s>3->Fields,
+								$<s>3->StaticName
+							);
+						NullTerminate( SymbolTable->Fields, SymbolTable );
+
+					_elseif(  $<s>3->pType == tThunk )
+
+						/*
+						** Need some dummy local vars for a thunk.
+						*/
+
+						SymbolTable->u.proc.parms = &true_ste;
+
+					_endif
+
+
+					_if( !AddOffset1st )	/* If not a local variable */
+
+						CurOffset += ArraySize * CurOffsetDir;
+
+					_endif
+					free2( vss $<v.Dimensions>5 );
+
 				_endif
-			}
+
+			_endif
+			_if( $<options.NoStorage>8 )
+			
+				CurOffset = coSave;
+				
+			_endif
+		}
 	;
 
 
@@ -39854,11 +39885,8 @@ VariableDef:
 
 
 
-			/*
-			** Handle record variable declarations here.
-			**
-			*/
-
+			
+// Handle record variable declarations here.
 
 VariableDef:
 			UndefinedID		/* $1 */
@@ -40038,12 +40066,9 @@ VariableDef:
 
 
 
-			/*
-			** Handle union variable declarations here.
-			**
-			*/
-
-
+			
+// Handle union variable declarations here.
+			
 VariableDef:
 			UndefinedID
 			Colon

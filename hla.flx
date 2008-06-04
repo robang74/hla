@@ -11408,37 +11408,36 @@ _begin( doID )
     int             Token;
 
 
-    /*
-    ** In the event we are processing a class ID,
-    ** initialize the "ClassID" string to empty
-    ** so we can capture the full "path" of the
-    ** class identifier sequence (in case we have
-    ** to push the name back onto the lexer
-    ** input).
-    */
-
+    
+    // In the event we are processing a class ID,
+    // initialize the "ClassID" string to empty
+    // so we can capture the full "path" of the
+    // class identifier sequence (in case we have
+    // to push the name back onto the lexer
+    // input).
+    
     _here;
     ClassID[0] = '\0';
 
 
-    /*
-    ** Begin by assuming that this is *not* a
-    ** class identifier.
-    */
+    
+    // Begin by assuming that this is *not* a
+    // class identifier.
+    
 
     CurObject = NULL;
 
-    /*
-    ** Parser expects us to look up the symbol
-    ** before returning the ID token.
-    */
+    
+    // Parser expects us to look up the symbol
+    // before returning the ID token.
+    
 
     _if( (fastNamespace && fastLookup) || SkipLookup )
 
         symbol = NULL;
         
     _else
-    
+
         symbol = lookup( yytext, 0 );
         
     _endif
@@ -11455,32 +11454,32 @@ _begin( doID )
         );
 
 
-    /*
-    ** Namespace, text, and macro symbols
-    ** do not return control directly to the
-    ** parser.  ProcessID, above, returns -1/-2
-    ** for text/macro symbols, and -3 for namespace
-    ** symbols.  In the
-    ** case of namespace and class symbols, ProcessID
-    ** also sets the start condition to either
-    ** <namespace> allows the
-    ** lexer to handle the rest of the identifier.
-    ** For all other symbol types, the following 
-    ** statement returns control to the parser.
-    */
+    
+    // Namespace, text, and macro symbols
+    // do not return control directly to the
+    // parser.  ProcessID, above, returns -1/-2
+    // for text/macro symbols, and -3 for namespace
+    // symbols.  In the
+    // case of namespace and class symbols, ProcessID
+    // also sets the start condition to either
+    // <namespace> allows the
+    // lexer to handle the rest of the identifier.
+    // For all other symbol types, the following 
+    // statement returns control to the parser.
+    
 
     _returnif( Token >= 0 ) Token;
 
-    /*
-    ** If this is a class object, CurObject
-    ** needs to point at the leftmost name (the
-    ** object name) in the "dot-path" (fully qualified)
-    ** list of identifiers.  Since this regular expression
-    ** matches that leftmost identifier, save
-    ** the address of this symbol before passing
-    ** control to the <ClassSpace> regular
-    ** expression.
-    */
+    
+    // If this is a class object, CurObject
+    // needs to point at the leftmost name (the
+    // object name) in the "dot-path" (fully qualified)
+    // list of identifiers.  Since this regular expression
+    // matches that leftmost identifier, save
+    // the address of this symbol before passing
+    // control to the <ClassSpace> regular
+    // expression.
+    
 
     CurObject = symbol;
     _if( Token == -3 && symbol->SymClass != cNamespace )

@@ -2673,15 +2673,15 @@ _begin( lookup )
 	assert( src != NULL );
 	
 	length = strcpylc( lcName, src, &hash ) + 1;
-	/*
-	** Before searching for the symbol in the symbol table,
-	** check to see if this symbol matches a formal macro parameter.
-	** If so, use the active macro parameter definition rather than
-	** the standard symbol table entry.
-	*/
+	
+	
+	// Before searching for the symbol in the symbol table,
+	// check to see if this symbol matches a formal macro parameter.
+	// If so, use the active macro parameter definition rather than
+	// the standard symbol table entry.
+	
 
 	cur = MacroLookup( src, lcName, ActiveMacros, NULL, hash );
-
 	_if( cur == NULL ) 
 	
 		cur = rawlookup( src, doCaseTest, lcName, length, hash );

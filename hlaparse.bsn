@@ -3166,6 +3166,7 @@ ClassFieldName:
 			*/
 
 			assert( $<s>1 != NULL );
+			assert( $<dotName.FullName>4 != NULL );
 			_if( $<s>1 != NULL )
 
 				/*
@@ -3174,25 +3175,34 @@ ClassFieldName:
 				nameLen = 
 						strlen( $<s>1->TrueName ) 
 					+	strlen( $<dotName.FullName>4 )
-					+	1;
+					+	2;
 
 				name = malloc2( nameLen );
 
 				strcpy( name, $<s>1->TrueName );
+				
+				// Kludge, because macro/text expansions don't
+				// put a "." in front of the FullName identifier.
+				
+				_if( *$<dotName.FullName>4 != '.' )
+				
+					strcat( name, "." );
+					
+				_endif
 				strcat( name, $<dotName.FullName>4 );
 				$<dotName.FullName>$ = name;
 				free2( vss $<dotName.FullName>4 );
 
-				/*
-				** Generate the StaticName field.
-				**
-				**	The new StaticName field is the value
-				**	of the hlaFields StaticName field if it
-				**	is non-null.  If it is null, then the
-				**	hlaFields StaticName field is the StaticName
-				**	value of the hlaSingleID field and the Disp
-				**	field is the value of the hlaFields Disp value.
-				*/
+				
+				// Generate the StaticName field.
+				//
+				//	The new StaticName field is the value
+				//	of the hlaFields StaticName field if it
+				//	is non-null.  If it is null, then the
+				//	hlaFields StaticName field is the StaticName
+				//	value of the hlaSingleID field and the Disp
+				//	field is the value of the hlaFields Disp value.
+				
 
 				_if( $<dotName.StaticName>4 != NULL )
 
@@ -63457,7 +63467,6 @@ SingleFieldName:
 		SimpleID
 		{
 			_here;
-
 			_if( $<s>1 == NULL )
 
 				/*
@@ -67579,19 +67588,19 @@ UndefProc:
 		NonLocalID
 		{			  
 			_here;
-			$<idStr>$ = $<idStr>1;
+			$<idStr>$ = hlastrdup2( $<s>1->TrueName );
 		}
 
 	|	NonLocalVarID
 		{
 			_here;
-			$<idStr>$ = $<idStr>1;
+			$<idStr>$ =  hlastrdup2( $<s>1->TrueName );
 		}
 
 	|	NonLocalStaticID
 		{
 			_here;
-			$<idStr>$ = $<idStr>1;
+			$<idStr>$ =  hlastrdup2( $<s>1->TrueName );
 		}
 
 	|	UndefID
@@ -67603,7 +67612,7 @@ UndefProc:
 	|	NonLocalConstID
 		{
 			_here;
-			$<idStr>$ = $<idStr>1;
+			$<idStr>$ =  hlastrdup2( $<s>1->TrueName );
 		}
 	;
 

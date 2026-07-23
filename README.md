@@ -3,7 +3,8 @@
 The High Level Assembler (HLA) is a 32-bit 80x86 assembly language that is portable between Win32, Linux, and FreeBSD.
 
 - Original author: [Randall Hyde](https://www.randallhyde.com/)
-- Original project: [sourceforge.net/projects/hlav1](https://sourceforge.net/projects/hlav1/)
+- Project source: [sourceforge.net/projects/hlav1](https://sourceforge.net/projects/hlav1/)
+- HLA manual: [The Art of Assembly Language](https://www.randallhyde.com/AssemblyLanguage/www.artofasm.com/index.html)
 
 This project is a derivative work of High Level Assembler (HLA) by Randall Hyde, which was released into the Public Domain.
 
